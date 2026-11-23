@@ -41,11 +41,11 @@ HEAD = f"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AI Search Guide | CSE 3811</title>
+<title>CSE 3811 AI Guide</title>
 <meta name="description" content="An interactive guide to the first half of artificial intelligence: agents, uninformed and informed search, local search, constraint satisfaction and game playing, with step-by-step visualisers and worked exam answers.">
 <meta name="theme-color" content="#16223A">
-<meta property="og:title" content="AI Search Guide">
-<meta property="og:description" content="Learn uninformed and informed search step by step, with visualisers that show the fringe, the search tree and how to read the answer.">
+<meta property="og:title" content="CSE 3811 AI Guide">
+<meta property="og:description" content="Learn the first half of the AI course step by step: search, local search, CSP and games, with visualisers, a graph editor and worked exam answers.">
 <meta property="og:type" content="website">
 <link rel="icon" href="{FAVICON}">
 <link rel="preconnect" href="https://fonts.googleapis.com">

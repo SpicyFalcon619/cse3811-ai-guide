@@ -1,8 +1,8 @@
-# AI Search Guide
+# CSE 3811 AI Guide
 
 An interactive guide to artificial intelligence, written for CSE 3811 (Artificial Intelligence). It follows the course outline up to the midterm: intelligent agents, uninformed and informed search, local search, constraint satisfaction and game playing. The topics after the midterm will be added as the course reaches them. Each topic opens with a plain-language lesson and a worked example, and then gives you a visualiser you can step through one move at a time.
 
-**[Open the guide](https://spicyfalcon619.github.io/ai-search-guide/)**
+**[Open the guide](https://spicyfalcon619.github.io/cse3811-ai-guide/)**
 
 ## What it covers
 
