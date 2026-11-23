@@ -19,13 +19,16 @@ const cases = [
   ['tA', 'GREEDY', 'tree', 'S-C-E-G', 9],
   ['tR', 'RBFS', 'tree', 'A-D-F-G', 15],      // teacher's and deck's RBFS example
   ['tI', 'IDASTAR', 'tree', 'S-A-C-G', 10],   // teacher's IDA* example
+  ['q253u', 'DLS', 'tree', 'S-C-G', 11, { limit: 2 }],        // depth-limited, limit 2
+  ['q253u', 'DLS', 'tree', 'S-A-B-G', 11, { limit: 3 }],      // a bigger limit, still not the cheapest
+  ['q253u', 'DLS', 'tree', 'S-A-B-C-G', 9, { limit: 4 }],
 ];
 
 let failed = 0;
-for (const [g, alg, mode, path, cost] of cases) {
+for (const [g, alg, mode, path, cost, extra] of cases) {
   const name = `${alg} ${mode} search on ${GRAPHS[g].name}`;
   try {
-    const r = runSearch(GRAPHS[g], alg, { mode }).result;
+    const r = runSearch(GRAPHS[g], alg, Object.assign({ mode }, extra)).result;
     assert.ok(r, 'no solution found');
     assert.strictEqual(r.path.join('-'), path);
     assert.strictEqual(r.cost, cost);
@@ -35,5 +38,16 @@ for (const [g, alg, mode, path, cost] of cases) {
     console.log(`FAIL  ${name}: ${e.message}`);
   }
 }
+// DLS: cutoff (a limit stopped something) versus failure (nothing was stopped)
+function lastText(G, limit) { return runSearch(G, 'DLS', { mode: 'tree', limit }).steps.slice(-1)[0].text; }
+const noGoal = { name: 'no goal', dir: true, start: 'S', goal: 'Z', vb: '0 0 9 9', nodes: { S: [0, 0, 0], A: [0, 0, 0], Z: [0, 0, 0] }, edges: [['S', 'A', 1]] };
+for (const [name, ok] of [
+  ['DLS limit 1 on Fall 2025 Q2(a) reports cutoff', /cutoff/.test(lastText(GRAPHS.q253u, 1))],
+  ['DLS on a graph with no path to the goal reports failure', /failure/.test(lastText(noGoal, 5))],
+]) {
+  cases.push(0);
+  if (ok) console.log(`ok    ${name}`); else { failed++; console.log(`FAIL  ${name}`); }
+}
+
 console.log(`\n${cases.length - failed} of ${cases.length} passed`);
 process.exit(failed ? 1 : 0);

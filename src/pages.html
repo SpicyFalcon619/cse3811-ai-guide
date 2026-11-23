@@ -432,26 +432,37 @@
 <section class="lesson" data-for="ids">
 <div class="ls-bar"><b>Learn it first</b><span>about 4 minutes</span></div>
 <div class="ls-grid"><div class="ls-main">
-<div class="beat"><span class="bn">1</span><div><h3>Depth-limited search: DFS with a leash</h3><p>Pick a limit L. Run DFS, but never expand a path that already has L edges. It can no longer dive forever, but if the goal is deeper than L it is missed.</p></div></div>
-<div class="beat"><span class="bn">2</span><div><h3>Iterative deepening: try L = 0, 1, 2, &hellip;</h3><p>We don't know the right limit, so try them all in order. Each round <b>starts again from scratch</b> at the start state. The first round that finds a goal gives the answer.</p></div></div>
-<div class="beat"><span class="bn">3</span><div><h3>Fall 2025 Q2(a), round by round</h3>
+<div class="beat"><span class="bn">1</span><div><h3>Depth-limited search (DLS): DFS with a leash</h3><p>Pick a limit L. Run DFS, but <b>never expand a path that already has L edges</b>. Such a path is still taken out and still goal-tested, its children just are not generated. DFS can no longer dive forever, but if every goal is deeper than L it is missed.</p>
+<table class="ls-t"><thead><tr><th>Limit L on Fall 2025 Q2(a)</th><th>Result</th></tr></thead><tbody>
+<tr><td>0</td><td>cutoff: S is taken out but not expanded</td></tr>
+<tr><td>1</td><td>cutoff: S-A and S-C are not expanded</td></tr>
+<tr class="win"><td>2</td><td>S-C-G, cost 11</td></tr>
+<tr><td>3</td><td>S-A-B-G, cost 11</td></tr>
+<tr><td>4</td><td>S-A-B-C-G, cost 9</td></tr></tbody></table>
+<p>Three things to notice. A bigger limit is not always better: limit 4 is the first to find the cost-9 path. DLS is <b>not complete</b> (a goal deeper than L is never found) and <b>not optimal</b> (limit 3 returns cost 11 although cost 9 exists).</p></div></div>
+<div class="beat"><span class="bn">2</span><div><h3>Two different ways DLS can come back empty-handed</h3>
+<div class="ls-gh"><div><b>cutoff</b><span>the stack emptied, but at least one path was stopped by the limit. A goal may still exist deeper. Try a bigger L.</span></div><div><b>failure</b><span>the stack emptied and the limit never stopped anything. The whole tree was searched: there is no solution.</span></div></div></div></div>
+<div class="beat"><span class="bn">3</span><div><h3>Iterative deepening (IDS): try L = 0, 1, 2, &hellip;</h3><p>We don't know the right limit, so try them all in order. Each round <b>starts again from scratch</b> at the start state. The first round that finds a goal gives the answer.</p></div></div>
+<div class="beat"><span class="bn">4</span><div><h3>Fall 2025 Q2(a), round by round</h3>
 <table class="ls-t"><thead><tr><th>Limit</th><th>Taken out, in order</th><th>Result</th></tr></thead><tbody>
 <tr><td>0</td><td>S</td><td>no goal</td></tr>
 <tr><td>1</td><td>S, S-A, S-C</td><td>no goal</td></tr>
 <tr class="win"><td>2</td><td>S, S-A, S-A-B, S-A-C, S-C, S-C-G</td><td>goal: S-C-G, cost 11</td></tr></tbody></table></div></div>
-<div class="beat"><span class="bn">4</span><div><h3>Best of both</h3><p>Like <b>BFS</b>, it finds the shallowest goal (fewest edges). Like <b>DFS</b>, it only stores one branch at a time. Repeating the top levels sounds wasteful, but most nodes live in the deepest level, so the extra work is small (about 11% for b = 10).</p></div></div>
+<div class="beat"><span class="bn">5</span><div><h3>Best of both</h3><p>Like <b>BFS</b>, it finds the shallowest goal (fewest edges). Like <b>DFS</b>, it only stores one branch at a time. Repeating the top levels sounds wasteful, but most nodes live in the deepest level, so the extra work is small (about 11% for b = 10).</p></div></div>
 </div><aside class="ls-side">
-<div class="ls-card"><b>In one line</b><p>DFS with limit 0, 1, 2&hellip; until found. Same answer as BFS, memory like DFS.</p></div>
+<div class="ls-card"><b>In one line</b><p>DLS = DFS that stops at depth L. IDS = DLS with L = 0, 1, 2&hellip; until found: BFS's answer, DFS's memory.</p></div>
+<div class="ls-card"><b>Don't confuse</b><p>DLS: one run, a limit you choose, may miss the goal. IDS: many runs, the limit grows by itself, never misses.</p></div>
 <div class="ls-card"><b>Exam habit</b><p>Write each round on its own line, with its own expansion list.</p></div>
 </aside></div>
 <div class="ls-check"><b class="k">Check yourself</b>
+<details><summary>DLS with limit 1 on Fall 2025 Q2(a): cutoff or failure?</summary><p>Cutoff. S-A and S-C sit at depth 1, which equals the limit, and both have children that were never generated, so a goal could still be deeper.</p></details>
 <details><summary>At limit 2, why is S-A-B taken out but not expanded?</summary><p>S-A-B already has 2 edges, which equals the limit, so its children (depth 3) are not generated.</p></details>
 </div></section>
 
-  <div class="rule"><span class="k">Rules to write in the exam</span><ol><li>Round with limit L: plain DFS from the start with an <b>empty stack</b>.</li><li>A path at depth L is goal-tested but <b>not expanded</b>.</li><li>No goal? L = L + 1 and start again from scratch. Nothing carries over.</li><li>Write the expansion order <b>round by round</b>.</li></ol></div>
-  <div class="sim" data-algs="IDS" data-graphs="q262u,q253u" data-view="full"></div>
+  <div class="rule"><span class="k">Rules to write in the exam</span><ol><li>Round with limit L: plain DFS from the start with an <b>empty stack</b>.</li><li>A path at depth L is goal-tested but <b>not expanded</b>.</li><li>No goal? L = L + 1 and start again from scratch. Nothing carries over.</li><li>Write the expansion order <b>round by round</b>.</li><li>Plain <b>DLS</b> is one round with the limit the question gives you. If the stack empties without a goal, answer <b>cutoff</b> (a limit stopped something) or <b>failure</b> (nothing was stopped, so no solution).</li></ol></div>
+  <div class="sim" data-algs="DLS,IDS" data-alg="DLS" data-graphs="q253u,q262u" data-view="full"></div>
   <div class="cols">
-    <div class="card"><span class="k">Properties</span><table><tbody><tr><td>Complete</td><td class="yes">Yes</td></tr><tr><td>Optimal</td><td class="if">Only if every step costs the same</td></tr><tr><td>Time</td><td class="m">O(b<sup>d</sup>)</td></tr><tr><td>Space</td><td class="m">O(bd)</td></tr></tbody></table></div>
+    <div class="card"><span class="k">Properties of IDS (DLS: not complete, not optimal)</span><table><tbody><tr><td>Complete</td><td class="yes">Yes</td></tr><tr><td>Optimal</td><td class="if">Only if every step costs the same</td></tr><tr><td>Time</td><td class="m">O(b<sup>d</sup>)</td></tr><tr><td>Space</td><td class="m">O(bd)</td></tr></tbody></table></div>
     <div class="card"><span class="k">Is repeating the work wasteful?</span><p>Less than it looks. Most nodes in a tree are in the deepest level, so redoing the shallow levels adds only a small fraction. Remember this idea: IDA* uses it with f instead of depth.</p></div>
   </div>
 </article>
@@ -1099,7 +1110,7 @@
 
 <article class="page" id="lab" data-title="Simulator lab" data-group="Exam" data-skip="1" hidden>
   <header class="hero"><p class="eyebrow"><b>Lab</b> &middot; every algorithm, every graph</p><h1>Simulator lab</h1><p class="lede">Any algorithm on any graph from this guide, or on a graph you type in from a question paper.</p></header>
-  <div class="sim" id="labsim" data-algs="BFS,DFS,UCS,IDS,GREEDY,ASTAR,IDASTAR,RBFS" data-graphs="q253u,q262u,q261u,q253i,q261i,q262i,q262t,tA,tR,tI,s36,s18" data-modectl="1" data-ties="1"></div>
+  <div class="sim" id="labsim" data-algs="BFS,DFS,UCS,DLS,IDS,GREEDY,ASTAR,IDASTAR,RBFS" data-graphs="q253u,q262u,q261u,q253i,q261i,q262i,q262t,tA,tR,tI,s36,s18" data-modectl="1" data-ties="1"></div>
   <div class="card" data-widget="custom">
     <span class="k">Type your own graph</span>
     <p>One line per fact: <code>S A 3</code> is an edge from S to A costing 3; <code>h A 5</code> sets h(A) = 5; add <code>start S</code>, <code>goal G</code>, and <code>undirected</code> if edges go both ways.</p>

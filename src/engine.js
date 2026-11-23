@@ -53,6 +53,7 @@ var ALG = {
   BFS: { name: 'Breadth-first search', short: 'BFS', ds: 'queue', key: null },
   DFS: { name: 'Depth-first search', short: 'DFS', ds: 'stack', key: null },
   UCS: { name: 'Uniform cost search', short: 'UCS', ds: 'pq', key: 'g' },
+  DLS: { name: 'Depth-limited', short: 'DLS', ds: 'stack', key: null },
   IDS: { name: 'Iterative deepening', short: 'IDS', ds: 'stack', key: null },
   GREEDY: { name: 'Greedy best-first search', short: 'Greedy', ds: 'pq', key: 'h' },
   ASTAR: { name: 'A* search', short: 'A*', ds: 'pq', key: 'f' },
@@ -100,17 +101,19 @@ function runSearch(G, alg, opts) {
   var result = null;
 
   /* ---------- fringe-based: BFS, DFS, UCS, Greedy, A*, and IDS rounds ---------- */
-  if (A.ds === 'queue' || A.ds === 'pq' || alg === 'DFS' || alg === 'IDS') {
-    var maxL = alg === 'IDS' ? Object.keys(G.nodes).length : 0, L = alg === 'IDS' ? 0 : Infinity;
+  if (A.ds === 'queue' || A.ds === 'pq' || alg === 'DFS' || alg === 'IDS' || alg === 'DLS') {
+    var limited = alg === 'IDS' || alg === 'DLS', cutHit = false;
+    var maxL = alg === 'IDS' ? Object.keys(G.nodes).length : 0, L = alg === 'IDS' ? 0 : alg === 'DLS' ? (opts.limit === undefined ? 2 : opts.limit) : Infinity;
     for (; ; L++) {
-      if (alg === 'IDS') {
+      if (limited) {
         round = L; closed = {}; order = []; st = {};
         regs = { 'Depth limit': L };
-        if (L > maxL) { snap('fail', 'Every depth limit up to ' + maxL + ' failed. There is no path to the goal.'); break; }
+        if (alg === 'IDS' && L > maxL) { snap('fail', 'Every depth limit up to ' + maxL + ' failed. There is no path to the goal.'); break; }
       }
       var fr = [], r0 = tnode(null, G.start, 0, 0); fr.push(r0); st[r0.id] = 'open';
       var DSname = A.ds === 'queue' ? 'queue' : A.ds === 'pq' ? 'priority queue' : 'stack';
-      if (alg === 'IDS') snap('round', 'Round ' + (L + 1) + ': depth limit ' + L + '. Start again from ' + G.start + ' with an empty stack. Nothing is remembered from the last round.', { fr: fr.slice() });
+      if (alg === 'DLS') snap('init', 'Depth-limited search with limit <b>' + L + '</b>: no path may be expanded once it has ' + L + ' edge' + (L === 1 ? '' : 's') + '. Put the start state <b>' + G.start + '</b> on the stack.', { fr: fr.slice() });
+      else if (alg === 'IDS') snap('round', 'Round ' + (L + 1) + ': depth limit ' + L + '. Start again from ' + G.start + ' with an empty stack. Nothing is remembered from the last round.', { fr: fr.slice() });
       else snap('init', 'Put the start state <b>' + G.start + '</b> into the ' + DSname + (A.key ? ' with ' + valTxt(r0) : '') + '. The fringe holds just this one path.', { fr: fr.slice() });
       var done = false;
       while (fr.length) {
@@ -128,9 +131,10 @@ function runSearch(G, alg, opts) {
           snap('goal', 'Take ' + lbl(n) + ' out. <b>' + n.s + ' is the goal, so stop.</b> The answer is the path stored in this entry: <b>' + pathStr(n.path) + '</b>, cost ' + result.cost + '.' + (alg === 'IDS' ? ' Found in round ' + (L + 1) + ' (limit ' + L + ').' : ''), { fr: fr.slice(), cur: cur, popped: n.id, done: true });
           done = true; break;
         }
-        if (alg === 'IDS' && n.depth >= L) {
+        if (limited && n.depth >= L) {
           st[n.id] = 'cut'; order.push(n.s);
-          snap('pop', 'Take ' + lbl(n) + ' out. ' + n.s + ' is not the goal. It is at depth ' + n.depth + ', which equals the limit ' + L + ', so it is <b>not expanded</b>.', { fr: fr.slice(), cur: cur, popped: n.id });
+          var more = kidsOf(n).length > 0; if (more) cutHit = true;
+          snap('pop', 'Take ' + lbl(n) + ' out. ' + n.s + ' is not the goal. It is at depth ' + n.depth + ', which equals the limit ' + L + ', so it is <b>not expanded</b>' + (alg === 'DLS' ? (more ? ' (it has children we are not allowed to look at: a <b>cutoff</b>).' : ' (it has no children anyway, so nothing is lost here).') : '.'), { fr: fr.slice(), cur: cur, popped: n.id });
           continue;
         }
         order.push(n.s); if (graph) closed[n.s] = 1; st[n.id] = 'done';
@@ -148,6 +152,7 @@ function runSearch(G, alg, opts) {
         snap('pop', 'Take ' + lbl(n) + ' out. ' + n.s + ' is not the goal, so <b>expand</b> it. ' + kt, { fr: fr.slice(), cur: cur, popped: n.id, kids: kids.map(function (k) { return k.id; }) });
       }
       if (done) break;
+      if (alg === 'DLS') { snap('fail', cutHit ? 'The stack is empty and the goal was not found. Some paths were stopped by the limit, so the answer is <b>cutoff</b>: a goal may exist deeper than ' + L + '. Try a larger limit.' : 'The stack is empty and no path was ever stopped by the limit, so the answer is <b>failure</b>: there is no solution at all.', { fr: [] }); break; }
       if (alg !== 'IDS') { snap('fail', 'The fringe is empty and the goal was never taken out. There is no solution.', { fr: [] }); break; }
       snap('roundend', 'The stack is empty and the goal was not found within limit ' + L + '. Raise the limit by one and start again.', { fr: [] });
     }

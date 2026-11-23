@@ -200,7 +200,7 @@
     this.algs = (d.algs || 'BFS').split(','); this.alg = d.alg || this.algs[0];
     this.graphs = (d.graphs || 'q253u').split(','); this.graph = d.graph || this.graphs[0];
     this.mode = d.mode || 'tree'; this.modectl = d.modectl === '1'; this.tiesctl = d.ties === '1';
-    this.ties = 'alpha'; this.view = d.view || 'graph'; this.code = d.code ? document.getElementById(d.code) : null;
+    this.limit = d.limit === undefined ? 2 : +d.limit; this.ties = 'alpha'; this.view = d.view || 'graph'; this.code = d.code ? document.getElementById(d.code) : null;
     this.predict = false; this.asking = false; this.i = 0; this.timer = null;
     this.build(); this.run();
   }
@@ -209,6 +209,7 @@
     if (this.algs.length > 1) o += '<div class="seg" data-r="alg" role="group" aria-label="Algorithm">' + this.algs.map(function (a) { return '<button type="button" data-v="' + a + '">' + ALG[a].short + '</button>'; }).join('') + '</div>';
     if (this.graphs.length > 1) o += '<label class="f">GRAPH <select data-r="graph" aria-label="Graph">' + this.graphs.map(function (g) { return '<option value="' + g + '">' + esc(GRAPHS[g].name) + '</option>'; }).join('') + '</select></label>';
     else o += '<span class="f mono" style="font-size:.74rem;color:var(--muted)">' + esc(GRAPHS[this.graph].name) + '</span>';
+    if (this.algs.indexOf('DLS') >= 0) o += '<div class="seg" data-r="lim" role="group" aria-label="Depth limit"><span class="seglab">LIMIT</span>' + [0, 1, 2, 3, 4].map(function (v) { return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join('') + '</div>';
     if (this.modectl) o += '<div class="seg" data-r="mode" role="group" aria-label="Search type"><button type="button" data-v="tree">Tree search</button><button type="button" data-v="graph">Graph search</button></div>';
     if (this.tiesctl) o += '<div class="seg" data-r="ties" role="group" aria-label="Ties"><button type="button" data-v="alpha">Ties: A&#8594;Z</button><button type="button" data-v="fifo">Ties: first in</button></div>';
     o += '<label class="chk" title="Guess which path comes out next before you see it"><input type="checkbox" data-r="predict"> Predict mode</label></div>';
@@ -223,6 +224,7 @@
     segs('alg', function (v) { self.alg = v; self.run(); });
     segs('mode', function (v) { self.mode = v; self.run(); });
     segs('ties', function (v) { self.ties = v; self.run(); });
+    segs('lim', function (v) { self.limit = +v; self.run(); });
     if (this.r.graph) this.r.graph.addEventListener('change', function () { self.graph = this.value; self.run(); });
     $('.tabs', this.el).addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; self.view = b.dataset.v; self.render(); });
     this.r.predict.addEventListener('change', function () { self.predict = this.checked; self.asking = false; self.render(); });
@@ -243,7 +245,8 @@
     this.stop(); this.asking = false;
     var G = GRAPHS[this.graph], alg = this.alg;
     if (G.fOnly && !REC[alg]) { alg = this.alg = 'IDASTAR'; }
-    this.R = runSearch(G, alg, { mode: this.mode, ties: this.ties });
+    this.R = runSearch(G, alg, { mode: this.mode, ties: this.ties, limit: this.limit });
+    if (this.r.lim) { this.r.lim.hidden = alg !== 'DLS'; $$('button', this.r.lim).forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.v === this.limit)); }); }
     this.i = 0; this.r.range.max = this.R.steps.length - 1;
     var self = this;
     ['alg', 'mode', 'ties'].forEach(function (k) { if (self.r[k]) $$('button', self.r[k]).forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === self[k])); }); });
