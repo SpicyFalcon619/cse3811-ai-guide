@@ -246,7 +246,7 @@
     var G = GRAPHS[this.graph], alg = this.alg;
     if (G.fOnly && !REC[alg]) { alg = this.alg = 'IDASTAR'; }
     this.R = runSearch(G, alg, { mode: this.mode, ties: this.ties, limit: this.limit });
-    if (this.r.lim) { this.r.lim.hidden = alg !== 'DLS'; $$('button', this.r.lim).forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.v === this.limit)); }); }
+    if (this.r.lim) { var lim = this.limit; this.r.lim.hidden = alg !== 'DLS'; $$('button', this.r.lim).forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.v === lim)); }); }
     this.i = 0; this.r.range.max = this.R.steps.length - 1;
     var self = this;
     ['alg', 'mode', 'ties'].forEach(function (k) { if (self.r[k]) $$('button', self.r[k]).forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === self[k])); }); });
