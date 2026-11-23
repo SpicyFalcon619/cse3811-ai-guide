@@ -1109,27 +1109,12 @@
 </article>
 
 <article class="page" id="lab" data-title="Simulator lab" data-group="Exam" data-skip="1" hidden>
-  <header class="hero"><p class="eyebrow"><b>Lab</b> &middot; every algorithm, every graph</p><h1>Simulator lab</h1><p class="lede">Any algorithm on any graph from this guide, or on a graph you type in from a question paper.</p></header>
+  <header class="hero"><p class="eyebrow"><b>Lab</b> &middot; every algorithm, every graph</p><h1>Simulator lab</h1><p class="lede">Any algorithm on any graph from this guide, or on a graph or tree you draw yourself.</p></header>
+  <h2>Build your own graph or tree</h2>
+  <p>Draw a graph from a question paper, or a search tree, and the simulator below runs any algorithm on it. Start from one of the exam graphs and change it, or begin with a blank canvas.</p>
+  <div class="card" data-widget="editor"></div>
+  <h2>Run it</h2>
   <div class="sim" id="labsim" data-algs="BFS,DFS,UCS,DLS,IDS,GREEDY,ASTAR,IDASTAR,RBFS" data-graphs="q253u,q262u,q261u,q253i,q261i,q262i,q262t,tA,tR,tI,s36,s18" data-modectl="1" data-ties="1"></div>
-  <div class="card" data-widget="custom">
-    <span class="k">Type your own graph</span>
-    <p>One line per fact: <code>S A 3</code> is an edge from S to A costing 3; <code>h A 5</code> sets h(A) = 5; add <code>start S</code>, <code>goal G</code>, and <code>undirected</code> if edges go both ways.</p>
-    <textarea id="customtxt" aria-label="Your graph" spellcheck="false">start S
-goal G
-S A 1
-S B 4
-A B 2
-A C 5
-B C 1
-C G 3
-h S 6
-h A 4
-h B 3
-h C 2
-h G 0</textarea>
-    <div><button class="btn pri" type="button">Load into the simulator</button></div>
-    <p class="err" aria-live="polite"></p>
-  </div>
 </article>
 
 <article class="page" id="quiz" data-title="Quick check" data-group="Exam" data-skip="1" hidden>

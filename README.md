@@ -23,6 +23,7 @@ An interactive guide to artificial intelligence, written for CSE 3811 (Artificia
 - **Visualisers you can step through.** Choose an algorithm and a graph, then step forward and back. Each step shows the state graph, the full search tree and the stack, queue or priority queue, with a sentence explaining that step.
 - **Beyond path search.** Alpha-beta on game trees with the v, α, β box at every node, as on the lecture slides; map colouring with the domain table updated after each assignment; an 8-queens board that shows h for every move; and a landscape for hill climbing and simulated annealing.
 - **The answer read from the fringe.** The guide shows how to write the path, the cost and the expansion order straight from the stack or queue, the way an exam answer is written.
+- **Draw your own graph or tree.** The lab has a drag-and-drop editor: click to add nodes, connect them, type step costs and heuristic values, set the start and goal, or press Add child to grow a tree. The simulator follows every change, and the same graph is shown as plain text that you can edit.
 - **Real exam graphs.** Questions from recent midterms and the lecture examples are built in, with the full trace table for each run.
 - **Course conventions.** Ties are broken alphabetically, the goal test happens when a path is taken out, and DFS pushes children in reverse order, as in the lecture decks.
 - **Progress and themes.** You can mark pages as understood, and choose a paper, dark or charcoal theme. The background animation can be turned off. These choices are saved in your browser only.
@@ -49,6 +50,8 @@ Then open `dist/index.html` in a browser.
 | `src/ui.js` | The interface: navigation, visualisers, search trees and interactive widgets |
 | `src/beyond-engine.js` | Minimax and alpha-beta, CSP backtracking with filtering and ordering, and the 8-queens heuristic |
 | `src/beyond-ui.js` | The visualisers for games, CSPs and local search |
+| `src/dropdown.js` | A themed replacement for the browser's native dropdown |
+| `src/editor.js` | The graph and tree editor in the simulator lab |
 | `src/data.js` | Quiz questions and the SMA\* walkthrough |
 | `tests/engine.test.js`, `tests/beyond.test.js` | Check the engines against answers worked out by hand |
 | `build.py` | Puts everything into a single self-contained `dist/index.html` |

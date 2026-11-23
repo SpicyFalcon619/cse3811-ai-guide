@@ -59,7 +59,7 @@ HEAD = f"""<!doctype html>
 
 def build():
     strip = lambda js: re.sub(r"^if \(typeof module !== 'undefined'\) module\.exports = .*$", "", js, flags=re.M)
-    engine = strip(read("engine.js")) + "\n" + strip(read("beyond-engine.js")) + "\n" + read("beyond-ui.js") + "\n" + read("dropdown.js")
+    engine = strip(read("engine.js")) + "\n" + strip(read("beyond-engine.js")) + "\n" + read("beyond-ui.js") + "\n" + read("dropdown.js") + "\n" + read("editor.js")
     html = (
         HEAD
         + read("style.css")

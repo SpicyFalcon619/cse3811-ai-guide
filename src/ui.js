@@ -610,6 +610,7 @@
     pages.forEach(function (x) { x.hidden = x !== p; });
     buildSub(p); buildHero(p); refreshDone(); enterPage(p);
     lastY = 0; setHidden(false); setTimeout(adaptNav, 80);
+    window.__sims = sims;
     $$('.sim', p).forEach(function (el) { if (!el.__sim) { el.__sim = new Sim(el); if (el.id) sims[el.id] = el.__sim; } });
     $$('[data-widget]', p).forEach(function (el) { if (!el.__w && WIDGETS[el.dataset.widget]) { el.__w = 1; WIDGETS[el.dataset.widget](el); } });
     if (current !== id) { window.scrollTo(0, 0); requestAnimationFrame(function () { window.scrollTo(0, 0); }); setTimeout(function () { window.scrollTo(0, 0); }, 60); current = id; }
@@ -861,34 +862,7 @@
       box.innerHTML = examHTML(R) + '<div><button class="btn" type="button" data-lab="' + el.dataset.graph + ',' + c[0] + ',' + (c[1] || 'tree') + '">Step through it in the lab</button></div>';
     });
   };
-  WIDGETS.custom = function (el) {
-    var ta = $('textarea', el), msg = $('.err', el);
-    $('button', el).addEventListener('click', function () {
-      var lines = ta.value.split('\n'), edges = [], h = {}, nodes = {}, start = null, goal = null, dir = true, bad = [];
-      lines.forEach(function (ln, i) {
-        var t = ln.trim().split(/\s+/); if (!t[0] || t[0].charAt(0) === '#') return;
-        var w = t[0].toLowerCase();
-        if (w === 'start') start = t[1]; else if (w === 'goal') goal = t[1]; else if (w === 'undirected') dir = false; else if (w === 'directed') dir = true;
-        else if (w === 'h' && t.length === 3 && !isNaN(+t[2])) h[t[1]] = +t[2];
-        else if (t.length === 3 && !isNaN(+t[2])) { edges.push([t[0], t[1], +t[2]]); nodes[t[0]] = 1; nodes[t[1]] = 1; }
-        else bad.push(i + 1);
-      });
-      if (bad.length) { msg.textContent = 'Line ' + bad.join(', ') + ' is not understood. Use "A B 3" for an edge, "h A 5" for a heuristic, "start S", "goal G".'; return; }
-      if (!edges.length || !start || !goal || !nodes[start] || !nodes[goal]) { msg.textContent = 'Give at least one edge, plus a start and a goal that appear in the edges.'; return; }
-      msg.textContent = '';
-      var adj = {}; Object.keys(nodes).forEach(function (k) { adj[k] = []; }); edges.forEach(function (e) { adj[e[0]].push(e[1]); if (!dir) adj[e[1]].push(e[0]); });
-      var depth = {}; depth[start] = 0; var qq = [start];
-      while (qq.length) { var u = qq.shift(); adj[u].forEach(function (v) { if (depth[v] === undefined) { depth[v] = depth[u] + 1; qq.push(v); } }); }
-      var maxd = 0; Object.keys(nodes).forEach(function (k) { if (depth[k] === undefined) depth[k] = 0; maxd = Math.max(maxd, depth[k]); });
-      var layers = {}; Object.keys(nodes).sort().forEach(function (k) { (layers[depth[k]] = layers[depth[k]] || []).push(k); });
-      var maxw = 0; for (var d in layers) maxw = Math.max(maxw, layers[d].length);
-      var W = Math.max(300, (maxd + 1) * 120 + 40), H = Math.max(160, maxw * 80 + 40), N = {};
-      for (var d2 in layers) layers[d2].forEach(function (k, j) { N[k] = [50 + d2 * 120, Math.round(H / (layers[d2].length + 1) * (j + 1)), h[k] || 0]; });
-      GRAPHS.custom = { name: 'Your graph', dir: dir, start: start, goal: goal, vb: '0 0 ' + W + ' ' + H, inf: Object.keys(h).length > 0, nodes: N, edges: edges };
-      if (sims.labsim) sims.labsim.set({ graph: 'custom' });
-      msg.textContent = 'Loaded. Your graph is now in the simulator above.';
-    });
-  };
+  /* the graph and tree editor for the lab lives in editor.js */
 
   /* ---------------- theme ---------------- */
   function calmInit() {
