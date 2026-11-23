@@ -96,6 +96,7 @@
       var cls = (s === 'path' || s === 'goal') && step.done ? 'sol' : onPath[n.id] ? 'on' : '';
       if (s === 'forgot') cls += ' forgot';
       o += '<line class="tedge ' + cls + '" x1="' + X(n.parent) + '" y1="' + Y(n.parent) + '" x2="' + X(n.id) + '" y2="' + Y(n.id) + '"/>';
+      if (!run.G.fOnly) { var cx = X(n.parent) + (X(n.id) - X(n.parent)) * .62, cy = Y(n.parent) + (Y(n.id) - Y(n.parent)) * .62; o += '<text class="tcost" x="' + (cx + (X(n.id) > X(n.parent) ? 10 : X(n.id) < X(n.parent) ? -10 : 11)) + '" y="' + (cy + 1) + '">' + n.step + '</text>'; }
     });
     ns.forEach(function (n) {
       var s = nodeStatus(step, n.id); if (s === 'path' && !step.done) s = 'done';
@@ -191,7 +192,7 @@
   /* ---------------- visualiser ---------------- */
   function chip(run, n, cls, val) {
     var a = ALG[run.alg], v = val !== undefined ? val : a.key === 'g' ? n.g : a.key === 'h' ? n.h : a.key === 'f' ? n.f : null;
-    return '<span class="chip ' + (cls || '') + '" data-id="' + n.id + '">' + esc(n.path.join('-')) + (v !== null && v !== undefined ? '<span class="pv">' + a.key + '=' + v + '</span>' : '') + '</span>';
+    return '<span class="chip ' + (cls || '') + '" data-id="' + n.id + '">' + esc(n.path.join('-')) + (v !== null && v !== undefined ? '<span class="pv">' + a.key + '=' + v + '</span>' : '') + (a.key === 'g' && n.parent !== null && n.parent !== undefined && val === undefined ? '<span class="ps" title="cost so far of the parent + the cost of this one step">(' + run.T[n.parent].g + '+' + n.step + ')</span>' : '') + '</span>';
   }
 
   function Sim(el) {
@@ -279,8 +280,8 @@
   Sim.prototype.render = function () {
     var R = this.R, s = R.steps[this.i], G = R.G, A = ALG[R.alg], self = this;
     $$('.tabs button', this.el).forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === self.view)); });
-    this.r.canvas.innerHTML = this.view === 'graph' ? drawGraph(G, R, s) : this.view === 'full' ? drawFull(G, { run: R, step: s, valKey: treeValKey(R.alg) }) : drawTree(R, s);
-    this.r.legend.innerHTML = LEGEND + (this.view === 'full' ? '<span><i style="border-color:var(--rule);border-style:dashed"></i>not reached yet</span><span><i style="border-color:var(--S);background:var(--S)"></i>number = expansion order</span>' : '') + (LEGEND_X[R.alg] || '') + (this.mode === 'graph' && !REC[R.alg] ? '<span><i style="border-color:var(--muted);border-style:dashed"></i>skipped repeat</span>' : '');
+    this.r.canvas.innerHTML = this.view === 'graph' ? drawGraph(G, R, s) : this.view === 'full' ? drawFull(G, { run: R, step: s, valKey: treeValKey(R.alg), cost: !G.fOnly }) : drawTree(R, s);
+    this.r.legend.innerHTML = LEGEND + (this.view === 'graph' ? '<span>number on an arrow = cost of that one step</span>' : '<span>g under a node = total cost of the whole path</span><span>grey number on an edge = cost of that one step</span>') + (this.view === 'full' ? '<span><i style="border-color:var(--rule);border-style:dashed"></i>not reached yet</span><span><i style="border-color:var(--S);background:var(--S)"></i>number = expansion order</span>' : '') + (LEGEND_X[R.alg] || '') + (this.mode === 'graph' && !REC[R.alg] ? '<span><i style="border-color:var(--muted);border-style:dashed"></i>skipped repeat</span>' : '');
     // fringe
     var fh = '', fr = s.fr || [];
     if (REC[R.alg]) {

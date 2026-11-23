@@ -109,7 +109,8 @@
     <div class="card"><b>State</b><p>One situation the problem can be in. On a graph, a node: S, A, G.</p></div>
     <div class="card"><b>Start and goal</b><p>Where you begin, and the state you are trying to reach. The <b>goal test</b> checks whether a state is the goal.</p></div>
     <div class="card"><b>Successors (children)</b><p>The states you can reach in one move. Written in alphabetical order unless the paper says otherwise.</p></div>
-    <div class="card"><b>Path cost g(n)</b><span class="alt">backward cost</span><p>What you have paid so far: the sum of edge costs from the start to n along this path.</p></div>
+    <div class="card"><b>Step cost</b><span class="alt">edge cost, c(n, n&prime;)</span><p>The cost of <b>one single move</b>: the number written on one arrow. It says nothing about how you got there.</p></div>
+    <div class="card"><b>Path cost g(n)</b><span class="alt">cumulative cost, backward cost</span><p>The <b>total</b> paid so far: all the step costs from the start to n added up along this path. g(child) = g(parent) + step cost. UCS and A* compare this, never the last step alone.</p></div>
     <div class="card"><b>Heuristic h(n)</b><span class="alt">forward cost, estimate</span><p>A guess of the cost still left from n to the goal. Given on the graph as h = &hellip;</p></div>
     <div class="card"><b>f(n) = g(n) + h(n)</b><p>Paid so far plus estimate still to go: the estimated total cost of a solution through n. A* sorts by it.</p></div>
     <div class="card"><b>Fringe</b><span class="alt">frontier, open list</span><p>The waiting list of paths generated but not yet expanded. The data structure decides the algorithm.</p></div>
@@ -397,7 +398,10 @@
 <div class="ls-bar"><b>Learn it first</b><span>about 4 minutes</span></div>
 <div class="ls-grid"><div class="ls-main">
 <div class="beat"><span class="bn">1</span><div><h3>The idea: always extend the cheapest trip so far</h3><p>UCS is BFS that cares about money. Instead of "fewest edges first", it takes out the path with the <b>smallest g</b>, the total cost paid so far.</p></div></div>
-<div class="beat"><span class="bn">2</span><div><h3>The tool: a priority queue</h3><p>A list kept <b>sorted by g</b>, smallest at the front. Write g beside every entry. Ties: alphabetical.</p></div></div>
+<div class="beat"><span class="bn">2</span><div><h3>Two different costs: one step, and the whole path</h3>
+<div class="ls-gh"><div><b>step cost</b><span>the number on <b>one arrow</b>. The price of that single move only.</span></div><div><b>g (path cost)</b><span>the <b>total</b> of every step from S to here. g(child) = g(parent) + step cost.</span></div></div>
+<p>UCS sorts by <b>g, never by the last step</b>. Example: reaching A cost 7 + 3 = <b>10</b> in total, reaching B cost 3 + 5 = <b>8</b> in total. The last steps were 3 and 5, but B has the smaller g, so <b>B comes out first</b>. In the queue below, an entry like <b>S-A-B g=6 (1+5)</b> means: g is 6, made of 1 already paid plus a step of 5.</p>
+<p>A priority queue is a list kept <b>sorted by g</b>, smallest at the front. Write g beside every entry. Ties: alphabetical.</p></div></div>
 <div class="beat"><span class="bn">3</span><div><h3>Do it once by hand (Fall 2025 Q2(a))</h3>
 <table class="ls-t"><thead><tr><th>Take out (g)</th><th>Priority queue after (sorted by g)</th></tr></thead><tbody>
 <tr><td>S (0)</td><td>S-A 1, S-C 10</td></tr>

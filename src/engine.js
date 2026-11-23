@@ -69,7 +69,7 @@ function runSearch(G, alg, opts) {
   var T = [], steps = [], st = {}, valOv = {}, round = 0, seq = 0, regs = {}, closed = {}, order = [];
   var CAP = opts.cap || 400, rows = [];
   function tnode(parent, s, g, depth) {
-    var h = B.h(s), n = { id: T.length, parent: parent, s: s, g: g, h: h, f: g + h, depth: depth, round: round, seq: seq++ };
+    var h = B.h(s), n = { id: T.length, parent: parent, s: s, g: g, h: h, f: g + h, step: parent === null || parent === undefined ? 0 : g - T[parent].g, depth: depth, round: round, seq: seq++ };
     n.path = parent === null ? [s] : T[parent].path.concat([s]);
     T.push(n); return n;
   }
@@ -91,7 +91,7 @@ function runSearch(G, alg, opts) {
     return out;
   }
   function valTxt(n) {
-    if (A.key === 'g') return 'g = ' + n.g;
+    if (A.key === 'g') return n.parent === null || n.parent === undefined ? 'g = 0' : 'g = ' + T[n.parent].g + ' + ' + n.step + ' = ' + n.g;
     if (A.key === 'h') return 'h = ' + n.h;
     if (A.key === 'f') return G.fOnly ? 'f = ' + n.f : 'f = ' + n.g + ' + ' + n.h + ' = ' + n.f;
     return '';
@@ -142,7 +142,7 @@ function runSearch(G, alg, opts) {
         else {
           kids.forEach(function (k) { fr.push(k); });
           fr.sort(function (a, b) { var d = pri(a) - pri(b); if (d) return d; if (ties === 'alpha' && a.s !== b.s) return a.s < b.s ? -1 : 1; return a.seq - b.seq; });
-          why = 'The priority queue stays sorted by <b>' + (A.key === 'g' ? 'g (path cost so far)' : A.key === 'h' ? 'h (estimated distance to goal)' : 'f = g + h') + '</b>, lowest first' + (ties === 'alpha' ? ', ties alphabetical.' : ', ties first-come-first-served.');
+          why = 'The priority queue stays sorted by <b>' + (A.key === 'g' ? 'g (the total cost of the whole path so far, not just the last edge)' : A.key === 'h' ? 'h (estimated distance to goal)' : 'f = g + h') + '</b>, lowest first' + (ties === 'alpha' ? ', ties alphabetical.' : ', ties first-come-first-served.');
         }
         var kt = kids.length ? 'Its children: ' + kids.map(function (k) { return k.s + (A.key ? ' (' + valTxt(k) + ')' : G.dir === false || A.ds === 'queue' || A.ds === 'stack' ? '' : ''); }).join(', ') + '. ' + why : 'It has no children' + (graph && B.adj[n.s].length ? ' that are not already expanded' : '') + ', so nothing is added.';
         snap('pop', 'Take ' + lbl(n) + ' out. ' + n.s + ' is not the goal, so <b>expand</b> it. ' + kt, { fr: fr.slice(), cur: cur, popped: n.id, kids: kids.map(function (k) { return k.id; }) });
