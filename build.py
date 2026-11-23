@@ -30,9 +30,9 @@ def order_pages(pages):
 FAVICON = (
     "data:image/svg+xml,"
     "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E"
-    "%3Ccircle cx='16' cy='16' r='15' fill='%23F0B23A'/%3E"
-    "%3Cg stroke='%2312293B' stroke-width='2.2' fill='none'%3E%3Cpath d='M10 10l12 2M10 10l3 12M22 12l-9 10'/%3E%3C/g%3E"
-    "%3Cg fill='%2312293B'%3E%3Ccircle cx='10' cy='10' r='3.2'/%3E%3Ccircle cx='22' cy='12' r='3.2'/%3E%3Ccircle cx='13' cy='22' r='3.2'/%3E%3C/g%3E"
+    "%3Ccircle cx='16' cy='16' r='15' fill='%238EADFF'/%3E"
+    "%3Cg stroke='%2316223A' stroke-width='2.2' fill='none'%3E%3Cpath d='M10 10l12 2M10 10l3 12M22 12l-9 10'/%3E%3C/g%3E"
+    "%3Cg fill='%2316223A'%3E%3Ccircle cx='10' cy='10' r='3.2'/%3E%3Ccircle cx='22' cy='12' r='3.2'/%3E%3Ccircle cx='13' cy='22' r='3.2'/%3E%3C/g%3E"
     "%3C/svg%3E"
 )
 
@@ -43,7 +43,7 @@ HEAD = f"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI Search Guide | CSE 3811</title>
 <meta name="description" content="An interactive guide to the first half of artificial intelligence: agents, uninformed and informed search, local search, constraint satisfaction and game playing, with step-by-step visualisers and worked exam answers.">
-<meta name="theme-color" content="#12293B">
+<meta name="theme-color" content="#16223A">
 <meta property="og:title" content="AI Search Guide">
 <meta property="og:description" content="Learn uninformed and informed search step by step, with visualisers that show the fringe, the search tree and how to read the answer.">
 <meta property="og:type" content="website">

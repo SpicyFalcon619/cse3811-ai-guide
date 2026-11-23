@@ -522,7 +522,7 @@
     if (p.dataset.skip !== '1') acts.innerHTML += '<button type="button" class="hbtn line" data-done="' + p.id + '"></button>';
     if (acts.innerHTML) (($('.meta', left) || $('.lede', left)) || left.lastChild).insertAdjacentElement('afterend', acts);
     addField(h);
-    var pl = p.id === 'start' ? [routeSVG(), 'The course as a search graph, S to the goal G. Nodes fill in as you mark pages understood: saffron when started, sage when done.'] : PLATES[p.id] || autoPlate(p);
+    var pl = p.id === 'start' ? [routeSVG(), 'The course as a search graph, S to the goal G. Nodes fill in as you mark pages understood: amber when started, green when done.'] : PLATES[p.id] || autoPlate(p);
     if (pl) {
             h.classList.add('has-plate');
       var f = document.createElement('figure'); f.className = 'plate';
@@ -565,14 +565,14 @@
     c.clearRect(0, 0, this.w, this.h);
     this.E.forEach(function (e) {
       var a = N[e[0]], b = N[e[1]], lit = Math.min(a.d, b.d) < wave - .4 && Math.max(a.d, b.d) <= wave;
-      c.strokeStyle = lit ? 'rgba(240,178,58,' + (t > fade ? .28 * Math.max(0, 1 - (t - fade) / 3) : .28) + ')' : 'rgba(238,242,243,.07)';
+      c.strokeStyle = lit ? 'rgba(142,173,255,' + (t > fade ? .28 * Math.max(0, 1 - (t - fade) / 3) : .28) + ')' : 'rgba(238,242,243,.07)';
       c.lineWidth = lit ? 1.4 : 1; c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke();
     });
     N.forEach(function (n) {
       var k = wave - n.d, r = 3.2, col = 'rgba(238,242,243,.14)';
       if (n.d === 0) r = 5;
-      if (k >= 0 && k < 1) { col = 'rgba(240,178,58,' + (.85 - k * .4) + ')'; r = 4 + (1 - k) * 4; c.beginPath(); c.arc(n.x, n.y, 10 + k * 18, 0, 7); c.strokeStyle = 'rgba(240,178,58,' + (.35 * (1 - k)) + ')'; c.lineWidth = 1.2; c.stroke(); }
-      else if (k >= 1) col = 'rgba(125,181,160,' + (t > fade ? .45 * Math.max(0, 1 - (t - fade) / 3) : .45) + ')';
+      if (k >= 0 && k < 1) { col = 'rgba(142,173,255,' + (.85 - k * .4) + ')'; r = 4 + (1 - k) * 4; c.beginPath(); c.arc(n.x, n.y, 10 + k * 18, 0, 7); c.strokeStyle = 'rgba(142,173,255,' + (.35 * (1 - k)) + ')'; c.lineWidth = 1.2; c.stroke(); }
+      else if (k >= 1) col = 'rgba(102,189,177,' + (t > fade ? .45 * Math.max(0, 1 - (t - fade) / 3) : .45) + ')';
       c.fillStyle = col; c.beginPath(); c.arc(n.x, n.y, r, 0, 7); c.fill();
     });
   };
