@@ -701,3 +701,10 @@
   .gsvg .tedge.old { stroke: var(--A); stroke-width: 2; }
   .gsvg .tedge.fresh { stroke: var(--W); stroke-width: 2.6; stroke-dasharray: 1; stroke-dashoffset: 1; animation: drawEdge .6s ease-out forwards; }
   @media (prefers-reduced-motion: reduce) { .gsvg .tedge.fresh { animation: none; stroke-dasharray: none; } }
+  /* graph picker: always drawn as a button, whatever the browser does to native selects */
+  .sim-top label.f { cursor: pointer; position: relative; z-index: 2; }
+  .sim-top select { -webkit-appearance: none; appearance: none; cursor: pointer; position: relative; z-index: 2; pointer-events: auto; min-width: 190px; padding: 7px 34px 7px 12px; border: 1.5px solid rgba(238, 242, 243, .38); border-radius: 4px; font-family: var(--mono); font-size: .8rem; font-weight: 600; background-repeat: no-repeat; background-position: right 11px center; background-size: 12px 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23F0B23A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+  .sim-top select:hover { border-color: var(--hl); }
+  .sim-top select:focus-visible { outline: 2px solid var(--hl); outline-offset: 2px; }
+  .sim-top select option { background: #0E2232; color: #EEF2F3; }
