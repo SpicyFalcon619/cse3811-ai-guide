@@ -234,7 +234,7 @@
     this.r.say.addEventListener('click', function (e) { var c = e.target.closest('.chip.pick'); if (c) self.guess(+c.dataset.id, c); });
   };
   Sim.prototype.set = function (cfg) {
-    if (cfg.graph) { if (this.graphs.indexOf(cfg.graph) < 0) { this.graphs.push(cfg.graph); if (this.r.graph) this.r.graph.insertAdjacentHTML('beforeend', '<option value="' + cfg.graph + '">' + esc(GRAPHS[cfg.graph].name) + '</option>'); } this.graph = cfg.graph; if (this.r.graph) this.r.graph.value = cfg.graph; }
+    if (cfg.graph) { if (this.graphs.indexOf(cfg.graph) < 0) { this.graphs.push(cfg.graph); if (this.r.graph) this.r.graph.insertAdjacentHTML('beforeend', '<option value="' + cfg.graph + '">' + esc(GRAPHS[cfg.graph].name) + '</option>'); } this.graph = cfg.graph; if (this.r.graph) { this.r.graph.value = cfg.graph; this.r.graph.dispatchEvent(new Event('sync')); } }
     if (cfg.alg) this.alg = cfg.alg; if (cfg.mode) this.mode = cfg.mode;
     this.run();
   };
@@ -654,7 +654,7 @@
   };
   WIDGETS.puzzle = function (el) {
     var GOAL = [0, 1, 2, 3, 4, 5, 6, 7, 8], START = [7, 2, 4, 5, 0, 6, 8, 3, 1], b = START.slice();
-    el.innerHTML = '<div class="puz"><div><p class="k mono" style="font-size:.68rem;letter-spacing:.12em;color:var(--muted);margin-bottom:6px">CURRENT (CLICK A TILE NEXT TO THE GAP)</p><div class="board" data-r="b"></div></div><div><p class="mono" style="font-size:.68rem;letter-spacing:.12em;color:var(--muted);margin-bottom:6px">GOAL</p><div class="board">' + GOAL.map(function (t) { return t ? '<div>' + t + '</div>' : '<div class="blank"></div>'; }).join('') + '</div></div><div class="meter"><div class="row"><span>h1: tiles misplaced</span><b data-r="h1"></b></div><div class="row"><span>h2: Manhattan distance</span><b data-r="h2"></b></div><p class="mono" style="font-size:.78rem;color:var(--muted)" data-r="d"></p><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" type="button" data-r="reset">Slide 25 start</button><button class="btn" type="button" data-r="mix">Shuffle 3 moves</button></div></div></div>';
+    el.innerHTML = '<div class="puz"><div><p class="mono" style="font-size:.68rem;letter-spacing:.12em;color:var(--muted);margin-bottom:6px">CURRENT (CLICK A TILE NEXT TO THE GAP)</p><div class="board" data-r="b"></div></div><div><p class="mono" style="font-size:.68rem;letter-spacing:.12em;color:var(--muted);margin-bottom:6px">GOAL</p><div class="board">' + GOAL.map(function (t) { return t ? '<div>' + t + '</div>' : '<div class="blank"></div>'; }).join('') + '</div></div><div class="meter"><div class="row"><span>h1: tiles misplaced</span><b data-r="h1"></b></div><div class="row"><span>h2: Manhattan distance</span><b data-r="h2"></b></div><p class="mono" style="font-size:.78rem;color:var(--muted)" data-r="d"></p><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" type="button" data-r="reset">Slide 25 start</button><button class="btn" type="button" data-r="mix">Shuffle 3 moves</button></div></div></div>';
     function draw() {
       var h1 = 0, h2 = 0, parts = [];
       b.forEach(function (t, i) { if (!t) return; var g = GOAL.indexOf(t); if (g !== i) h1++; var d = Math.abs(Math.floor(i / 3) - Math.floor(g / 3)) + Math.abs(i % 3 - g % 3); h2 += d; parts.push(t + ':' + d); });
