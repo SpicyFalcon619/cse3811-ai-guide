@@ -42,6 +42,7 @@
       if (step.cur !== undefined && run.T[step.cur]) { var p = run.T[step.cur].path; for (var i = 0; i < p.length - 1; i++) onE[p[i] + '>' + p[i + 1]] = 1; }
       if (step.done && run.result) { var q = run.result.path; for (var j = 0; j < q.length - 1; j++) solE[q[j] + '>' + q[j + 1]] = 1; q.forEach(function (s) { stat[s] = 'path'; }); }
     }
+    if (opt.lit) { Object.keys(opt.lit.st).forEach(function (k) { stat[k] = opt.lit.st[k]; }); genE = opt.lit.e; }
     var o = '<svg class="gsvg gfull" viewBox="' + G.vb + '" width="' + W + '" role="img" aria-label="' + esc(G.name) + '">';
     G.edges.forEach(function (e) {
       var a = G.nodes[e[0]], b = G.nodes[e[1]], dx = b[0] - a[0], dy = b[1] - a[1], L = Math.sqrt(dx * dx + dy * dy), ux = dx / L, uy = dy / L;
@@ -163,13 +164,15 @@
       if (n.parent === null || (opts.upto !== undefined && n.depth > opts.upto)) return;
       var pa = byId[n.parent], cls = solKey[n.key] ? 'sol' : onKey[n.key] ? 'on' : '';
       if (ghosts && !stat[n.key]) cls += ' ghost';
-      o += '<line class="tedge ' + cls + '" x1="' + X(pa) + '" y1="' + Y(pa) + '" x2="' + X(n) + '" y2="' + Y(n) + '"/>';
-      if (opts.cost) { var mx = X(pa) + (X(n) - X(pa)) * .45, my = Y(pa) + (Y(n) - Y(pa)) * .45; o += '<text class="tcost" x="' + (mx + (X(n) > X(pa) ? 9 : X(n) < X(pa) ? -9 : 9)) + '" y="' + (my + 2) + '">' + (n.g - pa.g) + '</text>'; }
+      if (opts.level !== undefined) cls = n.depth === opts.level ? 'fresh' : 'old';
+      o += '<line pathLength="1" class="tedge ' + cls + '" x1="' + X(pa) + '" y1="' + Y(pa) + '" x2="' + X(n) + '" y2="' + Y(n) + '"/>';
+      if (opts.cost) { var mx = X(pa) + (X(n) - X(pa)) * .62, my = Y(pa) + (Y(n) - Y(pa)) * .62, sx = X(n) > X(pa) ? 10 : X(n) < X(pa) ? -10 : 11; o += '<text class="tcost" x="' + (mx + sx) + '" y="' + (my + 1) + '">' + (n.g - pa.g) + '</text>'; }
     });
     ns.forEach(function (n) {
       if (opts.upto !== undefined && n.depth > opts.upto) return;
       var s = stat[n.key] || (ghosts ? 'ghost' : ''), x = X(n), y = Y(n), born = bornKey[n.key];
       if (solKey[n.key]) s = 'path';
+      if (opts.level !== undefined) { s = n.s === G.goal ? 'goal' : n.depth === opts.level ? 'open' : 'done'; born = n.depth === opts.level; }
       var v = vk === 'none' ? '' : vk === 'f' ? (G.fOnly ? 'f=' + n.f : 'f=' + n.g + '+' + n.h) : vk + '=' + n[vk];
       if (run && run.alg === 'RBFS' && step) { var best = null; visibleNodes(run, step).forEach(function (t) { if (t.path.join('-') === n.key) best = t; }); if (best && step.val[best.id] !== undefined) v = 'f=' + step.val[best.id]; }
       o += '<g class="node ' + s + (born ? ' born' : '') + '" style="transform-origin:' + x + 'px ' + y + 'px"><circle cx="' + x + '" cy="' + y + '" r="15"/><text class="l" x="' + x + '" y="' + (y + 1) + '" style="font-size:' + Math.min(13, nodeLabelSize(n.s)) + 'px">' + esc(n.s) + '</text>';
@@ -668,32 +671,48 @@
     draw();
   };
   WIDGETS.builder = function (el) {
-    var keys = el.dataset.graphs.split(','), d = 0;
+    var keys = el.dataset.graphs.split(','), d = 0, timer = null;
     el.innerHTML = '<div class="sim"><div class="sim-top"><label class="f">GRAPH <select data-r="g">' + keys.map(function (k) { return '<option value="' + k + '">' + esc(GRAPHS[k].name) + '</option>'; }).join('') + '</select></label></div>' +
-      '<div class="ctrl"><button class="btn" type="button" data-r="p"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Back</button><button class="btn pri" type="button" data-r="n">Next level<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><span class="cnt" data-r="cnt" style="width:auto"></span></div>' +
-      '<div class="sim-body"><div class="viz"><div class="tabs"><span class="mono" style="font-size:.7rem;letter-spacing:.08em;color:var(--muted);padding:6px 10px">STATE GRAPH</span></div><div class="canvas tall" data-r="g1"></div></div><div class="viz" style="border-right:0"><div class="tabs"><span class="mono" style="font-size:.7rem;letter-spacing:.08em;color:var(--muted);padding:6px 10px">TREE SO FAR (number under each node = g, path cost)</span></div><div class="canvas tall" data-r="g2"></div></div></div>' +
-      '<div class="say" data-r="say" style="margin:0 16px 16px;border-radius:0 6px 6px 0"></div></div>';
-    var sel = $('[data-r=g]', el);
+      '<div class="ctrl"><button class="btn" type="button" data-r="z"><svg viewBox="0 0 24 24"><path d="M4 4v6h6"/><path d="M4.5 15a8 8 0 1 0 2-8.5L4 10"/></svg>Restart</button><button class="btn" type="button" data-r="p"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Back</button><button class="btn pri" type="button" data-r="n">Next level<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><button class="btn" type="button" data-r="a">Show all</button><input type="range" min="0" value="0" data-r="rg" aria-label="Level"><span class="cnt" data-r="cnt" style="width:auto"></span></div>' +
+      '<div class="sim-body bsplit"><div class="viz"><div class="tabs"><span class="tlabel">State graph</span></div><div class="canvas" data-r="g1"></div><div class="legend"><span><i style="border-color:var(--A);background:var(--Abg)"></i>already in the tree</span><span><i style="border-color:var(--W);background:var(--Wbg)"></i>added at this level</span><span><i style="border-color:var(--hl)"></i>arrow used just now</span></div></div>' +
+      '<div class="viz" style="border-right:0"><div class="tabs"><span class="tlabel">Search tree so far &middot; under a node: g, the path cost</span></div><div class="canvas tall" data-r="g2"></div><div class="legend"><span><i style="border-color:var(--W);background:var(--Wbg)"></i>new level</span><span><i style="border-color:var(--G);background:var(--G)"></i>goal: a leaf</span><span>small grey numbers: edge costs</span></div></div></div>' +
+      '<div class="say" data-r="say" style="margin:0 16px 16px"></div></div>';
+    var sel = $('[data-r=g]', el), rg = $('[data-r=rg]', el);
     function draw() {
       var G = GRAPHS[sel.value], ns = fullTree(G), maxD = Math.max.apply(null, ns.map(function (n) { return n.depth; }));
-      d = Math.max(0, Math.min(d, maxD));
-      $('[data-r=g1]', el).innerHTML = drawGraph(G, null, null);
-      $('[data-r=g2]', el).innerHTML = drawFull(G, { upto: d, valKey: G.fOnly ? 'f' : 'g', cost: !G.fOnly });
+      d = Math.max(0, Math.min(d, maxD)); rg.max = maxD; rg.value = d;
+      var lit = { st: {}, e: {} }, byId = {};
+      ns.forEach(function (n) { byId[n.id] = n; });
+      ns.forEach(function (n) { if (n.depth < d) lit.st[n.s] = 'done'; });
+      ns.forEach(function (n) { if (n.depth === d) { lit.st[n.s] = 'open'; if (n.parent !== null) lit.e[byId[n.parent].s + '>' + n.s] = 1; } });
+      $('[data-r=g1]', el).innerHTML = drawGraph(G, null, null, { lit: lit });
+      $('[data-r=g2]', el).innerHTML = drawFull(G, { upto: d, level: d, valKey: G.fOnly ? 'f' : 'g', cost: !G.fOnly });
       var lvl = ns.filter(function (n) { return n.depth === d; }), cnt = {};
       ns.filter(function (n) { return n.depth <= d; }).forEach(function (n) { cnt[n.s] = (cnt[n.s] || 0) + 1; });
       var rep = Object.keys(cnt).filter(function (k) { return cnt[k] > 1; });
       var t = d === 0 ? 'Level 0 is just the start state <b>' + G.start + '</b>, with g = 0. Every tree is built down from here.' :
         'Level ' + d + ': for every node on level ' + (d - 1) + ', draw one child for each arrow leaving its state (alphabetical, left to right), skipping states already on that path. ' +
         'New nodes: ' + lvl.map(function (n) { return '<b>' + n.key + '</b> (g = ' + n.g + ')'; }).join(', ') + '.';
-      if (lvl.some(function (n) { return n.s === G.goal; })) t += ' A goal node is a <b>leaf</b>: we stop that branch there.';
+      if (lvl.some(function (n) { return n.s === G.goal; })) t += ' A goal node is a <b>leaf</b>: that branch stops there.';
       if (rep.length) t += ' Notice ' + rep.map(function (k) { return '<b>' + k + '</b> appears ' + cnt[k] + ' times'; }).join(', ') + ': each copy is a different path, so it is a different tree node.';
       if (d === maxD) t += ' <b>The tree is complete.</b> Now run any search on it: switch a visualiser to the Full search tree view.';
       var say = $('[data-r=say]', el); say.className = 'say' + (d === maxD ? ' goal' : ''); say.innerHTML = '<span class="kind">LEVEL ' + d + ' OF ' + maxD + '</span><p>' + t + '</p>';
+      void say.offsetWidth; say.classList.add('flash');
       $('[data-r=cnt]', el).textContent = ns.filter(function (n) { return n.depth <= d; }).length + ' of ' + ns.length + ' tree nodes drawn';
-      $('[data-r=p]', el).disabled = d === 0; $('[data-r=n]', el).disabled = d === maxD;
+      $('[data-r=p]', el).disabled = d === 0; $('[data-r=z]', el).disabled = d === 0; $('[data-r=n]', el).disabled = d === maxD; $('[data-r=a]', el).disabled = d === maxD;
     }
-    el.addEventListener('click', function (e) { if (e.target.closest('[data-r=p]')) { d--; draw(); } if (e.target.closest('[data-r=n]')) { d++; draw(); } });
-    sel.addEventListener('change', function () { d = 0; draw(); });
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function go(n) { stop(); d = n; draw(); }
+    el.addEventListener('click', function (e) {
+      if (e.target.closest('[data-r=p]')) go(d - 1);
+      if (e.target.closest('[data-r=n]')) go(d + 1);
+      if (e.target.closest('[data-r=z]')) go(0);
+      if (e.target.closest('[data-r=a]')) { stop(); timer = setInterval(function () { d++; draw(); if (+rg.value >= +rg.max) stop(); }, 650); }
+    });
+    rg.addEventListener('input', function () { go(+this.value); });
+    el.tabIndex = -1;
+    el.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') { e.preventDefault(); go(d + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(d - 1); } });
+    sel.addEventListener('change', function () { go(0); });
     draw();
   };
   WIDGETS.readout = function (el) {
