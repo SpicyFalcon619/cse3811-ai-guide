@@ -408,7 +408,7 @@
     pages.forEach(function (p) {
       n++; p.dataset.num = n;
       var g = groups.filter(function (x) { return x.name === p.dataset.group; })[0];
-      if (!g) { g = { name: p.dataset.group, tag: p.dataset.tag || (p.dataset.ct === '1' ? 'CT2' : ''), pages: [] }; groups.push(g); }
+      if (!g) { g = { name: p.dataset.group, tag: '', pages: [] }; groups.push(g); }
       g.pages.push(p);
     });
     $('#groups').innerHTML = groups.map(function (g, i) { return '<a href="#' + g.pages[0].id + '" data-g="' + i + '">' + g.name + (g.tag ? '<span class="ct' + (g.tag === 'CT1' ? ' t1' : '') + '">' + g.tag + '</span>' : '') + '</a>'; }).join('');

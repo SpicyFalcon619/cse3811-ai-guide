@@ -9,9 +9,9 @@ An interactive guide to search in artificial intelligence, written for CSE 3811 
 | Part | Topics |
 |---|---|
 | Start here | The one search loop every algorithm shares, and the words you need (state, fringe, expand, g, h, f) |
-| Agents (CT1) | Views of AI, agents and environments, rationality, PEAS, environment properties, search problems |
+| Agents | Views of AI, agents and environments, rationality, PEAS, environment properties, search problems |
 | Uninformed search | Graph to search tree, reading the answer from the fringe, BFS, DFS, UCS, depth-limited search and IDS, bidirectional search, tree search vs graph search |
-| Informed search (CT2) | Heuristics (admissible and consistent), Greedy best-first, A\*, IDA\*, RBFS, SMA\* |
+| Informed search | Heuristics (admissible and consistent), Greedy best-first, A\*, IDA\*, RBFS, SMA\* |
 | Exam | The question types that come up, past paper answers, a simulator lab, a quick check and pairs that are easy to mix up |
 
 ## What the site gives you

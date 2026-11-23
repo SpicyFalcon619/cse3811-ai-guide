@@ -11,7 +11,7 @@
 <!-- ======================= START ======================= -->
 <article class="page" id="start" data-title="Start here" data-group="Start here" data-skip="1">
   <header class="hero">
-    <p class="eyebrow"><b>CSE 3811</b> &middot; Artificial Intelligence &middot; up to the midterm</p>
+    <p class="eyebrow"><b>CSE 3811</b> &middot; Artificial Intelligence</p>
     <h1>Search, one step at a time</h1>
     <p class="lede">Each page teaches one idea and lets you run it. You watch the fringe fill and empty, guess which path comes out next, then copy the exam table at the end. Go in order: the informed algorithms only make sense once the uninformed loop feels easy.</p>
   </header>
@@ -19,18 +19,18 @@
     <h2>Study plan</h2>
     <ol class="plan">
       <li><a href="#loop"><span class="pn">1</span><span class="pt"><b>The one loop</b><span>Every algorithm is the same five lines; only the fringe changes. Start here.</span></span><span class="pm">15 min</span></a></li>
-      <li><a href="#ai-views"><span class="pn">2</span><span class="pt"><b>Agents and PEAS <span class="tag">CT1</span></b><span>What AI is, rationality, PEAS, environment properties, formulating a search problem.</span></span><span class="pm">60 min</span></a></li>
+      <li><a href="#ai-views"><span class="pn">2</span><span class="pt"><b>Agents and PEAS</b><span>What AI is, rationality, PEAS, environment properties, formulating a search problem.</span></span><span class="pm">60 min</span></a></li>
       <li><a href="#graph-tree"><span class="pn">3</span><span class="pt"><b>Uninformed search</b><span>Graph to tree, reading the fringe, BFS, DFS, UCS, IDS, bidirectional.</span></span><span class="pm">90 min</span></a></li>
-      <li><a href="#heuristic"><span class="pn">4</span><span class="pt"><b>Heuristics <span class="tag t2">CT2</span></b><span>What h(n) is; admissible and consistent, checked live on exam graphs.</span></span><span class="pm">30 min</span></a></li>
-      <li><a href="#greedy"><span class="pn">5</span><span class="pt"><b>Greedy and A* <span class="tag t2">CT2</span></b><span>Tree vs graph search, and the two ways A* stops being optimal.</span></span><span class="pm">45 min</span></a></li>
-      <li><a href="#idastar"><span class="pn">6</span><span class="pt"><b>IDA*, RBFS, SMA* <span class="tag t2">CT2</span></b><span>The memory-bounded three, with the exact rules from your solved-examples deck.</span></span><span class="pm">60 min</span></a></li>
+      <li><a href="#heuristic"><span class="pn">4</span><span class="pt"><b>Heuristics</b><span>What h(n) is; admissible and consistent, checked live on exam graphs.</span></span><span class="pm">30 min</span></a></li>
+      <li><a href="#greedy"><span class="pn">5</span><span class="pt"><b>Greedy and A*</b><span>Tree vs graph search, and the two ways A* stops being optimal.</span></span><span class="pm">45 min</span></a></li>
+      <li><a href="#idastar"><span class="pn">6</span><span class="pt"><b>IDA*, RBFS, SMA*</b><span>The memory-bounded three, with the exact rules from your solved-examples deck.</span></span><span class="pm">60 min</span></a></li>
       <li><a href="#papers"><span class="pn">&middot;</span><span class="pt"><b>Past papers and quick check</b><span>Q1 to Q3 of all three midterms, solved the way you write them.</span></span><span class="pm">60 min</span></a></li>
       <li><a href="#lab"><span class="pn">&middot;</span><span class="pt"><b>Simulator lab</b><span>Type in any graph from a question paper and run any algorithm on it.</span></span><span class="pm">any time</span></a></li>
     </ol>
   </section>
   <section class="howto">
     <div><h3>How a visualiser works</h3><p><b>Next</b> and <b>Back</b>, or the arrow keys, move one step; the panel says what happened and why. <b>Predict mode</b> asks you first. The <b>Full search tree</b> tab is the tree from your answer script, numbered in expansion order.</p></div>
-    <div><h3>What CT2 asks</h3><p>Every past Q3: an A* or Greedy trace with tree vs graph search, an RBFS trace with Best, Alt and f_limit, an IDA* trace with thresholds, and one &ldquo;why&rdquo;.</p></div>
+    <div><h3>What informed-search questions ask</h3><p>Every past Q3: an A* or Greedy trace with tree vs graph search, an RBFS trace with Best, Alt and f_limit, an IDA* trace with thresholds, and one &ldquo;why&rdquo;.</p></div>
     <div><h3>Your teacher&rsquo;s visualiser</h3><p>The A*, RBFS, SMA* and IDA* pages use the same example graphs as <a href="https://tanvir64.github.io/AI-Search/" target="_blank" rel="noopener">tanvir64.github.io/AI-Search</a>, so you can compare step by step.</p></div>
   </section>
 </article>
@@ -94,8 +94,8 @@
   </div>
 </article>
 
-<!-- ======================= AGENTS (CT1) ======================= -->
-<article class="page" id="ai-views" data-title="What is AI" data-group="Agents" data-tag="CT1" hidden>
+<!-- ======================= AGENTS ======================= -->
+<article class="page" id="ai-views" data-title="What is AI" data-group="Agents" hidden>
   <header class="hero"><p class="eyebrow"><b>Agents</b> &middot; deck 02, slides 3&ndash;9, 38&ndash;41</p><h1>Four views of AI</h1><p class="lede">The lecture sorts every definition of AI into four boxes. The columns are <b>human vs rational</b>, the rows are <b>thinking vs acting</b>. This course lives in one box: acting rationally.</p></header>
   <div class="views">
     <span></span><span class="ax">HUMANLY</span><span class="ax">RATIONALLY</span>
@@ -119,7 +119,7 @@
   </tbody></table></div>
 </article>
 
-<article class="page" id="agents" data-title="Agents and environments" data-group="Agents" data-tag="CT1" hidden>
+<article class="page" id="agents" data-title="Agents and environments" data-group="Agents" hidden>
   <header class="hero"><p class="eyebrow"><b>Agents</b> &middot; deck 02, slides 10&ndash;15</p><h1>Agents and environments</h1><p class="lede">An agent is anything that perceives its environment through <b>sensors</b> and acts on it through <b>actuators</b>. What you design is the box in the middle: the agent function that turns what it has seen into what it does.</p></header>
   <div class="cols">
     <div class="card"><span class="k">Percept</span><p>What the agent senses at one instant.</p></div>
@@ -138,7 +138,7 @@
   </tbody></table></div>
 </article>
 
-<article class="page" id="rational" data-title="Rationality" data-group="Agents" data-tag="CT1" hidden>
+<article class="page" id="rational" data-title="Rationality" data-group="Agents" hidden>
   <header class="hero"><p class="eyebrow"><b>Agents</b> &middot; deck 02, slides 16&ndash;19</p><h1>Good behaviour: rationality</h1><p class="lede">A rational agent does the right thing, and &ldquo;right&rdquo; depends on how you measure success. Choose the performance measure carefully: it shapes the behaviour you get.</p></header>
   <div class="rule"><span class="k">Definition, word for word</span><p class="big" style="font-size:1.15rem;font-family:var(--body);font-weight:400">For each possible percept sequence, a rational agent should select an action that is expected to <b>maximise its performance measure</b>, given the evidence provided by the percept sequence and whatever built-in knowledge the agent has.</p></div>
   <h2>Rationality depends on four things (slide 18)</h2>
@@ -157,7 +157,7 @@
   <p class="trap"><b class="k">EXAM USE</b>If an agent made a bad move because of bad luck, it can still be rational: it chose the action with the best <i>expected</i> result given its percepts.</p>
 </article>
 
-<article class="page" id="peas" data-title="PEAS" data-group="Agents" data-tag="CT1" hidden>
+<article class="page" id="peas" data-title="PEAS" data-group="Agents" hidden>
   <header class="hero"><p class="eyebrow"><b>Agents</b> &middot; deck 02, slides 20&ndash;24 &middot; asked in every midterm</p><h1>PEAS: specifying the task</h1><p class="lede">The first step in designing any agent is to describe its task environment. PEAS gives four labelled lines: Performance, Environment, Actuators, Sensors.</p></header>
   <div class="cols">
     <div class="card"><span class="k">P &middot; Performance</span><p>How success is judged: speed, safety, profit. Include any cost or penalty the scenario mentions.</p></div>
@@ -171,7 +171,7 @@
   <div class="note"><b class="k">HOW TO READ A STORY</b>Underline as you read: goals go to P, places to E, things it does to A, things it must know to S.</div>
 </article>
 
-<article class="page" id="env" data-title="Environment properties" data-group="Agents" data-tag="CT1" hidden>
+<article class="page" id="env" data-title="Environment properties" data-group="Agents" hidden>
   <header class="hero"><p class="eyebrow"><b>Agents</b> &middot; deck 02, slides 25&ndash;35</p><h1>Properties of task environments</h1><p class="lede">Seven questions you ask about any environment. The left answer is the easy case for the agent, the right one the hard case. To justify a label, write the <b>property</b>, its <b>definition</b>, and <b>one fact from the scenario</b>.</p></header>
   <div class="scroll"><table><thead><tr><th>Ask</th><th>Easy</th><th>Hard</th><th>Definition (slides 26&ndash;31)</th></tr></thead><tbody>
     <tr><td>Can the sensors see everything that matters?</td><td>Fully observable</td><td>Partially</td><td>Fully: sensors give the complete state at each moment. Partially: noisy, inaccurate or missing data.</td></tr>
@@ -201,7 +201,7 @@
   </div>
 </article>
 
-<article class="page" id="problem" data-title="Search problems" data-group="Agents" data-tag="CT1" hidden>
+<article class="page" id="problem" data-title="Search problems" data-group="Agents" hidden>
   <header class="hero"><p class="eyebrow"><b>Agents to search</b> &middot; uninformed deck, slides 1&ndash;5</p><h1>Formulating a search problem</h1><p class="lede">A search problem has a state space, a successor function (actions with costs), a start state and a goal test. A <b>solution</b> is a sequence of actions that takes the start state to a goal state. Asked as &ldquo;formulate as a search problem&rdquo; in all three midterms.</p></header>
   <div class="rule"><span class="k">Template: one line each</span><ol><li><b>States</b>: what changes during the search. Include any resource that matters, such as battery.</li><li><b>Initial state</b>: the starting values.</li><li><b>Actions</b>: what the agent may do, with restrictions (only unblocked corridors).</li><li><b>Transition model</b>: the new state after each action.</li><li><b>Goal test</b>: a condition on the state.</li><li><b>Path cost</b>: the price of each action.</li></ol></div>
   <div class="cols">
@@ -415,7 +415,7 @@
   <div class="sim" data-algs="IDS" data-graphs="q262u,q253u" data-view="full"></div>
   <div class="cols">
     <div class="card"><span class="k">Properties</span><table><tbody><tr><td>Complete</td><td class="yes">Yes</td></tr><tr><td>Optimal</td><td class="if">Only if every step costs the same</td></tr><tr><td>Time</td><td class="m">O(b<sup>d</sup>)</td></tr><tr><td>Space</td><td class="m">O(bd)</td></tr></tbody></table></div>
-    <div class="card"><span class="k">Is repeating the work wasteful?</span><p>Less than it looks. Most nodes in a tree are in the deepest level, so redoing the shallow levels adds only a small fraction. Remember this idea: IDA* (CT2) uses it with f instead of depth.</p></div>
+    <div class="card"><span class="k">Is repeating the work wasteful?</span><p>Less than it looks. Most nodes in a tree are in the deepest level, so redoing the shallow levels adds only a small fraction. Remember this idea: IDA* uses it with f instead of depth.</p></div>
   </div>
 </article>
 
@@ -470,8 +470,8 @@
 </article>
 
 <!-- ======================= INFORMED ======================= -->
-<article class="page" id="heuristic" data-title="Heuristics" data-group="Informed search" data-ct="1" hidden>
-  <header class="hero"><p class="eyebrow"><b>CT2</b> &middot; Informed deck slides 7&ndash;29, 37</p><h1>Heuristics: a guess of the distance left</h1><p class="lede">A heuristic h(n) estimates how far state n is from the goal (slide 8). Uninformed search spreads out in every direction. With a good guess, search can head towards the goal instead.</p></header>
+<article class="page" id="heuristic" data-title="Heuristics" data-group="Informed search" hidden>
+  <header class="hero"><p class="eyebrow"><b>Informed</b> &middot; Informed deck slides 7&ndash;29, 37</p><h1>Heuristics: a guess of the distance left</h1><p class="lede">A heuristic h(n) estimates how far state n is from the goal (slide 8). Uninformed search spreads out in every direction. With a good guess, search can head towards the goal instead.</p></header>
 <section class="lesson" data-for="heuristic">
 <div class="ls-bar"><b>Learn it first</b><span>Start here if "heuristic" means nothing yet &middot; about 6 minutes</span></div>
 <div class="ls-grid"><div class="ls-main">
@@ -512,8 +512,8 @@
   </div>
 </article>
 
-<article class="page" id="greedy" data-title="Greedy best-first" data-group="Informed search" data-ct="1" hidden>
-  <header class="hero"><p class="eyebrow"><b>CT2</b> &middot; fringe = priority queue by h</p><h1>Greedy best-first search</h1><p class="lede">Greedy always expands the state that <b>looks</b> closest to the goal, using h alone. It ignores what the path has already cost, so it can rush down an expensive route.</p></header>
+<article class="page" id="greedy" data-title="Greedy best-first" data-group="Informed search" hidden>
+  <header class="hero"><p class="eyebrow"><b>Informed</b> &middot; fringe = priority queue by h</p><h1>Greedy best-first search</h1><p class="lede">Greedy always expands the state that <b>looks</b> closest to the goal, using h alone. It ignores what the path has already cost, so it can rush down an expensive route.</p></header>
 <section class="lesson" data-for="greedy">
 <div class="ls-bar"><b>Learn it first</b><span>about 3 minutes</span></div>
 <div class="ls-grid"><div class="ls-main">
@@ -538,8 +538,8 @@
   </div>
 </article>
 
-<article class="page" id="astar" data-title="A* search" data-group="Informed search" data-ct="1" hidden>
-  <header class="hero"><p class="eyebrow"><b>CT2</b> &middot; fringe = priority queue by f = g + h</p><h1>A* search</h1><p class="lede">A* adds both numbers: what you have already paid (g) and your guess of what is left (h). UCS looks only backwards, Greedy only forwards. A* looks both ways (slide 15).</p></header>
+<article class="page" id="astar" data-title="A* search" data-group="Informed search" hidden>
+  <header class="hero"><p class="eyebrow"><b>Informed</b> &middot; fringe = priority queue by f = g + h</p><h1>A* search</h1><p class="lede">A* adds both numbers: what you have already paid (g) and your guess of what is left (h). UCS looks only backwards, Greedy only forwards. A* looks both ways (slide 15).</p></header>
 <section class="lesson" data-for="astar">
 <div class="ls-bar"><b>Learn it first</b><span>about 5 minutes</span></div>
 <div class="ls-grid"><div class="ls-main">
@@ -573,8 +573,8 @@
   </div>
 </article>
 
-<article class="page" id="idastar" data-title="IDA*" data-group="Informed search" data-ct="1" hidden>
-  <header class="hero"><p class="eyebrow"><b>CT2</b> &middot; solved-examples deck slides 17&ndash;29</p><h1>IDA*: iterative deepening on f</h1><p class="lede">IDA* is iterative deepening, but the limit is on <b>f = g + h</b> instead of depth. Each iteration is a plain depth-first search that refuses to expand anything whose f is above the threshold.</p></header>
+<article class="page" id="idastar" data-title="IDA*" data-group="Informed search" hidden>
+  <header class="hero"><p class="eyebrow"><b>Informed</b> &middot; solved-examples deck slides 17&ndash;29</p><h1>IDA*: iterative deepening on f</h1><p class="lede">IDA* is iterative deepening, but the limit is on <b>f = g + h</b> instead of depth. Each iteration is a plain depth-first search that refuses to expand anything whose f is above the threshold.</p></header>
 <section class="lesson" data-for="idastar">
 <div class="ls-bar"><b>Learn it first</b><span>about 5 minutes</span></div>
 <div class="ls-grid"><div class="ls-main">
@@ -602,8 +602,8 @@
   </div>
 </article>
 
-<article class="page" id="rbfs" data-title="RBFS" data-group="Informed search" data-ct="1" hidden>
-  <header class="hero"><p class="eyebrow"><b>CT2</b> &middot; solved-examples deck slides 3&ndash;16, informed deck 55&ndash;61</p><h1>RBFS: recursive best-first search</h1><p class="lede">RBFS behaves like A*, but keeps only the current path and its siblings in memory. When the branch it is in gets more expensive than the best alternative, it backs out and writes one number on the parent: how good that branch turned out to be.</p></header>
+<article class="page" id="rbfs" data-title="RBFS" data-group="Informed search" hidden>
+  <header class="hero"><p class="eyebrow"><b>Informed</b> &middot; solved-examples deck slides 3&ndash;16, informed deck 55&ndash;61</p><h1>RBFS: recursive best-first search</h1><p class="lede">RBFS behaves like A*, but keeps only the current path and its siblings in memory. When the branch it is in gets more expensive than the best alternative, it backs out and writes one number on the parent: how good that branch turned out to be.</p></header>
 <section class="lesson" data-for="rbfs">
 <div class="ls-bar"><b>Learn it first</b><span>about 6 minutes</span></div>
 <div class="ls-grid"><div class="ls-main">
@@ -634,8 +634,8 @@
   </div>
 </article>
 
-<article class="page" id="smastar" data-title="SMA*" data-group="Informed search" data-ct="1" hidden>
-  <header class="hero"><p class="eyebrow"><b>CT2</b> &middot; informed deck slides 51&ndash;54</p><h1>SMA*: A* with a memory limit</h1><p class="lede">SMA* runs A* until memory is full. To make room it forgets the <b>worst leaf</b> (highest f), but the parent keeps that leaf&rsquo;s f value, so the branch can be rebuilt if everything else turns out worse. This is your teacher&rsquo;s example, with room for 3 nodes.</p></header>
+<article class="page" id="smastar" data-title="SMA*" data-group="Informed search" hidden>
+  <header class="hero"><p class="eyebrow"><b>Informed</b> &middot; informed deck slides 51&ndash;54</p><h1>SMA*: A* with a memory limit</h1><p class="lede">SMA* runs A* until memory is full. To make room it forgets the <b>worst leaf</b> (highest f), but the parent keeps that leaf&rsquo;s f value, so the branch can be rebuilt if everything else turns out worse. This is your teacher&rsquo;s example, with room for 3 nodes.</p></header>
 <section class="lesson" data-for="smastar">
 <div class="ls-bar"><b>Learn it first</b><span>about 4 minutes</span></div>
 <div class="ls-grid"><div class="ls-main">
@@ -653,8 +653,8 @@
   </div>
 </article>
 
-<article class="page" id="compare-i" data-title="Informed at a glance" data-group="Informed search" data-ct="1" hidden>
-  <header class="hero"><p class="eyebrow"><b>CT2</b> &middot; solved deck slide 30, informed deck slide 47</p><h1>Informed search at a glance</h1><p class="lede">A*, RBFS, IDA* and SMA* all find the optimal path with an admissible heuristic. They differ in what they give up to save memory.</p></header>
+<article class="page" id="compare-i" data-title="Informed at a glance" data-group="Informed search" hidden>
+  <header class="hero"><p class="eyebrow"><b>Informed</b> &middot; solved deck slide 30, informed deck slide 47</p><h1>Informed search at a glance</h1><p class="lede">A*, RBFS, IDA* and SMA* all find the optimal path with an admissible heuristic. They differ in what they give up to save memory.</p></header>
   <div class="scroll"><table><thead><tr><th></th><th>A*</th><th>RBFS</th><th>IDA*</th><th>SMA*</th></tr></thead><tbody>
     <tr><td><b>Memory</b></td><td class="m">O(b<sup>d</sup>), every node</td><td class="m">O(bd), path + siblings</td><td class="m">O(d), path only</td><td class="m">fixed limit</td></tr>
     <tr><td><b>Re-expansion</b></td><td>none (with a closed set)</td><td>frequent, on backtrack</td><td>every node, every iteration</td><td>when a forgotten branch returns</td></tr>
@@ -677,8 +677,8 @@
     <tr><td><b>Formulate as a search problem</b></td><td class="m">2&ndash;4</td><td>253 Q1b, 261 Q1b, 262 Q1a</td><td>States, initial, actions, transition, goal test, path cost.</td></tr>
     <tr><td><b>Draw the tree, trace an algorithm</b></td><td class="m">4&ndash;5</td><td>253 Q2a, 261 Q2, 262 Q2a</td><td>The tree, a fringe table, then order, path, cost.</td></tr>
     <tr><td><b>Compare or choose algorithms</b></td><td class="m">1&ndash;2</td><td>253 Q2b, 261 Q2b, 262 Q2b</td><td>Yes or no, the deciding property, the actual paths with numbers.</td></tr>
-    <tr><td><b>Informed traces</b> <span class="pill">CT2</span></td><td class="m">2&ndash;6</td><td>253 Q3, 261 Q3, 262 Q3</td><td>A* / Greedy with f or h per entry; RBFS Best, Alt, f_limit; IDA* thresholds.</td></tr>
-    <tr><td><b>Why is A* (not) optimal here?</b> <span class="pill">CT2</span></td><td class="m">2</td><td>253 Q3b, 261 Q3b</td><td>Admissible / consistent, checked on the actual edge.</td></tr>
+    <tr><td><b>Informed traces</b> <span class="pill">Informed</span></td><td class="m">2&ndash;6</td><td>253 Q3, 261 Q3, 262 Q3</td><td>A* / Greedy with f or h per entry; RBFS Best, Alt, f_limit; IDA* thresholds.</td></tr>
+    <tr><td><b>Why is A* (not) optimal here?</b> <span class="pill">Informed</span></td><td class="m">2</td><td>253 Q3b, 261 Q3b</td><td>Admissible / consistent, checked on the actual edge.</td></tr>
   </tbody></table></div>
   <h2>Decoder: what the wording means</h2>
   <div class="scroll"><table><thead><tr><th>If the question says&hellip;</th><th>Do this</th></tr></thead><tbody>
@@ -711,7 +711,7 @@
 
   <h2 class="ptitle">Fall 2025 (253)</h2>
   <section class="card paperq">
-    <div class="hd"><h3>Q1 PEAS and formulation: the hospital robot [2+4]</h3><span class="pill g">CT1</span></div>
+    <div class="hd"><h3>Q1 PEAS and formulation: the hospital robot [2+4]</h3><span class="pill g">Agents</span></div>
     <p>A hospital robot delivers medicine from the pharmacy to patient rooms. Some corridors may be blocked, the battery is limited, each move uses one unit.</p>
     <div class="write"><span class="k">(a) PEAS</span><div><b>P</b> Correct medicine to the right room; minimum battery used; no collisions.</div><div><b>E</b> Hospital: corridors, intersections, rooms; pharmacy (start); patient rooms (goal); blocked corridors.</div><div><b>A</b> Wheel and steering motors; arm or gripper to carry and place the medicine.</div><div><b>S</b> Camera, distance or ultrasonic sensors (to detect blocked corridors), battery-level sensor, location sensor.</div></div>
     <div class="write"><span class="k">(b) SEARCH PROBLEM</span><div><b>States</b> robot location + remaining battery. <b>Initial</b> at the pharmacy, full battery. <b>Actions</b> move to an adjacent unblocked corridor. <b>Transition</b> location changes, one battery unit used. <b>Goal</b> medicine delivered at the specified room. <b>Path cost</b> 1 per move.</div></div>
@@ -727,7 +727,7 @@
     <p class="note"><b class="k">ONE LINE WORTH ADDING</b>Here DFS also finds cost 9, but only because the leftmost branch happens to be cheap. DFS is not optimal; UCS is.</p></div></div>
   </section>
   <section class="card paperq" data-widget="paper" data-graph="q253i">
-    <div class="hd"><h3>Q3 A* tree search and A* graph search [2+2+2]</h3><span class="pill">CT2</span></div>
+    <div class="hd"><h3>Q3 A* tree search and A* graph search [2+2+2]</h3><span class="pill">Informed</span></div>
     <div class="pbody"><div class="left"><div class="figure"></div><div class="fulltree"></div></div><div class="ans">
     
     <p><b>(a)(i) A* tree search</b></p><div data-run="ASTAR,tree"></div>
@@ -736,14 +736,14 @@
   </section>
 
     <section class="card paperq">
-    <div class="hd"><h3>Q2(b) Which strategy expands the fewest nodes? [1+1]</h3><span class="pill g">CT1</span></div>
+    <div class="hd"><h3>Q2(b) Which strategy expands the fewest nodes? [1+1]</h3><span class="pill g">Uninformed</span></div>
     <div class="write"><span class="k">WRITE THIS (MY REASONING)</span><div>(i)(a) Shallowest solution leftmost: <b>DFS</b>, it dives straight to it after about s expansions. (i)(b) Rightmost: <b>BFS</b>, it finishes level s while DFS first explores whole left subtrees to depth m. (ii) With infinite depth DFS can run forever down a left branch, so for (b) only BFS is safe; (a) stays DFS.</div></div>
   </section>
 
   <h2 class="ptitle">Spring 2026 (261)</h2>
 
   <section class="card paperq">
-    <div class="hd"><h3>Q1 Postal robot: environment and formulation [2+4]</h3><span class="pill g">CT1</span></div>
+    <div class="hd"><h3>Q1 Postal robot: environment and formulation [2+4]</h3><span class="pill g">Agents</span></div>
     <p>A robot arm sorts letters, one at a time, into four bins by district. Its OCR misreads the label 15% of the time at random. Moving between adjacent positions costs 1 second; +5 for a correct bin, &minus;10 for a wrong one.</p>
     <div class="write"><span class="k">(a) EPISODIC AND STOCHASTIC</span><div><b>Episodic</b>: one letter at a time; where one letter goes does not affect the correct bin or reward for the next.</div><div><b>Stochastic</b>: the OCR misreads 15% of the time at random, so the next state is not fully determined by the state and the action.</div></div>
     <div class="write"><span class="k">(b) SEARCH PROBLEM (MY FORMULATION)</span><div><b>States</b> (robot position, letter status): position is the tray or bin A&ndash;D; letter is on the tray, held (district read) or dropped. <b>Initial</b> at the tray, letter on the tray. <b>Actions</b> pick up (reads the label), move to an adjacent position, drop. <b>Goal</b> the letter is in the bin of the district read. <b>Path cost</b> 1 second per move; +5 / &minus;10 outcome as a negative cost.</div></div>
@@ -760,7 +760,7 @@
     <div class="write"><span class="k">(b) WRITE THIS</span><div>Only <b>UCS</b> is guaranteed the least-cost path (13). BFS finds the fewest edges, and DFS ignores cost.</div></div></div></div>
   </section>
   <section class="card paperq" data-widget="paper" data-graph="q261i">
-    <div class="hd"><h3>Q3 A* tree search and Greedy, ties alphabetical [2&times;2+2]</h3><span class="pill">CT2</span></div>
+    <div class="hd"><h3>Q3 A* tree search and Greedy, ties alphabetical [2&times;2+2]</h3><span class="pill">Informed</span></div>
     <div class="pbody"><div class="left"><div class="figure"></div><div class="fulltree"></div></div><div class="ans">
     
     <p><b>(a)(i) A* tree search</b></p><div data-run="ASTAR,tree"></div>
@@ -771,7 +771,7 @@
 
   <h2 class="ptitle">Summer 2026 (262)</h2>
   <section class="card paperq">
-    <div class="hd"><h3>Q1 8-puzzle formulation, shopping agent PEAS [2+3]</h3><span class="pill g">CT1</span></div>
+    <div class="hd"><h3>Q1 8-puzzle formulation, shopping agent PEAS [2+3]</h3><span class="pill g">Agents</span></div>
     <div class="write"><span class="k">(a) 8-PUZZLE</span><div><b>States</b> an arrangement of the 8 tiles and the blank. <b>Initial</b> 1 2 3 / 8 _ 4 / 7 6 5. <b>Actions</b> move the blank up, down, left, right if it stays on the board. <b>Transition</b> the blank swaps with that tile (4 successors from the start). <b>Goal test</b> board = 2 8 1 / _ 4 3 / 7 6 5. <b>Path cost</b> 1 per move.</div></div>
     <div class="write"><span class="k">(b) INTERNET SHOPPING AGENT</span><div><b>P</b> low price, matches the user&rsquo;s preferences, short delivery, correct order. <b>E</b> shopping websites, vendors, shipping and payment systems, the user. <b>A</b> display results, follow links, fill forms, place the order. <b>S</b> web page contents (prices, reviews), the user&rsquo;s preferences (keyboard entry).</div></div>
   </section>
@@ -784,18 +784,18 @@
     <p><b>UCS</b></p><div data-run="UCS,tree"></div></div></div>
   </section>
   <section class="card paperq">
-    <div class="hd"><h3>Q2(b) Fewest steps or least cost: same algorithm? [2]</h3><span class="pill g">CT1</span></div>
+    <div class="hd"><h3>Q2(b) Fewest steps or least cost: same algorithm? [2]</h3><span class="pill g">Uninformed</span></div>
     <div class="write"><span class="k">WRITE THIS</span><div><b>No.</b> For the fewest steps, IDS (or BFS) returns S-A-D-G: 3 edges, cost 12. For the least cost, UCS returns S-A-C-F-G: 4 edges, cost 7. The two goals give different paths, so the choice of algorithm changes.</div></div>
   </section>
 
   <section class="card paperq" data-widget="paper" data-graph="q262i">
-    <div class="hd"><h3>Q3(a) RBFS trace [3]</h3><span class="pill">CT2</span></div>
+    <div class="hd"><h3>Q3(a) RBFS trace [3]</h3><span class="pill">Informed</span></div>
     <div class="pbody"><div class="figure"></div><div class="ans">
     
     <div data-run="RBFS"></div></div></div>
   </section>
   <section class="card paperq" data-widget="paper" data-graph="q262t">
-    <div class="hd"><h3>Q3(b) IDA* on a tree labelled with f [3]</h3><span class="pill">CT2</span></div>
+    <div class="hd"><h3>Q3(b) IDA* on a tree labelled with f [3]</h3><span class="pill">Informed</span></div>
     <div class="pbody"><div class="left"><div class="figure"></div><div class="fulltree"></div></div><div class="ans">
     
     <div data-run="IDASTAR"></div>
