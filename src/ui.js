@@ -449,7 +449,7 @@
   });
   /* ---------- page heroes: numbered kicker, meta line, actions, and a plate ---------- */
   var META = {
-    start: '30 pages &middot; about 6 hours with practice', loop: '15 min', words: '10 min', 'ai-views': 'deck 02 &middot; 10 min', agents: 'deck 02 &middot; 10 min', rational: 'deck 02 &middot; 10 min',
+    start: '41 pages &middot; about 10 hours with practice', course: '2 min', local: '15 min', hill: '20 min', anneal: '15 min', csp: 'deck 05 &middot; 20 min', backtrack: 'deck 05 &middot; 15 min', filtering: 'deck 05 &middot; 25 min', ordering: 'deck 05 &middot; 15 min', games: 'deck 06 &middot; 15 min', minimax: 'deck 06 &middot; 20 min', alphabeta: 'deck 06 &middot; 30 min', loop: '15 min', words: '10 min', 'ai-views': 'deck 02 &middot; 10 min', agents: 'deck 02 &middot; 10 min', rational: 'deck 02 &middot; 10 min',
     peas: 'deck 02 &middot; 15 min', env: 'deck 02 &middot; 20 min', problem: 'deck 03 &middot; 15 min', 'graph-tree': '15 min', 'read-answer': '10 min', bfs: 'deck 03 &middot; 15 min', dfs: 'deck 03 &middot; 15 min',
     ucs: 'deck 03 &middot; 15 min', ids: 'deck 03 &middot; 15 min', 'tree-graph': 'deck 04 &middot; 10 min', bidir: 'deck 03 &middot; 10 min', 'compare-u': '10 min', heuristic: 'deck 04 &middot; 30 min',
     greedy: 'deck 04 &middot; 15 min', astar: 'deck 04 &middot; 30 min', idastar: 'solved deck &middot; 25 min', rbfs: 'solved deck &middot; 30 min', smastar: 'deck 04 &middot; 15 min', 'compare-i': '10 min',
@@ -462,11 +462,14 @@
     { k: 'h', t: 'Heuristics', to: 'heuristic', pages: ['heuristic'] },
     { k: 'A*', t: 'Greedy, A*', to: 'greedy', pages: ['greedy', 'astar'] },
     { k: 'M', t: 'IDA*, RBFS, SMA*', to: 'idastar', pages: ['idastar', 'rbfs', 'smastar', 'compare-i'] },
+    { k: 'L', t: 'Local search', to: 'local', pages: ['local', 'hill', 'anneal'] },
+    { k: 'C', t: 'CSP', to: 'csp', pages: ['csp', 'backtrack', 'filtering', 'ordering'] },
+    { k: '&#945;&#946;', t: 'Games', to: 'games', pages: ['games', 'minimax', 'alphabeta'] },
     { k: 'G', t: 'Exam', to: 'papers', pages: ['qtypes', 'papers', 'quiz', 'pairs'] }
   ];
   function routeSVG() {
-    var d = doneSet(), W = 560, H = 250, xs = [], o = '<svg class="ill route" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="The course as a search graph">';
-    ROUTE.forEach(function (r, i) { xs.push([46 + i * 78, i % 2 ? 150 : 70]); });
+    var d = doneSet(), W = 92 + (ROUTE.length - 1) * 66, H = 250, xs = [], o = '<svg class="ill route" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="The course as a search graph">';
+    ROUTE.forEach(function (r, i) { xs.push([46 + i * 66, i % 2 ? 150 : 70]); });
     o += '<g class="d">';
     for (var i = 0; i < ROUTE.length - 1; i++) o += '<path style="--i:' + i + '" d="M' + xs[i][0] + ' ' + xs[i][1] + ' L' + xs[i + 1][0] + ' ' + xs[i + 1][1] + '"/>';
     o += '<path class="t" style="--i:7" d="M' + xs[1][0] + ' ' + xs[1][1] + ' Q 200 228 ' + xs[3][0] + ' ' + xs[3][1] + '"/></g>';
@@ -492,6 +495,7 @@
     'read-answer': ['<svg class="ill" viewBox="0 0 520 220" role="img" aria-label="Reading the goal entry"><g class="d"><rect x="40" y="20" width="200" height="180" rx="4" style="--i:0"/><path class="t" d="M40 66 H240 M40 110 H240 M40 155 H240" style="--i:1"/><rect class="o" x="46" y="25" width="188" height="36" rx="3" style="--i:2"/><path class="o" d="M250 43 C 300 43 300 100 340 100" style="--i:3"/></g><g class="f"><text class="ox" x="60" y="49">S-A-B-C-G</text><text class="ox" x="205" y="49">9</text><text class="s" x="60" y="93">S-A-B-G</text><text class="s" x="210" y="93">11</text><text class="s" x="60" y="137">S-A-C</text><text class="s" x="210" y="137">11</text><text class="s" x="60" y="182">S-C</text><text class="s" x="210" y="182">10</text><text x="350" y="80">path S&#8594;A&#8594;B&#8594;C&#8594;G</text><text x="350" y="106">cost 9</text><text class="s" x="350" y="132">order: S, A, B, C</text></g></svg>', 'The entry the goal came out in already holds the whole answer.'],
     'ai-views': ['<svg class="ill" viewBox="0 0 520 220" role="img" aria-label="Four views of AI"><g class="d"><rect x="120" y="20" width="180" height="85" rx="4" style="--i:0"/><rect x="310" y="20" width="180" height="85" rx="4" style="--i:1"/><rect x="120" y="115" width="180" height="85" rx="4" style="--i:2"/><rect class="o" x="310" y="115" width="180" height="85" rx="4" style="--i:3"/></g><g class="f"><text class="s" x="210" y="14" text-anchor="middle">humanly</text><text class="s" x="400" y="14" text-anchor="middle">rationally</text><text class="s" x="100" y="66" text-anchor="end">thinking</text><text class="s" x="100" y="161" text-anchor="end">acting</text><text x="210" y="68" text-anchor="middle">cognitive model</text><text x="400" y="68" text-anchor="middle">laws of thought</text><text x="210" y="163" text-anchor="middle">Turing test</text><text class="ox" x="400" y="163" text-anchor="middle">rational agent</text></g></svg>', 'Slide 3. This course lives in the bottom-right box.']
   };
+  Object.assign(PLATES, window.EXTRA_PLATES || {});
   function autoPlate(p) {
     var el = $('.sim', p); if (!el) return null;
     var algs = (el.dataset.algs || 'BFS').split(','), alg = el.dataset.alg || algs[0], g = (el.dataset.graphs || '').split(',')[0];
@@ -606,6 +610,7 @@
 
   /* ---------------- widgets ---------------- */
   var WIDGETS = {};
+  Object.assign(WIDGETS, window.EXTRA_WIDGETS || {});
   WIDGETS.quiz = function (el) {
     var qs = QUIZ[el.dataset.set] || [], o = '';
     qs.forEach(function (q, i) {

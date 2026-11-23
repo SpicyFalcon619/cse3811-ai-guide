@@ -42,7 +42,7 @@ HEAD = f"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI Search Guide | CSE 3811</title>
-<meta name="description" content="An interactive guide to search in artificial intelligence: agents, BFS, DFS, UCS, IDS, heuristics, Greedy, A*, IDA*, RBFS and SMA*, with step-by-step visualisers and worked exam answers.">
+<meta name="description" content="An interactive guide to the first half of artificial intelligence: agents, uninformed and informed search, local search, constraint satisfaction and game playing, with step-by-step visualisers and worked exam answers.">
 <meta name="theme-color" content="#12293B">
 <meta property="og:title" content="AI Search Guide">
 <meta property="og:description" content="Learn uninformed and informed search step by step, with visualisers that show the fringe, the search tree and how to read the answer.">
@@ -58,9 +58,8 @@ HEAD = f"""<!doctype html>
 
 
 def build():
-    engine = read("engine.js").replace(
-        "if (typeof module !== 'undefined') module.exports = { GRAPHS: GRAPHS, runSearch: runSearch };", ""
-    )
+    strip = lambda js: re.sub(r"^if \(typeof module !== 'undefined'\) module\.exports = .*$", "", js, flags=re.M)
+    engine = strip(read("engine.js")) + "\n" + strip(read("beyond-engine.js")) + "\n" + read("beyond-ui.js")
     html = (
         HEAD
         + read("style.css")

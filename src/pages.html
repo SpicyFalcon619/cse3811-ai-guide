@@ -1,5 +1,5 @@
 <header class="top" role="banner">
-  <a class="crest" href="#start" aria-label="CSE 3811 Search, start page"><svg viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#F0B23A"/><path d="M10 11 L23 9.5 M10 11 L14 24 M23 9.5 L25 22 M14 24 L25 22" stroke="#12293B" stroke-width="1.6" fill="none"/><circle cx="10" cy="11" r="3" fill="#12293B"/><circle cx="23" cy="9.5" r="2.6" fill="#12293B"/><circle cx="14" cy="24" r="2.6" fill="#12293B"/><circle cx="25" cy="22" r="3.2" fill="#FFF8EA" stroke="#12293B" stroke-width="1.6"/></svg><span>Search Guide</span></a>
+  <a class="crest" href="#start" aria-label="Search Guide, start page"><svg viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="16" fill="#F0B23A"/><path d="M10 11 L23 9.5 M10 11 L14 24 M23 9.5 L25 22 M14 24 L25 22" stroke="#12293B" stroke-width="1.6" fill="none"/><circle cx="10" cy="11" r="3" fill="#12293B"/><circle cx="23" cy="9.5" r="2.6" fill="#12293B"/><circle cx="14" cy="24" r="2.6" fill="#12293B"/><circle cx="25" cy="22" r="3.2" fill="#FFF8EA" stroke="#12293B" stroke-width="1.6"/></svg><span>Search Guide</span></a>
   <nav class="groups" id="groups" aria-label="Sections"></nav>
   <div class="prog" title="Pages marked as understood"><i><b id="progB"></b></i><span id="progT"></span></div>
   <button id="calmBtn" class="tbtn" type="button" aria-pressed="false" aria-label="Turn background animation off" title="Background animation"></button>
@@ -12,18 +12,22 @@
 <article class="page" id="start" data-title="Start here" data-group="Start here" data-skip="1">
   <header class="hero">
     <p class="eyebrow"><b>CSE 3811</b> &middot; Artificial Intelligence</p>
-    <h1>Search, one step at a time</h1>
-    <p class="lede">Each page teaches one idea and lets you run it. You watch the fringe fill and empty, guess which path comes out next, then copy the exam table at the end. Go in order: the informed algorithms only make sense once the uninformed loop feels easy.</p>
+    <h1>AI, one step at a time</h1>
+    <p class="lede">Each page teaches one idea and lets you run it. You watch the fringe fill and empty, guess which path comes out next, then copy the exam table at the end. It covers the course up to the midterm: agents, uninformed and informed search, local search, constraint satisfaction and games. Go in order: each part builds on the one before.</p>
   </header>
   <section class="plan-wrap">
     <h2>Study plan</h2>
     <ol class="plan">
+      <li><a href="#course"><span class="pn">0</span><span class="pt"><b>Course map</b><span>The whole outline on one page, and where each topic is in this guide.</span></span><span class="pm">2 min</span></a></li>
       <li><a href="#loop"><span class="pn">1</span><span class="pt"><b>The one loop</b><span>Every algorithm is the same five lines; only the fringe changes. Start here.</span></span><span class="pm">15 min</span></a></li>
       <li><a href="#ai-views"><span class="pn">2</span><span class="pt"><b>Agents and PEAS</b><span>What AI is, rationality, PEAS, environment properties, formulating a search problem.</span></span><span class="pm">60 min</span></a></li>
       <li><a href="#graph-tree"><span class="pn">3</span><span class="pt"><b>Uninformed search</b><span>Graph to tree, reading the fringe, BFS, DFS, UCS, IDS, bidirectional.</span></span><span class="pm">90 min</span></a></li>
       <li><a href="#heuristic"><span class="pn">4</span><span class="pt"><b>Heuristics</b><span>What h(n) is; admissible and consistent, checked live on exam graphs.</span></span><span class="pm">30 min</span></a></li>
       <li><a href="#greedy"><span class="pn">5</span><span class="pt"><b>Greedy and A*</b><span>Tree vs graph search, and the two ways A* stops being optimal.</span></span><span class="pm">45 min</span></a></li>
       <li><a href="#idastar"><span class="pn">6</span><span class="pt"><b>IDA*, RBFS, SMA*</b><span>The memory-bounded three, with the exact rules from your solved-examples deck.</span></span><span class="pm">60 min</span></a></li>
+      <li><a href="#local"><span class="pn">7</span><span class="pt"><b>Local search</b><span>Hill climbing on 8-queens, simulated annealing with the probability worked out.</span></span><span class="pm">45 min</span></a></li>
+      <li><a href="#csp"><span class="pn">8</span><span class="pt"><b>Constraint satisfaction</b><span>Formulating CSPs, backtracking, forward checking, arc consistency, MRV and LCV.</span></span><span class="pm">75 min</span></a></li>
+      <li><a href="#games"><span class="pn">9</span><span class="pt"><b>Games</b><span>Minimax and alpha-beta pruning with the deck&rsquo;s v, &alpha;, &beta; boxes.</span></span><span class="pm">60 min</span></a></li>
       <li><a href="#papers"><span class="pn">&middot;</span><span class="pt"><b>Past papers and quick check</b><span>Q1 to Q3 of all three midterms, solved the way you write them.</span></span><span class="pm">60 min</span></a></li>
       <li><a href="#lab"><span class="pn">&middot;</span><span class="pt"><b>Simulator lab</b><span>Type in any graph from a question paper and run any algorithm on it.</span></span><span class="pm">any time</span></a></li>
     </ol>
@@ -33,6 +37,35 @@
     <div><h3>What informed-search questions ask</h3><p>Every past Q3: an A* or Greedy trace with tree vs graph search, an RBFS trace with Best, Alt and f_limit, an IDA* trace with thresholds, and one &ldquo;why&rdquo;.</p></div>
     <div><h3>Your teacher&rsquo;s visualiser</h3><p>The A*, RBFS, SMA* and IDA* pages use the same example graphs as <a href="https://tanvir64.github.io/AI-Search/" target="_blank" rel="noopener">tanvir64.github.io/AI-Search</a>, so you can compare step by step.</p></div>
   </section>
+</article>
+
+<article class="page" id="course" data-title="Course map" data-group="Start here" data-skip="1" hidden>
+  <header class="hero"><p class="eyebrow"><b>CSE 3811</b> &middot; the course outline</p><h1>The whole course on one page</h1><p class="lede">Every topic in the outline, in teaching order, with where it is in this guide. The first half is examined in the midterm (30%), the second half in the final (40%). Class tests and assignments make up the rest.</p></header>
+  <div class="cols">
+    <div class="card"><span class="k">Marks</span><table><tbody><tr><td>Attendance</td><td class="m">5%</td></tr><tr><td>Assignments (best 1 of 2)</td><td class="m">5%</td></tr><tr><td>Class tests (best 3 of 4)</td><td class="m">20%</td></tr><tr><td>Midterm (CO1, CO2)</td><td class="m">30%</td></tr><tr><td>Final (CO3, CO4)</td><td class="m">40%</td></tr></tbody></table></div>
+    <div class="card"><span class="k">Textbook</span><p><i>Artificial Intelligence: A Modern Approach</i> (3rd edition), Russell and Norvig. Where the deck is thin, this guide follows the textbook.</p></div>
+  </div>
+  <h2>Midterm half</h2>
+  <div class="scroll"><table class="cmap"><thead><tr><th>Class</th><th>Topic</th><th>In this guide</th></tr></thead><tbody>
+    <tr><td>1</td><td>Introduction to AI; agents and environments</td><td><a href="#ai-views">What is AI</a> &middot; <a href="#agents">Agents</a> &middot; <a href="#rational">Rationality</a> &middot; <a href="#peas">PEAS</a> &middot; <a href="#env">Environments</a></td></tr>
+    <tr><td>2</td><td>Problem-solving agents; example problems; searching for solutions</td><td><a href="#problem">Search problems</a> &middot; <a href="#loop">The one loop</a> &middot; <a href="#graph-tree">Graph to search tree</a></td></tr>
+    <tr><td>3&ndash;5</td><td>Uninformed search: BFS, DFS, depth-limited; UCS, IDS, bidirectional</td><td><a href="#bfs">BFS</a> &middot; <a href="#dfs">DFS</a> &middot; <a href="#ucs">UCS</a> &middot; <a href="#ids">IDS</a> &middot; <a href="#bidir">Bidirectional</a></td></tr>
+    <tr><td>5&ndash;7</td><td>Informed search: A*, Greedy best-first, RBFS, SMA*, IDA*</td><td><a href="#heuristic">Heuristics</a> &middot; <a href="#greedy">Greedy</a> &middot; <a href="#astar">A*</a> &middot; <a href="#idastar">IDA*</a> &middot; <a href="#rbfs">RBFS</a> &middot; <a href="#smastar">SMA*</a></td></tr>
+    <tr><td>7&ndash;8</td><td>Local search and optimisation: hill climbing, simulated annealing</td><td><a href="#local">Local search</a> &middot; <a href="#hill">Hill climbing</a> &middot; <a href="#anneal">Simulated annealing</a></td></tr>
+    <tr><td>9&ndash;10</td><td>Constraint satisfaction problems</td><td><a href="#csp">What a CSP is</a> &middot; <a href="#backtrack">Backtracking</a> &middot; <a href="#filtering">Filtering</a> &middot; <a href="#ordering">MRV and LCV</a></td></tr>
+    <tr><td>11&ndash;12</td><td>Adversarial search: minimax, alpha-beta pruning (tic-tac-toe)</td><td><a href="#games">Games</a> &middot; <a href="#minimax">Minimax</a> &middot; <a href="#alphabeta">Alpha-beta</a></td></tr>
+  </tbody></table></div>
+  <h2>Final half</h2>
+  <p>These topics are taught after the midterm. They will be added to the guide as the lecture slides arrive, so that each page follows what is actually taught.</p>
+  <div class="scroll"><table class="cmap later"><thead><tr><th>Class</th><th>Topic</th><th>Status</th></tr></thead><tbody>
+    <tr><td>13&ndash;14</td><td>Monte Carlo and random search, genetic algorithms; dynamic programming: the Viterbi algorithm</td><td>coming</td></tr>
+    <tr><td>14&ndash;15</td><td>Fuzzy logic and crisp logic; inference in first-order logic</td><td>coming</td></tr>
+    <tr><td>16</td><td>Uncertainty and probabilistic reasoning; Bayesian networks, naive Bayes classifier</td><td>coming</td></tr>
+    <tr><td>17&ndash;18</td><td>Supervised and unsupervised learning; k-means clustering</td><td>coming</td></tr>
+    <tr><td>19&ndash;20</td><td>Perceptron algorithm, artificial neural networks</td><td>coming</td></tr>
+    <tr><td>21&ndash;22</td><td>Linear and logistic regression</td><td>coming</td></tr>
+    <tr><td>23&ndash;24</td><td>AI planning, reinforcement learning, Markov models</td><td>coming</td></tr>
+  </tbody></table></div>
 </article>
 
 <article class="page" id="loop" data-title="The one loop" data-group="Start here" hidden>
@@ -669,6 +702,256 @@
 
 <!-- ======================= EXAM ======================= -->
 
+<!-- ======================= LOCAL SEARCH ======================= -->
+<article class="page" id="local" data-title="Local search" data-group="Local search" hidden>
+  <header class="hero"><p class="eyebrow"><b>Local search</b> &middot; beyond classical search</p><h1>When the path doesn&rsquo;t matter</h1><p class="lede">In 8-queens nobody asks for the moves, only for the final board. Local search keeps <b>one current state</b> and keeps improving it, instead of remembering paths.</p></header>
+<section class="lesson">
+<div class="ls-bar"><b>Learn it first</b><span>about 5 minutes</span></div>
+<div class="ls-grid"><div class="ls-main">
+<div class="beat"><span class="bn">1</span><div><h3>Two kinds of problem</h3><p>In route finding the answer <b>is</b> the path (S-A-C-G). In 8-queens, timetabling or chip layout, the answer is just a good <b>final state</b>; how you reached it is irrelevant. For these, keeping a fringe of paths is wasted memory.</p></div></div>
+<div class="beat"><span class="bn">2</span><div><h3>The idea: improve one state, step by step</h3><p>Start with a complete (probably bad) state, for example 8 queens placed anywhere. Look at the <b>neighbours</b>: states one small change away. Move to a better one. Repeat. Memory stays tiny, and it works even when the state space is huge or infinite.</p></div></div>
+<div class="beat"><span class="bn">3</span><div><h3>Optimisation: a number to push up or down</h3><p>Each state gets a score: an <b>objective function</b> to maximise (profit, height) or a <b>cost</b> to minimise (for 8-queens, h = number of pairs of queens attacking each other). The goal is the best score, not a goal test.</p></div></div>
+<div class="beat"><span class="bn">4</span><div><h3>Picture it as a landscape</h3><p>Lay the states along the ground and make the height the score. Local search is a hiker in thick fog: they can only feel the ground right next to them. The landscape below has the shapes every exam names:</p>
+<div class="ls-gh"><div><b>global maximum</b><span>the highest point anywhere: the true best state.</span></div><div><b>local maximum</b><span>higher than all its neighbours, lower than the global maximum. Hill climbing gets stuck here.</span></div><div><b>plateau</b><span>a flat area: every neighbour has the same score, so there is no direction to go.</span></div><div><b>shoulder</b><span>a plateau that still rises on one side, so progress is possible.</span></div><div><b>ridge</b><span>a sequence of local maxima that is hard to climb with single moves.</span></div></div></div></div>
+</div><aside class="ls-side">
+<div class="ls-card"><b>In one line</b><p>Keep one state, move to better neighbours, care only about the final state.</p></div>
+<div class="ls-card"><b>Two big wins</b><p>Constant memory. Works on huge or continuous state spaces where systematic search is hopeless.</p></div>
+<div class="ls-card"><b>The price</b><p>Not complete and not optimal: it can stop at a local maximum.</p></div>
+</aside></div></section>
+  <h2>Walk the landscape</h2>
+  <p>Click anywhere on the ground to place the climber, then press <b>Step</b>. Hill climbing only ever goes up, so where it starts decides where it ends.</p>
+  <div data-widget="landscape" data-mode="hill"></div>
+  <div class="cols">
+    <div class="card"><span class="k">8-queens as local search</span><p><b>State:</b> 8 queens, one per column. <b>Neighbours:</b> move one queen within its column (8 &times; 7 = 56 neighbours). <b>Cost:</b> h = pairs of queens that attack each other. <b>Goal:</b> h = 0.</p></div>
+    <div class="card"><span class="k">Where it is used</span><p>Timetabling, scheduling, circuit layout, travelling salesperson tours, training the weights of a neural network: anywhere the final configuration is what counts.</p></div>
+  </div>
+</article>
+
+<article class="page" id="hill" data-title="Hill climbing" data-group="Local search" hidden>
+  <header class="hero"><p class="eyebrow"><b>Local search</b> &middot; steepest ascent</p><h1>Hill climbing</h1><p class="lede">Look at every neighbour, move to the best one, stop when none is better. The simplest local search, and the one every variant tries to fix.</p></header>
+<section class="lesson">
+<div class="ls-bar"><b>Learn it first</b><span>about 5 minutes</span></div>
+<div class="ls-grid"><div class="ls-main">
+<div class="beat"><span class="bn">1</span><div><h3>The whole algorithm</h3><ol class="ls-ol"><li>current = a starting state.</li><li>Look at all neighbours of current; pick the best one.</li><li>If it is <b>not better</b> than current, stop and return current.</li><li>Otherwise move there and go back to step 2.</li></ol><p>That is <b>steepest-ascent</b> hill climbing: always the steepest step uphill. When the score is a cost like h, &ldquo;uphill&rdquo; means &ldquo;h goes down&rdquo;.</p></div></div>
+<div class="beat"><span class="bn">2</span><div><h3>Do one step on 8-queens</h3><p>On the board below, each empty square shows the h you would get by moving that column&rsquo;s queen there. The board has h = 17. The smallest number on the board is the move hill climbing makes. Press <b>Hill-climb one step</b> and watch h fall.</p></div></div>
+<div class="beat"><span class="bn">3</span><div><h3>Why it gets stuck</h3><p>It stops at the first state with no better neighbour. That can be a <b>local maximum</b> (a small hill), a <b>plateau</b> (flat, no direction) or a <b>ridge</b>. From random 8-queens boards it solves only about <b>14%</b> and gets stuck in 86%, but it is fast: about 4 steps when it succeeds, 3 when it gets stuck.</p></div></div>
+<div class="beat"><span class="bn">4</span><div><h3>The fixes</h3>
+<table class="ls-t"><thead><tr><th>Variant</th><th>What changes</th></tr></thead><tbody>
+<tr><td>Sideways moves</td><td>Allow moves to an equal neighbour (with a limit, e.g. 100) to cross plateaus. 8-queens: 14% &#8594; 94% solved.</td></tr>
+<tr><td>Stochastic</td><td>Pick randomly among the uphill moves, steeper ones more likely.</td></tr>
+<tr><td>First-choice</td><td>Generate neighbours at random and take the first better one. Good when there are thousands of neighbours.</td></tr>
+<tr><td>Random restart</td><td>If stuck, start again from a new random state. If one run succeeds with probability p, expect about 1/p runs.</td></tr></tbody></table></div></div>
+</div><aside class="ls-side">
+<div class="ls-card"><b>In one line</b><p>Greedy local search: best neighbour, until no neighbour is better.</p></div>
+<div class="ls-card"><b>Also called</b><p>Greedy local search. It never looks back and never plans ahead.</p></div>
+<div class="ls-card"><b>Complete?</b><p>No, it can get stuck. Random-restart hill climbing is complete with probability approaching 1.</p></div>
+</aside></div>
+<div class="ls-check"><b class="k">Check yourself</b>
+<details><summary>A hill climber is on a plateau. What does plain steepest ascent do?</summary><p>It stops: no neighbour is strictly better. With sideways moves allowed it could keep walking along the plateau.</p></details>
+<details><summary>Random restart succeeds 14% of the time per run. Roughly how many runs do you expect?</summary><p>About 1 / 0.14 &asymp; 7 runs (6 failures and 1 success).</p></details>
+</div></section>
+  <h2>Climb on the 8-queens board</h2>
+  <div data-widget="queens" data-board="4,5,6,3,4,5,6,5"></div>
+  <h2>How it is asked</h2>
+  <div class="card"><span class="k">Practice</span><p>For the 8-queens state given, (a) compute h, (b) which move does steepest-ascent hill climbing make, and (c) why might hill climbing fail to reach h = 0?</p>
+  <details class="exam"><summary>Worked answer</summary><div class="in"><p>(a) Count every pair of queens in the same row or on the same diagonal; each pair counts once. The board above has h = 17. (b) Compute h for every single-queen move; take the smallest (on the board, the highlighted squares). (c) It stops at a local minimum of h or on a plateau, where no single move lowers h, even though h &gt; 0. Fixes: sideways moves, random restarts, simulated annealing.</p></div></details></div>
+</article>
+
+<article class="page" id="anneal" data-title="Simulated annealing" data-group="Local search" hidden>
+  <header class="hero"><p class="eyebrow"><b>Local search</b> &middot; sometimes go downhill</p><h1>Simulated annealing</h1><p class="lede">Hill climbing never goes down, so it gets trapped. Simulated annealing sometimes accepts a worse move on purpose, often at first and rarely at the end, to shake itself out of small hills.</p></header>
+<section class="lesson">
+<div class="ls-bar"><b>Learn it first</b><span>about 5 minutes</span></div>
+<div class="ls-grid"><div class="ls-main">
+<div class="beat"><span class="bn">1</span><div><h3>Where the name comes from</h3><p>Metalworkers heat metal and cool it <b>slowly</b> so the atoms settle into a strong, low-energy arrangement. Hot: atoms move around wildly. Cold: they barely move. The algorithm copies this with a number called the <b>temperature T</b>.</p></div></div>
+<div class="beat"><span class="bn">2</span><div><h3>One step</h3><ol class="ls-ol"><li>Pick a <b>random</b> neighbour (not the best one).</li><li>&Delta;E = value(neighbour) &minus; value(current).</li><li>If &Delta;E &gt; 0 (better): always move.</li><li>If &Delta;E &le; 0 (worse): move anyway with probability <b>p = e<sup>&Delta;E / T</sup></b>.</li><li>Lower T a little (the <b>schedule</b>), and repeat.</li></ol></div></div>
+<div class="beat"><span class="bn">3</span><div><h3>Work the probability by hand</h3>
+<table class="ls-t"><thead><tr><th>&Delta;E</th><th>T</th><th>p = e<sup>&Delta;E/T</sup></th><th>Meaning</th></tr></thead><tbody>
+<tr><td>&minus;2</td><td>10</td><td>e<sup>&minus;0.2</sup> = 0.82</td><td>hot: a small step down is usually taken</td></tr>
+<tr><td>&minus;10</td><td>10</td><td>e<sup>&minus;1</sup> = 0.37</td><td>a big step down, still often taken</td></tr>
+<tr><td>&minus;2</td><td>1</td><td>e<sup>&minus;2</sup> = 0.14</td><td>cooler: rarely taken</td></tr>
+<tr><td>&minus;10</td><td>1</td><td>e<sup>&minus;10</sup> &asymp; 0.00005</td><td>cold: almost never</td></tr></tbody></table>
+<p>Two rules come out of the table: <b>bigger drops are less likely</b>, and <b>lower temperature makes every drop less likely</b>.</p></div></div>
+<div class="beat"><span class="bn">4</span><div><h3>Why it works</h3><p>Early on, while T is high, it wanders freely and can climb out of local maxima. As T falls it behaves more and more like hill climbing. If T is lowered slowly enough, it finds the global optimum with probability approaching 1.</p></div></div>
+</div><aside class="ls-side">
+<div class="ls-card"><b>In one line</b><p>Random neighbour; always accept better; accept worse with p = e<sup>&Delta;E/T</sup>; cool down.</p></div>
+<div class="ls-card"><b>When T &#8594; 0</b><p>p &#8594; 0 for every bad move, so it becomes hill climbing.</p></div>
+<div class="ls-card"><b>Related</b><p>Local beam search keeps k states at once and keeps the k best of all their neighbours.</p></div>
+</aside></div>
+<div class="ls-check"><b class="k">Check yourself</b>
+<details><summary>Current value 20, neighbour value 15, T = 5. Probability of moving?</summary><p>&Delta;E = 15 &minus; 20 = &minus;5, so p = e<sup>&minus;5/5</sup> = e<sup>&minus;1</sup> &asymp; 0.37.</p></details>
+<details><summary>Neighbour value 25 instead. Probability?</summary><p>&Delta;E = +5 &gt; 0, a better move: it is always taken (probability 1).</p></details>
+</div></section>
+  <h2>Anneal the same landscape</h2>
+  <p>Switch between the two methods from the same starting point. Hill climbing stops on the first hill. Annealing shows the probability it computed for every downhill move, and usually ends higher.</p>
+  <div data-widget="landscape" data-mode="sa"></div>
+</article>
+
+<!-- ======================= CSP ======================= -->
+<article class="page" id="csp" data-title="What a CSP is" data-group="CSP" hidden>
+  <header class="hero"><p class="eyebrow"><b>CSP</b> &middot; deck 05 slides 2&ndash;16</p><h1>Constraint satisfaction problems</h1><p class="lede">Some problems are not about a route but about filling in values so that rules hold: colour a map, fill a Sudoku, build a timetable. A CSP describes them with three lists, and that structure makes them much faster to solve.</p></header>
+<section class="lesson">
+<div class="ls-bar"><b>Learn it first</b><span>about 6 minutes</span></div>
+<div class="ls-grid"><div class="ls-main">
+<div class="beat"><span class="bn">1</span><div><h3>Planning vs identification (slide 2)</h3><p>Search problems so far were <b>planning</b>: the path matters. A CSP is <b>identification</b>: only the final assignment matters, and every complete answer has the same depth (one value per variable).</p></div></div>
+<div class="beat"><span class="bn">2</span><div><h3>Three lists define every CSP</h3><div class="ls-gh"><div><b>Variables</b><span>X1 &hellip; Xn: the things to decide. Map: WA, NT, SA, Q, NSW, V, T.</span></div><div><b>Domains</b><span>the values each variable may take. Map: {red, green, blue}.</span></div><div><b>Constraints</b><span>which combinations are allowed. Map: neighbouring regions differ, e.g. WA &ne; NT.</span></div></div><p>A <b>solution</b> is a complete assignment (every variable has a value) that satisfies every constraint.</p></div></div>
+<div class="beat"><span class="bn">3</span><div><h3>The constraint graph (slide 10)</h3><p>Draw one node per variable and an edge for every binary constraint. For the map: WA&ndash;NT, WA&ndash;SA, NT&ndash;SA, NT&ndash;Q, SA&ndash;Q, SA&ndash;NSW, SA&ndash;V, Q&ndash;NSW, NSW&ndash;V. T has no edges: Tasmania is an <b>independent subproblem</b> and can be solved on its own.</p></div></div>
+<div class="beat"><span class="bn">4</span><div><h3>Kinds of constraints (slide 15)</h3><table class="ls-t"><tbody><tr><td>Unary</td><td>one variable: SA &ne; green (just shrink its domain)</td></tr><tr><td>Binary</td><td>two variables: SA &ne; WA</td></tr><tr><td>Higher-order</td><td>three or more: a cryptarithmetic column</td></tr><tr><td>Soft (preferences)</td><td>red is better than green: a cost, not a rule</td></tr></tbody></table></div></div>
+<div class="beat"><span class="bn">5</span><div><h3>Kinds of variables (slide 14)</h3><p><b>Discrete, finite</b> domains (size d, n variables): d<sup>n</sup> complete assignments, e.g. Boolean CSPs. <b>Discrete, infinite</b>: integers or strings, like job start times. <b>Continuous</b>: real numbers, like telescope observation times; linear constraints there are solved by linear programming.</p></div></div>
+</div><aside class="ls-side">
+<div class="ls-card"><b>In one line</b><p>Variables, domains, constraints. Solution = complete and consistent assignment.</p></div>
+<div class="ls-card"><b>Exam habit</b><p>&ldquo;Formulate as a CSP&rdquo; means write exactly those three headings, then draw the constraint graph.</p></div>
+</aside></div></section>
+  <h2>Formulations to know</h2>
+  <div class="cols">
+    <div class="rule"><span class="k">N-queens, formulation 1 (slide 7)</span><p><b>Variables:</b> X<sub>ij</sub>, one per square. <b>Domains:</b> {0, 1}. <b>Constraints:</b> no two 1s in a row, a column or a diagonal, and exactly N ones in total.</p></div>
+    <div class="rule"><span class="k">N-queens, formulation 2 (slide 8)</span><p><b>Variables:</b> Q<sub>k</sub>, one per row. <b>Domains:</b> {1, &hellip;, N}, the column. <b>Constraints:</b> for every pair i, j: Q<sub>i</sub> and Q<sub>j</sub> are not in the same column or diagonal. Smaller and better.</p></div>
+  </div>
+  <div class="cols">
+    <div class="rule"><span class="k">Sudoku (slide 12)</span><p><b>Variables:</b> each open square. <b>Domains:</b> {1, &hellip;, 9}. <b>Constraints:</b> 9-way alldiff for each row, each column and each 3&times;3 region (or many pairwise &ne;).</p></div>
+    <div class="rule"><span class="k">Cryptarithmetic: TWO + TWO = FOUR (slide 11)</span><p><b>Variables:</b> F, T, U, W, R, O and carries C1, C2, C3. <b>Domains:</b> {0, &hellip;, 9}; carries {0, 1}. <b>Constraints:</b> alldiff(F, T, U, W, R, O); O + O = R + 10&middot;C1; C1 + W + W = U + 10&middot;C2; C2 + T + T = O + 10&middot;C3; C3 = F; T &ne; 0, F &ne; 0.</p></div>
+  </div>
+  <div class="card"><span class="k">Real-world CSPs (slide 16)</span><p>Who teaches which class, timetabling, hardware configuration, transport and factory scheduling, circuit layout, fault diagnosis.</p></div>
+</article>
+
+<article class="page" id="backtrack" data-title="Backtracking search" data-group="CSP" hidden>
+  <header class="hero"><p class="eyebrow"><b>CSP</b> &middot; deck 05 slides 18&ndash;23</p><h1>Backtracking search</h1><p class="lede">The basic way to solve a CSP: depth-first search that assigns one variable at a time and refuses any value that breaks a constraint.</p></header>
+<section class="lesson">
+<div class="ls-bar"><b>Learn it first</b><span>about 5 minutes</span></div>
+<div class="ls-grid"><div class="ls-main">
+<div class="beat"><span class="bn">1</span><div><h3>Plain search is terrible here (slides 18&ndash;19)</h3><p>As a normal search problem: the state is a partial assignment, the start is {} and each action assigns some variable. BFS would build every partial assignment before finishing any. DFS would fill in all variables and only then check the constraints, finding the clash between WA and NT at the very bottom.</p></div></div>
+<div class="beat"><span class="bn">2</span><div><h3>Two small ideas fix it (slide 21)</h3><p><b>Idea 1, one variable at a time:</b> WA = red then NT = green is the same as NT = green then WA = red, so fix an order and only decide one variable per level. <b>Idea 2, check as you go:</b> only try values that don&rsquo;t clash with what is already assigned (an incremental goal test).</p><p class="formula">Backtracking = DFS + one variable per level + fail on violation</p></div></div>
+<div class="beat"><span class="bn">3</span><div><h3>What &ldquo;backtrack&rdquo; means</h3><p>If a variable has no value left that fits, go back to the <b>previous</b> variable and try its next value. That is all. With order NSW, WA, Q, V, SA, NT, T the visualiser below runs into dead ends and backtracks 9 times before it finds a colouring.</p></div></div>
+<div class="beat"><span class="bn">4</span><div><h3>How to make it faster (slide 24)</h3><p><b>Filtering:</b> spot doomed branches early (next page). <b>Ordering:</b> choose which variable and which value to try first (the page after). <b>Structure:</b> split independent parts, like Tasmania.</p></div></div>
+</div><aside class="ls-side">
+<div class="ls-card"><b>In one line</b><p>DFS over variables, one per level, skip any value that clashes, back up when stuck.</p></div>
+<div class="ls-card"><b>Power</b><p>Plain backtracking solves n-queens up to about n = 25 (slide 21).</p></div>
+</aside></div></section>
+  <h2>Colour the map, one step at a time</h2>
+  <p>The table on the right is how you answer in an exam: one row per variable, with removed values crossed out after every step.</p>
+  <div data-widget="csp" data-filter="none" data-var="fixed" data-val="fixed"></div>
+</article>
+
+<article class="page" id="filtering" data-title="Forward checking and arc consistency" data-group="CSP" hidden>
+  <header class="hero"><p class="eyebrow"><b>CSP</b> &middot; deck 05 slides 25&ndash;27</p><h1>Filtering: forward checking and arc consistency</h1><p class="lede">Keep a domain for every unassigned variable and cross off values that can no longer work. When a domain becomes empty, you know this branch is dead before you walk down it.</p></header>
+<section class="lesson">
+<div class="ls-bar"><b>Learn it first</b><span>about 6 minutes</span></div>
+<div class="ls-grid"><div class="ls-main">
+<div class="beat"><span class="bn">1</span><div><h3>Forward checking (slide 26)</h3><p>After assigning X = v, go to every <b>unassigned neighbour</b> of X and cross v off its domain. If any domain becomes empty, undo X = v straight away.</p>
+<table class="ls-t"><thead><tr><th>After</th><th>WA</th><th>NT</th><th>SA</th><th>Q</th><th>NSW</th><th>V</th></tr></thead><tbody>
+<tr><td>start</td><td>RGB</td><td>RGB</td><td>RGB</td><td>RGB</td><td>RGB</td><td>RGB</td></tr>
+<tr><td>WA = R</td><td>R</td><td>GB</td><td>GB</td><td>RGB</td><td>RGB</td><td>RGB</td></tr>
+<tr><td>Q = G</td><td>R</td><td>B</td><td>B</td><td>G</td><td>RB</td><td>RGB</td></tr></tbody></table></div></div>
+<div class="beat"><span class="bn">2</span><div><h3>What forward checking misses (slide 27)</h3><p>Look at the last row: NT and SA both have only <b>blue</b> left, and they are neighbours, so they cannot both be blue. The branch is already dead. Forward checking does not notice, because it only looks from assigned variables to unassigned ones, never between two unassigned ones.</p></div></div>
+<div class="beat"><span class="bn">3</span><div><h3>Arc consistency: check between unassigned variables too</h3><p>An arc X &#8594; Y is <b>consistent</b> if for <b>every</b> value x left in X there is <b>some</b> value y left in Y that fits the constraint. If x has no partner, delete x from X. Check SA &#8594; NT: SA&rsquo;s only value B needs NT &ne; B, but NT has only B. Delete B from SA: SA is empty, so fail now.</p></div></div>
+<div class="beat"><span class="bn">4</span><div><h3>AC-3, the bookkeeping</h3><ol class="ls-ol"><li>Put arcs in a queue.</li><li>Take an arc X &#8594; Y and remove the values of X that have no partner in Y.</li><li>If X lost a value, add every arc Z &#8594; X back to the queue (Z&rsquo;s values might have depended on the removed one).</li><li>Stop when the queue is empty, or a domain is empty (failure).</li></ol><p>Remember the direction: when X shrinks, recheck the arcs <b>into</b> X.</p></div></div>
+</div><aside class="ls-side">
+<div class="ls-card"><b>In one line</b><p>FC: cross off neighbours of what you just assigned. AC: keep crossing off until every value has a partner.</p></div>
+<div class="ls-card"><b>Trade-off</b><p>AC catches more dead ends but costs more work per step. FC is cheap and catches many.</p></div>
+</aside></div>
+<div class="ls-check"><b class="k">Check yourself</b>
+<details><summary>Is the arc NT &#8594; SA consistent when D(NT) = {B} and D(SA) = {G, B}?</summary><p>Yes. For NT = B there is SA = G, which satisfies NT &ne; SA. (The reverse arc SA &#8594; NT removes B from SA.)</p></details>
+</div></section>
+  <h2>Compare the three on the same order</h2>
+  <p>Switch between <b>Backtracking only</b>, <b>Forward checking</b> and <b>Arc consistency</b> and watch the counters: 9 dead ends in 75 steps, then the same 9 dead ends caught in 40 steps, then only 3.</p>
+  <div data-widget="csp" data-filter="fc" data-var="fixed" data-val="fixed"></div>
+</article>
+
+<article class="page" id="ordering" data-title="MRV and LCV" data-group="CSP" hidden>
+  <header class="hero"><p class="eyebrow"><b>CSP</b> &middot; deck 05 slides 28&ndash;30</p><h1>Ordering: MRV and LCV</h1><p class="lede">Which variable to fill in next, and which value to try first, can turn a long search with many dead ends into a straight run.</p></header>
+<section class="lesson">
+<div class="ls-bar"><b>Learn it first</b><span>about 4 minutes</span></div>
+<div class="ls-grid"><div class="ls-main">
+<div class="beat"><span class="bn">1</span><div><h3>MRV: minimum remaining values (slide 29)</h3><p>Choose the variable with the <b>fewest legal values left</b>, the &ldquo;most constrained variable&rdquo;. Why the fewest? If something is going to fail, it is most likely this variable, so find out now instead of after building on top of it. This is <b>fail-fast</b>.</p></div></div>
+<div class="beat"><span class="bn">2</span><div><h3>Breaking MRV ties: the degree heuristic</h3><p>At the very start every region has 3 values, so MRV ties. Then pick the variable involved in the <b>most constraints</b> with unassigned variables. On the map that is <b>SA</b> (5 neighbours), which is why MRV starts with SA.</p></div></div>
+<div class="beat"><span class="bn">3</span><div><h3>LCV: least constraining value (slide 30)</h3><p>Once the variable is chosen, try first the value that <b>rules out the fewest</b> values in the neighbours&rsquo; domains. Why the least? You only need <b>one</b> solution, so keep the most options open for everyone else.</p></div></div>
+<div class="beat"><span class="bn">4</span><div><h3>Remember the asymmetry</h3><p>Variables: <b>most</b> constrained first (fail fast). Values: <b>least</b> constraining first (succeed fast). Together they make 1000-queens feasible (slide 30).</p></div></div>
+</div><aside class="ls-side">
+<div class="ls-card"><b>In one line</b><p>MRV picks the variable, LCV orders its values.</p></div>
+<div class="ls-card"><b>Don&rsquo;t confuse</b><p>MRV counts values left in a variable&rsquo;s own domain. LCV counts values a choice would remove from others.</p></div>
+</aside></div></section>
+  <h2>Same map, smarter order</h2>
+  <p>Turn on <b>MRV</b> with any filtering: the dead ends drop to 0. Turn it off again to compare.</p>
+  <div data-widget="csp" data-filter="fc" data-var="mrv" data-val="lcv"></div>
+  <h2>How it is asked</h2>
+  <div class="card"><span class="k">Practice</span><p>Colour the map of Australia with {R, G, B} using backtracking with forward checking. Show the domains after each assignment. Which variable does MRV pick first, and why?</p>
+  <details class="exam"><summary>Worked answer</summary><div class="in"><p>Draw the domain table (rows WA, NT, SA, Q, NSW, V, T; columns R, G, B) and cross out values after every assignment, exactly like the table in the visualiser. At the start all domains have 3 values, so MRV ties and the degree heuristic picks <b>SA</b>, which has the most constraints (5). With MRV and forward checking there are no dead ends; one solution is SA = R, NT = G, Q = B, NSW = G, WA = B, V = B, T = R.</p></div></details></div>
+</article>
+
+<!-- ======================= GAMES ======================= -->
+<article class="page" id="games" data-title="Games as search" data-group="Games" hidden>
+  <header class="hero"><p class="eyebrow"><b>Games</b> &middot; deck 06 slides 2&ndash;8</p><h1>Games: search with an opponent</h1><p class="lede">So far the agent was alone. In a game, every second move is made by someone who wants you to lose. You can no longer plan a path; you need a strategy that works whatever they do.</p></header>
+<section class="lesson">
+<div class="ls-bar"><b>Learn it first</b><span>about 5 minutes</span></div>
+<div class="ls-grid"><div class="ls-main">
+<div class="beat"><span class="bn">1</span><div><h3>Competitive vs cooperative (slide 2)</h3><p>With several agents, each must think about what the others will do. When their goals <b>conflict</b> (competitive) we get <b>adversarial search</b>, also called games. Cooperative settings, like taxis sharing a road, are different.</p></div></div>
+<div class="beat"><span class="bn">2</span><div><h3>The kind of game AI studies (slide 3)</h3><p><b>Deterministic, turn-taking, two-player, zero-sum, perfect information</b>, like chess or tic-tac-toe. <b>Zero-sum</b>: one player&rsquo;s gain is exactly the other&rsquo;s loss, so the utilities at the end are equal and opposite (+1 and &minus;1).</p></div></div>
+<div class="beat"><span class="bn">3</span><div><h3>A game as a search problem (slides 6&ndash;7)</h3><table class="ls-t"><tbody><tr><td>S<sub>0</sub></td><td>the initial position</td></tr><tr><td>PLAYER(s)</td><td>whose turn it is: MAX or MIN</td></tr><tr><td>ACTIONS(s)</td><td>the legal moves</td></tr><tr><td>RESULT(s, a)</td><td>the position after a move</td></tr><tr><td>TERMINAL-TEST(s)</td><td>is the game over?</td></tr><tr><td>UTILITY(s, p)</td><td>the final score for player p (win, lose, draw)</td></tr></tbody></table><p>Together they define the <b>game tree</b>: nodes are positions, edges are moves, and levels alternate MAX, MIN, MAX&hellip;</p></div></div>
+<div class="beat"><span class="bn">4</span><div><h3>MAX and MIN</h3><p><b>MAX</b> is us: we want the highest utility. <b>MIN</b> is the opponent: they want the lowest. In drawings MAX nodes point up (&#9651;) and MIN nodes point down (&#9661;), exactly as on the deck.</p></div></div>
+</div><aside class="ls-side">
+<div class="ls-card"><b>In one line</b><p>Two players, alternating moves, one&rsquo;s win is the other&rsquo;s loss: search the game tree.</p></div>
+<div class="ls-card"><b>Size</b><p>Tic-tac-toe has fewer than 9! = 362,880 terminal nodes. Chess: about 35 moves per position, so the full tree is far too big to search.</p></div>
+</aside></div></section>
+  <div class="cols">
+    <div class="card"><span class="k">Strategy, not a path</span><p>A search answer was a sequence of actions. A game answer is a <b>strategy</b>: what MAX should do in reply to every possible move of MIN.</p></div>
+    <div class="card"><span class="k">Environment properties</span><p>Chess with a clock: fully observable, deterministic, sequential, semidynamic, discrete, multi-agent (competitive). Poker: partially observable and stochastic, so it falls outside this chapter.</p></div>
+  </div>
+</article>
+
+<article class="page" id="minimax" data-title="Minimax" data-group="Games" hidden>
+  <header class="hero"><p class="eyebrow"><b>Games</b> &middot; deck 06 slides 9&ndash;15</p><h1>Minimax</h1><p class="lede">Assume the opponent plays perfectly. Then the value of a position is what you get if both sides always choose their best move, and you can work it out from the leaves upwards.</p></header>
+<section class="lesson">
+<div class="ls-bar"><b>Learn it first</b><span>about 5 minutes</span></div>
+<div class="ls-grid"><div class="ls-main">
+<div class="beat"><span class="bn">1</span><div><h3>The rule (slide 10)</h3><p class="formula">MINIMAX(n) = utility if n is terminal; max of the children if MAX moves; min of the children if MIN moves</p><p>The minimax value of a node is the utility for MAX of being there, assuming both players play optimally to the end.</p></div></div>
+<div class="beat"><span class="bn">2</span><div><h3>Work it bottom-up</h3><p>Textbook tree: MAX at the root, three MIN children A, B, C, each with three leaves: A (3, 12, 8), B (2, 4, 6), C (14, 5, 2).</p>
+<table class="ls-t"><thead><tr><th>Node</th><th>Who moves</th><th>Value</th></tr></thead><tbody>
+<tr><td>A</td><td>MIN</td><td>min(3, 12, 8) = 3</td></tr>
+<tr><td>B</td><td>MIN</td><td>min(2, 4, 6) = 2</td></tr>
+<tr><td>C</td><td>MIN</td><td>min(14, 5, 2) = 2</td></tr>
+<tr class="win"><td>root</td><td>MAX</td><td>max(3, 2, 2) = 3: play A</td></tr></tbody></table>
+<p>C has the 14, but MIN would never let MAX have it: MIN would answer with 2.</p></div></div>
+<div class="beat"><span class="bn">3</span><div><h3>How the algorithm actually runs</h3><p>It is a depth-first search: it dives to the leftmost leaf, then passes values up as each subtree finishes. Time O(b<sup>m</sup>), memory O(bm), for branching factor b and depth m.</p></div></div>
+<div class="beat"><span class="bn">4</span><div><h3>Real games are too deep (slides 12&ndash;14)</h3><p>You cannot reach the leaves of chess. So: search to a <b>depth limit</b> and replace utilities with an <b>evaluation function</b> that estimates how good a position is. With 100 seconds at 10,000 nodes per second you can look at 1 million nodes per move; with alpha-beta that reaches about depth 8. The price: the guarantee of optimal play is gone, because evaluation functions are imperfect.</p></div></div>
+</div><aside class="ls-side">
+<div class="ls-card"><b>In one line</b><p>Leaves upwards: MAX takes the max, MIN takes the min.</p></div>
+<div class="ls-card"><b>Optimal?</b><p>Yes, against an optimal opponent. Against a weaker one it is still safe, never worse.</p></div>
+</aside></div></section>
+  <h2>Step through minimax</h2>
+  <div data-widget="gametree" data-tree="aima" data-mode="mm" data-trees="aima,deck,practice"></div>
+  <h2>How it is asked</h2>
+  <div class="card"><span class="k">Practice (deck slide 43(a))</span><p>Practically, it is not possible to run down the depth of the game tree when depth and branching factor are both large. How can the performance of the minimax algorithm be improved? [1]</p>
+  <details class="exam"><summary>Worked answer</summary><div class="in"><p>Cut the search off at a fixed depth and score the positions there with a heuristic <b>evaluation function</b> instead of the true utility, and use <b>alpha-beta pruning</b> (with good move ordering) to skip branches that cannot change the decision.</p></div></details></div>
+</article>
+
+<article class="page" id="alphabeta" data-title="Alpha-beta pruning" data-group="Games" hidden>
+  <header class="hero"><p class="eyebrow"><b>Games</b> &middot; deck 06 slides 16&ndash;42</p><h1>Alpha-beta pruning</h1><p class="lede">Same answer as minimax, far fewer nodes. Alpha-beta notices when a branch cannot change the final decision and stops exploring it.</p></header>
+<section class="lesson">
+<div class="ls-bar"><b>Learn it first</b><span>about 8 minutes</span></div>
+<div class="ls-grid"><div class="ls-main">
+<div class="beat"><span class="bn">1</span><div><h3>The intuition with the textbook tree</h3><p>MAX already knows A is worth 3. Now look at B. Its first leaf is 2, so MIN at B can force a value of 2 or less. MAX will never choose B over A (3 &gt; 2), so B&rsquo;s other leaves, 4 and 6, <b>don&rsquo;t matter</b>. Skip them. That skipping is pruning.</p></div></div>
+<div class="beat"><span class="bn">2</span><div><h3>Two numbers carried down the tree (slide 18)</h3><div class="ls-gh"><div><b>&alpha; (alpha)</b><span>the best value MAX can already guarantee on the path so far. Starts at &minus;&infin;, only goes up. Updated at MAX nodes.</span></div><div><b>&beta; (beta)</b><span>the best (lowest) value MIN can already guarantee. Starts at +&infin;, only goes down. Updated at MIN nodes.</span></div></div></div></div>
+<div class="beat"><span class="bn">3</span><div><h3>The two pruning rules</h3><ol class="ls-ol"><li>At a <b>MAX</b> node: after each child, v = max(v, child). If <b>v &ge; &beta;</b>, stop and return v. Otherwise &alpha; = max(&alpha;, v).</li><li>At a <b>MIN</b> node: after each child, v = min(v, child). If <b>v &le; &alpha;</b>, stop and return v. Otherwise &beta; = min(&beta;, v).</li></ol><p>&alpha; and &beta; are passed <b>down</b> to children; values are passed <b>up</b> to parents.</p></div></div>
+<div class="beat"><span class="bn">4</span><div><h3>The deck&rsquo;s example (slides 22&ndash;41)</h3><p>MAX root; two MIN children; each has two MAX children; leaves 4 6 | 7 9 | 1 2 | 0 1.</p>
+<table class="ls-t"><thead><tr><th>Where</th><th>What happens</th></tr></thead><tbody>
+<tr><td>first MAX</td><td>sees 4, 6: v = 6. Left MIN: &beta; = 6.</td></tr>
+<tr><td>second MAX</td><td>gets &beta; = 6, sees 7: v = 7 &ge; 6, <b>prune 9</b>. Left MIN keeps 6.</td></tr>
+<tr><td>root</td><td>&alpha; = 6. Right MIN gets &alpha; = 6.</td></tr>
+<tr><td>third MAX</td><td>sees 1, 2: v = 2. Right MIN: v = 2 &le; &alpha; = 6, <b>prune the 0, 1 subtree</b>.</td></tr>
+<tr class="win"><td>answer</td><td>root = 6, move left. Pruned: 9 and the whole (0, 1) branch.</td></tr></tbody></table></div></div>
+<div class="beat"><span class="bn">5</span><div><h3>Move ordering</h3><p>Pruning works best when the best moves are looked at first. With perfect ordering alpha-beta examines about O(b<sup>m/2</sup>) nodes instead of O(b<sup>m</sup>): it can search <b>twice as deep</b> in the same time (slide 17). It never changes the answer, only the work.</p></div></div>
+</div><aside class="ls-side">
+<div class="ls-card"><b>In one line</b><p>Carry &alpha; and &beta; down; prune at MAX when v &ge; &beta;, at MIN when v &le; &alpha;.</p></div>
+<div class="ls-card"><b>Exam answer shape</b><p>Write a [v | &alpha; | &beta;] box at each node, as on the deck, and cross out pruned edges.</p></div>
+</aside></div>
+<div class="ls-check"><b class="k">Check yourself</b>
+<details><summary>Does alpha-beta ever return a different root value than minimax?</summary><p>No. It returns exactly the same value and move; it only skips work.</p></details>
+<details><summary>Slide 42 practice: what is the root value and what is pruned?</summary><p>Root = 8 (move left). Pruned: the leaf 2 next to 9 (that MAX already has 9 &ge; &beta; = 8), and the right MIN&rsquo;s second and third MAX nodes (leaves 2, 3 and 11, 12), because the right MIN already has 5 &le; &alpha; = 8.</p></details>
+</div></section>
+  <h2>Step through alpha-beta</h2>
+  <p>Each node shows the box from the deck: <b>v | &alpha; | &beta;</b>. Red crosses mark pruned branches. Switch to <b>Minimax</b> to see how many more leaves it needs.</p>
+  <div data-widget="gametree" data-tree="deck" data-mode="ab" data-trees="deck,practice,aima"></div>
+</article>
+
 <article class="page" id="qtypes" data-title="What gets asked" data-group="Exam" hidden>
   <header class="hero"><p class="eyebrow"><b>Exam</b> &middot; from the three midterms and the slide questions</p><h1>What gets asked, and how to answer it</h1><p class="lede">Nearly every mark in Q1 to Q3 falls into one of these types. Learn the shape of each answer.</p></header>
   <div class="scroll"><table><thead><tr><th>Type</th><th>Marks</th><th>Where it appeared</th><th>Write this</th></tr></thead><tbody>
@@ -704,6 +987,13 @@
     <div class="card"><b>Admissible vs consistent?</b><p>Admissible: h(n) &le; true cost to the goal. Consistent: h(u) &minus; h(v) &le; cost(u, v) on every edge. Consistent implies admissible.</p></div>
   </div>
   <p class="note"><b class="k">ON THE DAY</b>Underline the verbs. Draw the graph or tree before tracing. Write the fringe after every step. End each trace with order, path, cost. State any assumption (tie rule, task definition). Show the cost as a sum.</p>
+  <h2>Local search, CSP and games</h2>
+  <p>None of the three past midterms asks about these yet, but they are in the outline before the midterm. The deck and the textbook point to these question styles:</p>
+  <div class="cols">
+    <div class="card"><span class="k">Games</span><p><b>Alpha-beta on a given tree:</b> mark the values each node receives and which branches are pruned [3] (deck slide 43). <b>Short answer:</b> how to make minimax practical on deep trees [1]. Practise on <a href="#alphabeta">Alpha-beta pruning</a>.</p></div>
+    <div class="card"><span class="k">CSP</span><p><b>Formulate</b> a problem as a CSP (variables, domains, constraints) and draw the constraint graph. <b>Trace</b> backtracking with forward checking, showing domains after each step. <b>Explain</b> MRV and LCV. Practise on <a href="#backtrack">Backtracking</a>.</p></div>
+    <div class="card"><span class="k">Local search</span><p><b>Compute</b> h for an 8-queens state and the best hill-climbing move. <b>Explain</b> local maxima, plateaus and ridges. <b>Calculate</b> the annealing acceptance probability e<sup>&Delta;E/T</sup>. Practise on <a href="#hill">Hill climbing</a>.</p></div>
+  </div>
 </article>
 
 <article class="page" id="papers" data-title="Past paper answers" data-group="Exam" hidden>

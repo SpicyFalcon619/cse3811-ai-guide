@@ -25,8 +25,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Check the search engine against worked answers
-        run: node tests/engine.test.js
+      - name: Check the engines against worked answers
+        run: node tests/engine.test.js && node tests/beyond.test.js
       - name: Build the site
         run: python build.py
       - uses: actions/configure-pages@v5
