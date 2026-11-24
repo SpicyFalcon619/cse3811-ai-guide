@@ -28,7 +28,7 @@
       <li><a href="#local"><span class="pn">7</span><span class="pt"><b>Local search</b><span>Hill climbing on 8-queens, simulated annealing with the probability worked out.</span></span><span class="pm">45 min</span></a></li>
       <li><a href="#csp"><span class="pn">8</span><span class="pt"><b>Constraint satisfaction</b><span>Formulating CSPs, backtracking, forward checking, arc consistency, MRV and LCV.</span></span><span class="pm">75 min</span></a></li>
       <li><a href="#games"><span class="pn">9</span><span class="pt"><b>Games</b><span>Minimax and alpha-beta pruning with the deck&rsquo;s v, &alpha;, &beta; boxes.</span></span><span class="pm">60 min</span></a></li>
-      <li><a href="#papers"><span class="pn">&middot;</span><span class="pt"><b>Past papers and quick check</b><span>Q1 to Q3 of all three midterms, solved the way you write them.</span></span><span class="pm">60 min</span></a></li>
+      <li><a href="#papers"><span class="pn">&middot;</span><span class="pt"><b>Past papers and quick check</b><span>Q1 to Q5 of all three midterms, solved the way you write them.</span></span><span class="pm">60 min</span></a></li>
       <li><a href="#lab"><span class="pn">&middot;</span><span class="pt"><b>Simulator lab</b><span>Type in any graph from a question paper and run any algorithm on it.</span></span><span class="pm">any time</span></a></li>
     </ol>
   </section>
@@ -968,7 +968,7 @@
 </article>
 
 <article class="page" id="qtypes" data-title="What gets asked" data-group="Exam" hidden>
-  <header class="hero"><p class="eyebrow"><b>Exam</b> &middot; from the three midterms and the slide questions</p><h1>What gets asked, and how to answer it</h1><p class="lede">Nearly every mark in Q1 to Q3 falls into one of these types. Learn the shape of each answer.</p></header>
+  <header class="hero"><p class="eyebrow"><b>Exam</b> &middot; from the three midterms and the slide questions</p><h1>What gets asked, and how to answer it</h1><p class="lede">Every mark in the three midterms falls into one of these types, from Q1 (agents) to Q5 (games). Learn the shape of each answer.</p></header>
   <div class="scroll"><table><thead><tr><th>Type</th><th>Marks</th><th>Where it appeared</th><th>Write this</th></tr></thead><tbody>
     <tr><td><b>Write the PEAS</b></td><td class="m">2&ndash;3</td><td>253 Q1a, 262 Q1b</td><td>Four labelled lines built from phrases in the story.</td></tr>
     <tr><td><b>Why is it episodic, stochastic&hellip;?</b></td><td class="m">2</td><td>261 Q1a</td><td>Property, its definition, one fact from the scenario.</td></tr>
@@ -977,6 +977,10 @@
     <tr><td><b>Compare or choose algorithms</b></td><td class="m">1&ndash;2</td><td>253 Q2b, 261 Q2b, 262 Q2b</td><td>Yes or no, the deciding property, the actual paths with numbers.</td></tr>
     <tr><td><b>Informed traces</b> <span class="pill">Informed</span></td><td class="m">2&ndash;6</td><td>253 Q3, 261 Q3, 262 Q3</td><td>A* / Greedy with f or h per entry; RBFS Best, Alt, f_limit; IDA* thresholds.</td></tr>
     <tr><td><b>Why is A* (not) optimal here?</b> <span class="pill">Informed</span></td><td class="m">2</td><td>253 Q3b, 261 Q3b</td><td>Admissible / consistent, checked on the actual edge.</td></tr>
+    <tr><td><b>Simulated annealing, by calculation</b> <span class="pill">Local search</span></td><td class="m">2&ndash;4</td><td>253 Q4a, 261 Q4a and Q4b, 262 Q4(i)</td><td>A table: t, node, &Delta;E, T, p = e<sup>&Delta;E/T</sup>, the random number, accept or reject. Or solve e<sup>&Delta;E/T</sup> for the limit asked.</td></tr>
+    <tr><td><b>Hill climbing and annealing, in words</b> <span class="pill">Local search</span></td><td class="m">2</td><td>253 Q4b, 261 Q4c, 262 Q4(ii)</td><td>Which one can escape a local maximum, where hill climbing gets stuck (local optimum, plateau), what happens as T falls.</td></tr>
+    <tr><td><b>Alpha-beta pruning on a tree</b> <span class="pill">Games</span></td><td class="m">4&ndash;5</td><td>253 Q5a, 261 Q5a, 262 Q5a</td><td>The [&alpha;, &beta;, v] values at every node, left to right, and the pruned branches crossed out. End with the root value.</td></tr>
+    <tr><td><b>Minimax and pruning, in words</b> <span class="pill">Games</span></td><td class="m">1&ndash;2</td><td>253 Q5b, 261 Q5b, 262 Q5b</td><td>Is minimax always optimal, can pruning remove nothing, does pruning change the decision: yes or no, the reason, one example.</td></tr>
   </tbody></table></div>
   <h2>Decoder: what the wording means</h2>
   <div class="scroll"><table><thead><tr><th>If the question says&hellip;</th><th>Do this</th></tr></thead><tbody>
@@ -986,6 +990,8 @@
     <tr><td>&ldquo;Solution path and path cost&rdquo;</td><td>The path, then the sum written out: 1 + 5 + 2 + 1 = 9.</td></tr>
     <tr><td>&ldquo;In case of ties, consider alphabetical order&rdquo;</td><td>Equal values: the alphabetically first state comes out first.</td></tr>
     <tr><td>&ldquo;Mention all possible paths&rdquo;</td><td>Run it under every tie-break and list each path that can result.</td></tr>
+    <tr><td>&ldquo;Show utility[&alpha;, &beta;, v] for each node&rdquo;</td><td>Write three numbers beside every node you visit: &alpha; and &beta; as they arrive, and v as it leaves.</td></tr>
+    <tr><td>&ldquo;Which node will he decide to travel to first?&rdquo;</td><td>Go through the neighbours in order. A better one is taken at once; a worse one only if the random number is below e<sup>&Delta;E/T</sup>.</td></tr>
     <tr><td>&ldquo;Will it find the optimal solution? Why?&rdquo;</td><td>Yes or no, the condition (equal costs, UCS, consistent h), and a counter-example from the graph if no.</td></tr>
   </tbody></table></div>
   <h2>Model answers for short theory</h2>
@@ -1003,16 +1009,16 @@
   </div>
   <p class="note"><b class="k">ON THE DAY</b>Underline the verbs. Draw the graph or tree before tracing. Write the fringe after every step. End each trace with order, path, cost. State any assumption (tie rule, task definition). Show the cost as a sum.</p>
   <h2>Local search, CSP and games</h2>
-  <p>None of the three past midterms asks about these yet, but they are in the outline before the midterm. The deck and the textbook point to these question styles:</p>
+  <p>Local search (Q4) and games (Q5) are in all three midterms, and their answers are solved on <a href="#papers">Past paper answers</a>. CSP has not been asked yet, so its question styles come from the deck and the textbook.</p>
   <div class="cols">
-    <div class="card"><span class="k">Games</span><p><b>Alpha-beta on a given tree:</b> mark the values each node receives and which branches are pruned [3] (deck slide 43). <b>Short answer:</b> how to make minimax practical on deep trees [1]. Practise on <a href="#alphabeta">Alpha-beta pruning</a>.</p></div>
+    <div class="card"><span class="k">Games</span><p><b>Alpha-beta on a given tree [4&ndash;5], in every midterm:</b> mark [&alpha;, &beta;, v] at each node and name the pruned branches. <b>Short answers [1&ndash;2]:</b> is minimax always optimal, can alpha-beta prune nothing, does pruning change the decision. Practise on <a href="#alphabeta">Alpha-beta pruning</a>.</p></div>
     <div class="card"><span class="k">CSP</span><p><b>Formulate</b> a problem as a CSP (variables, domains, constraints) and draw the constraint graph. <b>Trace</b> backtracking with forward checking, showing domains after each step. <b>Explain</b> MRV and LCV. Practise on <a href="#backtrack">Backtracking</a>.</p></div>
-    <div class="card"><span class="k">Local search</span><p><b>Compute</b> h for an 8-queens state and the best hill-climbing move. <b>Explain</b> local maxima, plateaus and ridges. <b>Calculate</b> the annealing acceptance probability e<sup>&Delta;E/T</sup>. Practise on <a href="#hill">Hill climbing</a>.</p></div>
+    <div class="card"><span class="k">Local search</span><p><b>Simulated annealing [2&ndash;4], in every midterm:</b> go through the neighbours with T and the random number, or find the largest allowed drop or the minimum temperature. <b>Theory [2]:</b> hill climbing against annealing, and where hill climbing gets stuck. Also practise h on 8-queens on <a href="#hill">Hill climbing</a>.</p></div>
   </div>
 </article>
 
 <article class="page" id="papers" data-title="Past paper answers" data-group="Exam" hidden>
-  <header class="hero"><p class="eyebrow"><b>Exam</b> &middot; Fall 2025, Spring 2026, Summer 2026</p><h1>Past midterms, Q1 to Q3, solved</h1><p class="lede">Q1 is agents and formulation, Q2 is uninformed search and Q3 is informed search. Each trace below is generated by the same engine as the visualisers, so every row matches. Graphs are redrawn from the papers. These are my worked answers, not an official scheme.</p></header>
+  <header class="hero"><p class="eyebrow"><b>Exam</b> &middot; Fall 2025, Spring 2026, Summer 2026</p><h1>Past midterms, Q1 to Q5, solved</h1><p class="lede">Q1 is agents and formulation, Q2 is uninformed search, Q3 is informed search, Q4 is local search (simulated annealing and hill climbing) and Q5 is games (alpha-beta pruning). Each trace below is generated by the same engine as the visualisers, so every row matches. Graphs are redrawn from the papers. These are my worked answers, not an official scheme.</p></header>
 
   <h2 class="ptitle">Fall 2025 (253)</h2>
   <section class="card paperq">
@@ -1045,6 +1051,40 @@
     <div class="write"><span class="k">WRITE THIS (MY REASONING)</span><div>(i)(a) Shallowest solution leftmost: <b>DFS</b>, it dives straight to it after about s expansions. (i)(b) Rightmost: <b>BFS</b>, it finishes level s while DFS first explores whole left subtrees to depth m. (ii) With infinite depth DFS can run forever down a left branch, so for (b) only BFS is safe; (a) stays DFS.</div></div>
   </section>
 
+  <section class="card paperq">
+    <div class="hd"><h3>Q4(a) Simulated annealing from node A [4]</h3><span class="pill">Local search</span></div>
+    <div class="write"><span class="k">SET UP</span><div>Maximisation: bigger E is better. Current node A has E = 22. The neighbours are checked in alphabetical order, one per timestep, starting at t = 0: P, Q, R, S, T, U, V, W. For each one, &Delta;E = E(neighbour) &minus; E(A). A better neighbour (&Delta;E &gt; 0) is always taken. A worse one is taken only if <b>N &lt; p</b>, where p = e<sup>&Delta;E / T</sup>. The temperature is T = t &minus; 2t&sup2; + 67 and the random number is N = |cos(185 + 2.7t)| in degrees.</div></div>
+    <div class="scroll"><table><thead><tr><th>t</th><th>Node</th><th>E</th><th>&Delta;E</th><th>T = t &minus; 2t&sup2; + 67</th><th>p = e<sup>&Delta;E/T</sup></th><th>N = |cos(185 + 2.7t)|</th><th>Decision</th></tr></thead><tbody>
+      <tr><td class="m">0</td><td class="m">P</td><td class="m">17</td><td class="m">&minus;5</td><td class="m">67</td><td class="m">0.928</td><td class="m">0.996</td><td>N &gt; p: reject</td></tr>
+      <tr><td class="m">1</td><td class="m">Q</td><td class="m">13</td><td class="m">&minus;9</td><td class="m">66</td><td class="m">0.873</td><td class="m">0.991</td><td>N &gt; p: reject</td></tr>
+      <tr><td class="m">2</td><td class="m">R</td><td class="m">20</td><td class="m">&minus;2</td><td class="m">61</td><td class="m">0.968</td><td class="m">0.984</td><td>N &gt; p: reject</td></tr>
+      <tr><td class="m">3</td><td class="m">S</td><td class="m">9</td><td class="m">&minus;13</td><td class="m">52</td><td class="m">0.779</td><td class="m">0.974</td><td>N &gt; p: reject</td></tr>
+      <tr><td class="m"><b>4</b></td><td class="m"><b>T</b></td><td class="m">25</td><td class="m">+3</td><td class="m">39</td><td class="m">1 (better)</td><td class="m">&ndash;</td><td><b>accept</b></td></tr>
+    </tbody></table></div>
+    <div class="write"><span class="k">WORKED EXAMPLE, t = 0</span><div>T = 0 &minus; 0 + 67 = 67. &Delta;E = 17 &minus; 22 = &minus;5, so p = e<sup>&minus;5/67</sup> = e<sup>&minus;0.0746</sup> = 0.928. N = |cos 185&deg;| = 0.996. Since 0.996 is not smaller than 0.928, P is rejected.</div></div>
+    <div class="write"><span class="k">ANSWER</span><div>Santa Claus travels to <b>T</b>, decided at <b>timestep t = 4</b>. T has E = 25, which is better than A&rsquo;s 22, so it is accepted without any random test.</div></div>
+  </section>
+  <section class="card paperq">
+    <div class="hd"><h3>Q4(b) Stochastic hill climbing or simulated annealing? [2]</h3><span class="pill">Local search</span></div>
+    <div class="write"><span class="k">WRITE THIS</span><div><b>Simulated annealing</b> can give the best answer; the two are not equally good. In Figure 4(b) the starting point is on the slope of a small hill, and the hills get taller to the right, with the tallest on the far right.</div><div>Stochastic hill climbing only ever moves <b>uphill</b>, so it climbs the first small hill, reaches a local maximum, and stops there. Simulated annealing sometimes accepts a <b>downhill</b> move, with probability e<sup>&Delta;E/T</sup>, which is large while T is high. That lets it cross the valleys and reach the tallest peak. With a slow enough cooling schedule it can find the global maximum; hill climbing cannot, because it can never leave a local maximum.</div></div>
+  </section>
+  <section class="card paperq">
+    <div class="hd"><h3>Q5(a) Alpha-beta pruning on the game tree [4]</h3><span class="pill">Games</span></div>
+    <div data-widget="gametree" data-tree="p253" data-trees="p253" data-mode="ab"></div>
+    <div class="scroll"><table><thead><tr><th>Node (MAX at the root)</th><th>[&alpha;, &beta;] on entry</th><th>What happens</th></tr></thead><tbody>
+      <tr><td>Left MIN</td><td class="m">[&minus;&infin;, +&infin;]</td><td>First MAX child (4, 3) returns 4, so v = 4 and &beta; = 4. Second MAX child enters with [&minus;&infin;, 4]: its first leaf 6 gives v = 6 &ge; &beta; = 4, so the leaf <b>2 is pruned</b>. Left MIN = min(4, 6) = <b>4</b>.</td></tr>
+      <tr><td>Root</td><td class="m">&ndash;</td><td>&alpha; = 4.</td></tr>
+      <tr><td>Middle MIN</td><td class="m">[4, +&infin;]</td><td>First MAX child (2, 1) returns 2, so v = 2 &le; &alpha; = 4. MAX already has 4 elsewhere, so the other two MAX children, (9, 5) and (3, 1), are <b>pruned</b>. Middle MIN = <b>2</b>.</td></tr>
+      <tr><td>Right MIN</td><td class="m">[4, +&infin;]</td><td>First MAX child (5, 4) returns 5, so &beta; = 5. Second MAX child enters with [4, 5]: its first leaf 7 gives v = 7 &ge; &beta; = 5, so the last leaf <b>5 is pruned</b>. Right MIN = min(5, 7) = <b>5</b>.</td></tr>
+      <tr><td>Root</td><td class="m">&ndash;</td><td>max(4, 2, 5) = <b>5</b>. MAX moves to the right-hand MIN node.</td></tr>
+    </tbody></table></div>
+    <div class="write"><span class="k">ANSWER</span><div>Pruned leaves: 2, then 9, 5, 3, 1, then 5 (six of the 14 leaves; 8 are looked at). Root value 5.</div></div>
+  </section>
+  <section class="card paperq">
+    <div class="hd"><h3>Q5(b) Is minimax always optimal? [2]</h3><span class="pill">Games</span></div>
+    <div class="write"><span class="k">WRITE THIS</span><div><b>No.</b> Minimax is optimal only against an <b>optimal opponent</b>, and only when it can search all the way to the end of the game. It guarantees the best <b>worst case</b>, not the best result against a weak player.</div><div>Example from this tree: minimax sends MAX to the right (value 5) because it assumes MIN plays perfectly. In the left branch MIN would choose 4. If MIN blundered and chose 6 instead, going left would have given MAX 6, which beats 5. A second case is a depth-limited search, where the evaluation function is only an estimate.</div></div>
+  </section>
+
   <h2 class="ptitle">Spring 2026 (261)</h2>
 
   <section class="card paperq">
@@ -1072,6 +1112,41 @@
     <p><b>(a)(ii) Greedy best-first search</b></p><div data-run="GREEDY,tree"></div>
     <div class="write"><span class="k">(b) WRITE THIS</span><div><b>Yes.</b> The heuristic is consistent: on every edge h(u) &minus; h(v) &le; cost(u, v). For example S &rarr; C: 8 &minus; 2 = 6 &le; 6, and C &rarr; B: 2 &minus; 1 = 1 &le; 1. With a consistent heuristic A* graph search is optimal, so it returns S-C-D-G with cost 9.</div></div>
     <div><button class="btn" type="button" data-lab="q261i,ASTAR,graph">Check graph search in the lab</button></div></div></div>
+  </section>
+
+  <section class="card paperq">
+    <div class="hd"><h3>Q4(a) First neighbour accepted by simulated annealing [2]</h3><span class="pill">Local search</span></div>
+    <div class="write"><span class="k">SET UP</span><div>Maximisation, T = 2. A has E = 15. The neighbours are B (12), C (14) and D (18), checked in alphabetical order: B at t = 1, C at t = 2, D at t = 3. RNG = |sin(25 + 5t)| in degrees. A better neighbour is always taken; a worse one is taken only if <b>RNG &lt; p</b>, where p = e<sup>&Delta;E/T</sup>.</div></div>
+    <div class="scroll"><table><thead><tr><th>t</th><th>Node</th><th>E</th><th>&Delta;E</th><th>p = e<sup>&Delta;E/2</sup></th><th>RNG = |sin(25 + 5t)|</th><th>Decision</th></tr></thead><tbody>
+      <tr><td class="m">1</td><td class="m">B</td><td class="m">12</td><td class="m">&minus;3</td><td class="m">e<sup>&minus;1.5</sup> = 0.223</td><td class="m">|sin 30&deg;| = 0.500</td><td>RNG &gt; p: reject</td></tr>
+      <tr><td class="m"><b>2</b></td><td class="m"><b>C</b></td><td class="m">14</td><td class="m">&minus;1</td><td class="m">e<sup>&minus;0.5</sup> = 0.607</td><td class="m">|sin 35&deg;| = 0.574</td><td><b>RNG &lt; p: accept</b></td></tr>
+    </tbody></table></div>
+    <div class="write"><span class="k">ANSWER</span><div>The first neighbour accepted is <b>C</b>, at timestep t = 2. (D is better than A and would be taken at t = 3, but the search stops at C.)</div></div>
+  </section>
+  <section class="card paperq">
+    <div class="hd"><h3>Q4(b) Minimum temperature at which B is selected [2]</h3><span class="pill">Local search</span></div>
+    <div class="write"><span class="k">WRITE THIS</span><div>B is checked at t = 1, so RNG = |sin 30&deg;| = 0.5, and &Delta;E = 12 &minus; 15 = &minus;3. B is accepted when RNG &lt; p:</div><div>0.5 &lt; e<sup>&minus;3/T</sup> &nbsp;&rArr;&nbsp; ln 0.5 &lt; &minus;3/T &nbsp;&rArr;&nbsp; &minus;0.693 &lt; &minus;3/T &nbsp;&rArr;&nbsp; <b>T &gt; 3 / 0.693 = 4.33</b>.</div><div>So the temperature must be just above <b>4.33</b>. If temperatures are whole numbers, the minimum is <b>T = 5</b>. Check: T = 5 gives p = e<sup>&minus;0.6</sup> = 0.549, which is above 0.5, so B is accepted. T = 4 gives p = e<sup>&minus;0.75</sup> = 0.472, which is below 0.5, so it is rejected.</div></div>
+  </section>
+  <section class="card paperq">
+    <div class="hd"><h3>Q4(c) Where basic hill climbing goes wrong on Figure 4.2 [2]</h3><span class="pill">Local search</span></div>
+    <div class="write"><span class="k">WRITE THIS (ANY TWO)</span><div><b>1. Local minimum at A.</b> A sits at the bottom of a valley with higher ground on both sides, so no neighbour is better. Hill climbing stops there, even though D is lower and is the global minimum.</div><div><b>2. Plateau at E.</b> The curve is flat at E, so every neighbour has the same value. There is no strictly better neighbour, so the algorithm has no direction to move and stops (or wanders) without improving.</div><div>A third issue is the start position: begun near the peaks around B and C, hill climbing slides down to whichever valley is nearest, which may be A and not D. (Read from the figure; the markers A to E are the labels on the horizontal axis.)</div></div>
+  </section>
+  <section class="card paperq">
+    <div class="hd"><h3>Q5(a) Alpha-beta pruning on the game tree [5]</h3><span class="pill">Games</span></div>
+    <div data-widget="gametree" data-tree="p261" data-trees="p261" data-mode="ab"></div>
+    <div class="scroll"><table><thead><tr><th>Node (MAX at the root)</th><th>[&alpha;, &beta;] on entry</th><th>What happens</th></tr></thead><tbody>
+      <tr><td>Left MIN</td><td class="m">[&minus;&infin;, +&infin;]</td><td>First MAX child (5, 9) returns 9, so v = 9 and &beta; = 9.</td></tr>
+      <tr><td>Left MIN, second MAX child</td><td class="m">[&minus;&infin;, 9]</td><td>Leaf 6 gives v = 6. Its MIN child (14, 10) enters with [6, 9] and returns 10. Then v = 10 &ge; &beta; = 9, so the last leaf <b>2 is pruned</b>. This MAX returns 10; Left MIN stays min(9, 10) = 9.</td></tr>
+      <tr><td>Left MIN, third MAX child</td><td class="m">[&minus;&infin;, 9]</td><td>Leaf 12 gives v = 12 &ge; &beta; = 9, so the MIN node (7, 16) is <b>pruned</b> with its leaves 7 and 16. Left MIN = <b>9</b>.</td></tr>
+      <tr><td>Root</td><td class="m">&ndash;</td><td>&alpha; = 9.</td></tr>
+      <tr><td>Right MIN</td><td class="m">[9, +&infin;]</td><td>First MAX child (2, 6) returns 6, so v = 6 &le; &alpha; = 9. MAX already has 9, so the second MAX child (15, 9, 7) is <b>pruned</b>. Right MIN = <b>6</b>.</td></tr>
+      <tr><td>Root</td><td class="m">&ndash;</td><td>max(9, 6) = <b>9</b>. MAX moves to the left-hand MIN node.</td></tr>
+    </tbody></table></div>
+    <div class="write"><span class="k">ANSWER</span><div>Pruned: the leaf 2, the MIN node (7, 16), and the whole MAX node (15, 9, 7). Root value 9.</div></div>
+  </section>
+  <section class="card paperq">
+    <div class="hd"><h3>Q5(b) Can alpha-beta prune nothing at all? [1]</h3><span class="pill">Games</span></div>
+    <div class="write"><span class="k">WRITE THIS</span><div><b>Yes.</b> It happens when the children are ordered <b>worst-first</b>: at every MAX node the best child comes last, and at every MIN node the best child (the smallest) also comes last. Then &alpha; and &beta; never cross, so every leaf has to be examined and alpha-beta does as much work as plain minimax.</div></div>
   </section>
 
   <h2 class="ptitle">Summer 2026 (262)</h2>
@@ -1105,6 +1180,32 @@
     
     <div data-run="IDASTAR"></div>
     <div class="write"><span class="k">(c) WRITE THIS [2]</span><div>The bound (threshold or f_limit) is only meant to decide whether a node is <b>expanded</b>. If the goal test came after the bound check, a goal whose f is above the current bound would be cut off instead of recognised.</div><div>The search would then waste work: IDA* would need extra iterations until the threshold reached f(goal), and RBFS would fail and back up from a branch that already contained the goal. In the deck&rsquo;s IDA* example the goal (f = 15) is found at threshold 8; with the test after the bound it would not be found until the threshold reached 15.</div></div></div></div>
+  </section>
+  <section class="card paperq">
+    <div class="hd"><h3>Q4(i) Largest allowed drop in energy [3]</h3><span class="pill">Local search</span></div>
+    <div class="write"><span class="k">WRITE THIS</span><div>A downhill move is accepted with probability p = e<sup>&Delta;E/T</sup>. We need p &ge; 0.90 at T = 10:</div><div>e<sup>&Delta;E/10</sup> &ge; 0.90 &nbsp;&rArr;&nbsp; &Delta;E/10 &ge; ln 0.90 = &minus;0.1054 &nbsp;&rArr;&nbsp; <b>&Delta;E &ge; &minus;1.05</b>.</div><div>Energy takes whole values, so the largest allowed drop is <b>1 unit</b>. Check: &Delta;E = &minus;1 gives p = e<sup>&minus;0.1</sup> = 0.905, which is at least 0.90. &Delta;E = &minus;2 gives p = e<sup>&minus;0.2</sup> = 0.819, which is below 0.90. From E = 107 the new energy must therefore be at least 106.</div></div>
+  </section>
+  <section class="card paperq">
+    <div class="hd"><h3>Q4(ii) What happens to downhill acceptance as T falls [2]</h3><span class="pill">Local search</span></div>
+    <div class="write"><span class="k">WRITE THIS</span><div>For a downhill move &Delta;E is negative, so &Delta;E/T becomes <b>more negative</b> as T falls, and p = e<sup>&Delta;E/T</sup> gets <b>smaller</b>. The probability of accepting a downhill move decreases as the temperature drops.</div><div>Example with &Delta;E = &minus;2: at T = 10, p = e<sup>&minus;0.2</sup> = 0.82; at T = 5, p = 0.67; at T = 1, p = 0.14. As T approaches 0, p approaches 0 and the algorithm behaves like plain hill climbing, taking only uphill moves.</div></div>
+  </section>
+  <section class="card paperq">
+    <div class="hd"><h3>Q5(a) Alpha-beta pruning on the game tree [4]</h3><span class="pill">Games</span></div>
+    <div data-widget="gametree" data-tree="p262" data-trees="p262" data-mode="ab"></div>
+    <div class="scroll"><table><thead><tr><th>Node</th><th>[&alpha;, &beta;] on entry</th><th>What happens</th></tr></thead><tbody>
+      <tr><td>A (MIN, the root)</td><td class="m">[&minus;&infin;, +&infin;]</td><td>Note that the root is a MIN node in this paper.</td></tr>
+      <tr><td>B (MAX), child D (MIN)</td><td class="m">[&minus;&infin;, +&infin;]</td><td>D sees 5, 7, 1 and returns min = <b>1</b>. B: v = 1, &alpha; = 1.</td></tr>
+      <tr><td>B (MAX), child E (MIN)</td><td class="m">[1, +&infin;]</td><td>E sees 9, then 2. v = 2 is not &le; &alpha; = 1, so nothing is pruned. E = <b>2</b>. B = max(1, 2) = <b>2</b>.</td></tr>
+      <tr><td>A</td><td class="m">&ndash;</td><td>v = 2, so &beta; = 2.</td></tr>
+      <tr><td>C (MAX), child F (MIN)</td><td class="m">[&minus;&infin;, 2]</td><td>F sees 5 and then 10, and returns <b>5</b>. Then C: v = 5 &ge; &beta; = 2.</td></tr>
+      <tr><td>C, children G and H</td><td class="m">[&minus;&infin;, 2]</td><td>MIN above already has 2 from B, and C is worth at least 5, so it will never be chosen. G (leaves 12, 6) and H (leaf 20) are <b>pruned</b>. C = <b>5</b>.</td></tr>
+      <tr><td>A</td><td class="m">&ndash;</td><td>min(2, 5) = <b>2</b>. MIN chooses B.</td></tr>
+    </tbody></table></div>
+    <div class="write"><span class="k">ANSWER</span><div>Pruned: nodes G and H, with the leaves 12, 6 and 20. Root value 2.</div></div>
+  </section>
+  <section class="card paperq">
+    <div class="hd"><h3>Q5(b) Does pruning change the minimax decision? [2]</h3><span class="pill">Games</span></div>
+    <div class="write"><span class="k">WRITE THIS</span><div><b>No.</b> Alpha-beta pruning never changes the value or the move that minimax finds. It only skips branches that are provably unable to influence the decision: a pruned branch is already worse for the player choosing than an option found earlier. It saves time, not correctness. Here, plain minimax also gives 2 and picks B.</div></div>
   </section>
 </article>
 

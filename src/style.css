@@ -838,3 +838,5 @@
   .ged-foot .chk { border: 0; padding: 0; }
   .ged-bar .dd-btn { background-color: transparent; }
   .ged-bar .dd { z-index: 3; }
+  .xsim .canvas { display: block; overflow: auto; text-align: center; }
+  .xsim .canvas svg.gtree { display: inline-block; max-width: none; }

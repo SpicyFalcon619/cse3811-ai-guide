@@ -7,14 +7,17 @@
 var GAMES = {
   aima: { name: 'Three moves each (textbook figure)', tree: [[3, 12, 8], [2, 4, 6], [14, 5, 2]] },
   deck: { name: 'Deck slides 22-41', tree: [[[4, 6], [7, 9]], [[1, 2], [0, 1]]] },
-  practice: { name: 'Deck slide 42 (practice)', tree: [[[6, 8], [9, 2], [1, 10]], [[4, 5], [2, 3], [11, 12]]] }
+  practice: { name: 'Deck slide 42 (practice)', tree: [[[6, 8], [9, 2], [1, 10]], [[4, 5], [2, 3], [11, 12]]] },
+  p253: { name: 'Fall 2025 Q5 (midterm 253)', tree: [[[4, 3], [6, 2]], [[2, 1], [9, 5], [3, 1]], [[5, 4], [7, 5]]] },
+  p261: { name: 'Spring 2026 Q5 (midterm 261)', tree: [[[5, 9], [6, [14, 10], 2], [12, [7, 16]]], [[2, 6], [15, 9, 7]]] },
+  p262: { name: 'Summer 2026 Q5 (MIN root)', rootMin: true, tree: [[[5, 7, 1], [9, 2]], [[5, 10], [12, 6], [20]]] }
 };
 
-function gameRun(tree, mode) {
+function gameRun(tree, mode, rootMin) {
   // Build nodes with ids, kinds and labels.
   var nodes = [], steps = [];
   function mk(t, depth, parent, label) {
-    var n = { id: nodes.length, depth: depth, parent: parent, label: label, leaf: typeof t === 'number', kind: depth % 2 ? 'min' : 'max', kids: [] };
+    var n = { id: nodes.length, depth: depth, parent: parent, label: label, leaf: typeof t === 'number', kind: (depth + (rootMin ? 1 : 0)) % 2 ? 'min' : 'max', kids: [] };
     if (n.leaf) { n.value = t; n.kind = 'leaf'; }
     nodes.push(n);
     if (!n.leaf) t.forEach(function (c, i) { n.kids.push(mk(c, depth + 1, n.id, label + (depth === 0 ? String.fromCharCode(65 + i) : String(i + 1))).id); });
@@ -177,6 +180,21 @@ function cspRun(P, opt) {
   return { steps: steps, sol: sol, assigns: assigns, fails: fails };
 }
 
+/* ---------------- simulated annealing, as the midterms ask it ---------------- */
+/* cfg: { current, neighbours: [[name, value], ...] in the order they are checked, T: t => temperature, N: t => random number, maximise }
+   At timestep t the neighbour number t is checked. A better move is always taken; a worse one is taken when N(t) < e^(dE/T). */
+function annealRun(cfg) {
+  var steps = [], cur = cfg.current, max = cfg.maximise !== false;
+  for (var t = 0; t < cfg.neighbours.length; t++) {
+    var nb = cfg.neighbours[t], dE = max ? nb[1] - cur[1] : cur[1] - nb[1], T = cfg.T(t), N = cfg.N(t);
+    var better = dE > 0, p = better ? 1 : Math.exp(dE / T), accept = better || N < p;
+    steps.push({ t: t, node: nb[0], dE: dE, T: T, N: N, p: p, better: better, accept: accept });
+    if (accept) return { chosen: nb[0], at: t, steps: steps };
+  }
+  return { chosen: null, at: null, steps: steps };
+}
+function deg(x) { return x * Math.PI / 180; }
+
 /* ---------------- 8-queens for hill climbing ---------------- */
 function queensH(b) {
   var h = 0;
@@ -187,4 +205,4 @@ function queensNeighbours(b) {
   return b.map(function (r0, c) { return b.map(function (_, r) { if (r === r0) return null; var n = b.slice(); n[c] = r; return queensH(n); }); });
 }
 
-if (typeof module !== 'undefined') module.exports = { GAMES: GAMES, gameRun: gameRun, CSPS: CSPS, cspRun: cspRun, queensH: queensH, queensNeighbours: queensNeighbours };
+if (typeof module !== 'undefined') module.exports = { annealRun: annealRun, deg: deg, GAMES: GAMES, gameRun: gameRun, CSPS: CSPS, cspRun: cspRun, queensH: queensH, queensNeighbours: queensNeighbours };

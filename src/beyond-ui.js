@@ -129,7 +129,7 @@
       top: seg('mode', 'Algorithm', [['mm', 'Minimax'], ['ab', 'Alpha-beta']], opt.mode) +
         '<label class="f">TREE <select data-sel="tree" aria-label="Tree">' + trees.map(function (t) { return '<option value="' + t + '"' + (t === opt.tree ? ' selected' : '') + '>' + GAMES[t].name + '</option>'; }).join('') + '</select></label>',
       legend: '<span><i class="lg-max"></i>MAX node</span><span><i class="lg-min"></i>MIN node</span><span><i style="border-color:var(--W);background:var(--Wbg)"></i>working on it</span><span><i style="border-color:var(--A);background:var(--Abg)"></i>finished</span><span><i style="border-color:var(--R);border-style:dashed"></i>pruned</span>',
-      compute: function (o) { return gameRun(GAMES[o.tree].tree, o.mode); },
+      compute: function (o) { return gameRun(GAMES[o.tree].tree, o.mode, GAMES[o.tree].rootMin); },
       draw: function (R, s) { return drawGame(R, s, opt.mode); },
       side: function (R, s, i) {
         var c = s.cur !== null ? s.st[s.cur] : null, n = s.cur !== null ? R.nodes[s.cur] : null;
