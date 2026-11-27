@@ -1,65 +1,56 @@
-# CSE 3811 AI Guide
+# CSE 3811 · Artificial Intelligence Study Guide
 
-An interactive guide to artificial intelligence, written for CSE 3811 (Artificial Intelligence). It follows the course outline up to the midterm: intelligent agents, uninformed and informed search, local search, constraint satisfaction and game playing. The topics after the midterm will be added as the course reaches them. Each topic opens with a plain-language lesson and a worked example, and then gives you a visualiser you can step through one move at a time.
+**[Open the live Artificial Intelligence guide](https://spicyfalcon619.github.io/cse3811-ai-guide/)**
 
-**[Open the guide](https://spicyfalcon619.github.io/cse3811-ai-guide/)**
+Learn to formulate search problems, trace algorithms by hand, and check each step in a visualiser. The guide covers the CSE 3811 course through the midterm, from intelligent agents to game trees.
 
-## What it covers
+## Start studying
 
-| Part | Topics |
-|---|---|
-| Start here | A map of the whole course outline, the one search loop every algorithm shares, and the words you need (state, fringe, expand, g, h, f) |
-| Agents | Views of AI, agents and environments, rationality, PEAS, environment properties, search problems |
-| Uninformed search | Graph to search tree, reading the answer from the fringe, BFS, DFS, UCS, depth-limited search and IDS, bidirectional search, tree search vs graph search |
-| Informed search | Heuristics (admissible and consistent), Greedy best-first, A\*, IDA\*, RBFS, SMA\* |
-| Local search | The state-space landscape, hill climbing on 8-queens and its variants, simulated annealing |
-| CSP | Formulating constraint satisfaction problems, backtracking, forward checking, arc consistency, MRV and LCV |
-| Games | Games as search, minimax, alpha-beta pruning |
-| Exam | The question types that come up, past paper answers, a simulator lab, a quick check and pairs that are easy to mix up |
+- **New to search?** Follow [the search loop](https://spicyfalcon619.github.io/cse3811-ai-guide/#loop), then step through [breadth-first search](https://spicyfalcon619.github.io/cse3811-ai-guide/#bfs) and watch how the queue changes.
+- **Trying an example of your own?** Draw a graph or tree in the [simulator lab](https://spicyfalcon619.github.io/cse3811-ai-guide/#lab), set the costs and heuristics, and step through the resulting trace.
+- **Preparing for the midterm?** Practise [Q1–Q5 from Fall 2025, Spring 2026 and Summer 2026](https://spicyfalcon619.github.io/cse3811-ai-guide/#papers), then check your understanding with the [quiz](https://spicyfalcon619.github.io/cse3811-ai-guide/#quiz).
 
-## What the site gives you
+## Course coverage
 
-- **Lessons before rules.** Every search page starts with a short lesson: an everyday picture of the idea, then one worked example done by hand as a table, then questions to check yourself.
-- **Visualisers you can step through.** Choose an algorithm and a graph, then step forward and back. Each step shows the state graph, the full search tree and the stack, queue or priority queue, with a sentence explaining that step.
-- **Beyond path search.** Alpha-beta on game trees with the v, α, β box at every node, as on the lecture slides; map colouring with the domain table updated after each assignment; an 8-queens board that shows h for every move; and a landscape for hill climbing and simulated annealing.
-- **The answer read from the fringe.** The guide shows how to write the path, the cost and the expansion order straight from the stack or queue, the way an exam answer is written.
-- **Draw your own graph or tree.** The lab has a drag-and-drop editor: click to add nodes, connect them, type step costs and heuristic values, set the start and goal, or press Add child to grow a tree. The simulator follows every change, and the same graph is shown as plain text that you can edit.
-- **Real exam graphs.** Every question of the three recent midterms (Q1 to Q5) and the lecture examples are built in, with the full trace table for each run.
-- **Course conventions.** Ties are broken alphabetically, the goal test happens when a path is taken out, and DFS pushes children in reverse order, as in the lecture decks.
-- **Progress and themes.** You can mark pages as understood, and choose a paper, dark or charcoal theme. The background animation can be turned off. These choices are saved in your browser only.
+| Topic | What you can learn and practise |
+| --- | --- |
+| [Intelligent agents](https://spicyfalcon619.github.io/cse3811-ai-guide/#agents) | Describe an agent’s environment, apply PEAS, and formulate a search problem. |
+| [Uninformed search](https://spicyfalcon619.github.io/cse3811-ai-guide/#bfs) | Trace BFS, DFS, uniform-cost, depth-limited, iterative deepening and bidirectional search. Compare tree search with graph search. |
+| [Informed search](https://spicyfalcon619.github.io/cse3811-ai-guide/#heuristic) | Check heuristics for admissibility and consistency. Compare greedy best-first search, A\*, IDA\*, RBFS and SMA\*. |
+| [Local search](https://spicyfalcon619.github.io/cse3811-ai-guide/#local) | Follow hill climbing on an 8-queens board and explore how simulated annealing accepts moves. |
+| [Constraint satisfaction](https://spicyfalcon619.github.io/cse3811-ai-guide/#csp) | Trace map colouring with backtracking, forward checking, arc consistency, and the MRV and LCV heuristics. |
+| [Games](https://spicyfalcon619.github.io/cse3811-ai-guide/#games) | Evaluate a game tree with minimax and watch alpha-beta pruning skip branches. |
 
-## Running it locally
+The visualisers let you step forward and back to see which path the algorithm expands, how the queue or stack changes, and how to write the final path, cost and expansion order. The guide saves your progress and theme choice in your browser.
 
-You need Python 3 to build the site and Node.js to run the tests. There are no packages to install.
+## Build and test locally
 
-```bash
-node tests/engine.test.js   # check the search engine against hand-worked answers
-node tests/beyond.test.js   # check the game-tree, CSP and 8-queens engines
-python build.py             # writes dist/index.html
+Use Python 3.12 or later and Node.js. The build and tests use their standard libraries.
+
+```sh
+node tests/engine.test.js
+node tests/beyond.test.js
+python build.py
 ```
 
-Then open `dist/index.html` in a browser.
+Open `dist/index.html` in your browser. The build bundles the lessons, styles and scripts into that one file.
 
-## Project layout
+## Repository layout
 
-| Path | What it holds |
-|---|---|
-| `src/pages.html` | The content: one `<article>` per page |
-| `src/style.css` | The design: theme tokens, layout and motion |
-| `src/engine.js` | The search engine: the graphs and every algorithm, step by step |
-| `src/ui.js` | The interface: navigation, visualisers, search trees and interactive widgets |
-| `src/beyond-engine.js` | Minimax and alpha-beta, CSP backtracking with filtering and ordering, and the 8-queens heuristic |
-| `src/beyond-ui.js` | The visualisers for games, CSPs and local search |
-| `src/dropdown.js` | A themed replacement for the browser's native dropdown |
-| `src/editor.js` | The graph and tree editor in the simulator lab |
-| `src/data.js` | Quiz questions and the SMA\* walkthrough |
-| `tests/engine.test.js`, `tests/beyond.test.js` | Check the engines against answers worked out by hand |
-| `build.py` | Puts everything into a single self-contained `dist/index.html` |
-| `.github/workflows/pages.yml` | Runs the tests, builds the site and publishes it to GitHub Pages on every push to `main` |
+| Path | Purpose |
+| --- | --- |
+| `src/pages.html`, `src/data.js` | Lessons, worked past papers, quiz and walkthrough data |
+| `src/engine.js`, `src/ui.js` | Path search, navigation and search visualisers |
+| `src/beyond-engine.js`, `src/beyond-ui.js` | Games, constraint satisfaction and local-search visualisers |
+| `src/editor.js` | Graph and tree editor |
+| `src/style.css`, `src/dropdown.js` | Themes, layout and form controls |
+| `tests/`, `build.py` | Checks against worked examples and the static HTML build |
 
-## How the answers are checked
+The tests compare algorithm results with examples worked by hand from the course slides and past papers. For Fall 2025 Q3, for example, A\* returns cost 6 in tree-search mode and 7 in graph-search mode with the question’s inconsistent heuristic.
 
-The engine's results are compared with answers worked out by hand from past papers, the lecture decks and the course teacher's examples. For example, BFS on Fall 2025 Q2(a) gives S-C-G with cost 11, and A\* on Fall 2025 Q3 gives cost 6 with tree search but 7 with graph search, because that heuristic is not consistent. Alpha-beta on the deck's example returns 6 and prunes the leaf 9 and the whole 0, 1 branch. If a change to the engine breaks any of these, the tests fail and the site is not deployed.
+## GitHub Pages
+
+The [Pages workflow](.github/workflows/pages.yml) tests, builds and deploys the guide on pushes to `main`. It can also be run manually. [Deployment history](https://github.com/SpicyFalcon619/cse3811-ai-guide/actions/workflows/pages.yml)
 
 ## Author
 
