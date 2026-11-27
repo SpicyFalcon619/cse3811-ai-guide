@@ -846,3 +846,27 @@
   .smag .cap { font: 600 .66rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
   .gsvg .remv { font: 700 11px var(--mono); fill: var(--W); text-anchor: start; }
   .smacanvas { height: auto; min-height: 330px; }
+  /* SMA* memory bar */
+  .smamem { padding: 12px 16px; border-bottom: 1px solid var(--rule); background: var(--surface); display: flex; flex-direction: column; gap: 10px; }
+  .smamem .mh { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font: 700 .72rem var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+  .smamem .mh b { color: var(--ink); }
+  .smamem .mu { padding: 3px 10px; border-radius: var(--r-sm); background: var(--tint); color: var(--muted); }
+  .smamem .mu.full { background: var(--Wbg); color: var(--W); }
+  .smamem .drop { padding: 3px 10px; border-radius: var(--r-sm); background: var(--Rbg); color: var(--R); text-transform: none; letter-spacing: 0; font-size: .78rem; }
+  .smamem .slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  .slot { border: 1px dashed var(--line); border-radius: var(--r); padding: 8px 12px; display: flex; flex-direction: column; gap: 1px; min-height: 76px; color: var(--muted); }
+  .slot .sn { font: 700 .6rem var(--mono); letter-spacing: .12em; }
+  .slot b { font: 400 1.5rem/1.1 var(--display); color: inherit; }
+  .slot .sf { font: 600 .78rem var(--mono); }
+  .slot i { font: 600 .72rem var(--mono); color: var(--W); font-style: normal; }
+  .slot.on { border-style: solid; border-color: var(--S); background: var(--Sbg); color: var(--ink); }
+  .slot.on.goal { border-color: var(--G); background: var(--Gbg); }
+  .smaforg { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 8px 14px; border-top: 1px dashed var(--rule); font-size: .84rem; }
+  .smaforg .fh { font: 700 .62rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); width: 100%; }
+  .smaforg .fi { padding: 3px 9px; border: 1px dashed var(--muted); border-radius: var(--r-sm); color: var(--muted); }
+  .smaforg .fi b { color: var(--W); }
+  .smaforg .fi.now { border-color: var(--R); color: var(--R); background: var(--Rbg); }
+  .smaforg .fi.none { border-style: none; padding-left: 0; }
+  .legend .rtag { font: 700 .72rem var(--mono); color: var(--W); margin-right: 5px; }
+  .gsvg .remn { font: 600 8.5px var(--mono); fill: var(--W); text-anchor: start; }
+  @media (max-width: 640px) { .smamem .slots { gap: 6px; } .slot { padding: 6px 8px; } .slot i { font-size: .6rem; } }

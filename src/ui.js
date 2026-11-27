@@ -836,36 +836,54 @@
     el.innerHTML = R.rows.map(function (r) { var win = typeof r.next === 'string'; return '<div class="rung' + (win ? ' win' : '') + '"><span>ITERATION ' + r.it + '</span><b>threshold ' + r.thr + '</b><span>' + (win ? 'goal found' : 'cut: ' + r.cut + ' &#8594; next ' + r.next) + '</span></div>'; }).join('');
   };
   WIDGETS.sma = function (el) {
-    var S = SMA_STEPS, P = SMA_POS, i = 0, timer = null;
+    var S = SMA_STEPS, P = SMA_POS, LIMIT = 3, i = 0, timer = null;
     el.classList.add('sim', 'xsim');
     el.innerHTML = '<div class="ctrl"><button class="btn" type="button" data-r="z"><svg viewBox="0 0 24 24"><path d="M4 4v6h6"/><path d="M4.5 15a8 8 0 1 0 2-8.5L4 10"/></svg>Restart</button><button class="btn" type="button" data-r="p"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Back</button><button class="btn pri" type="button" data-r="n">Next<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><button class="btn" type="button" data-r="a">Play</button><input type="range" min="0" value="0" data-r="rg" aria-label="Step"><span class="cnt" data-r="cnt"></span></div>' +
-      '<div class="sim-body"><div class="viz"><div class="tabs"><span class="tlabel">Search tree in memory &middot; f under each node, (x) = remembered f</span></div><div class="canvas smacanvas" data-r="c"></div><div class="legend">' + LEGEND + '<span><i style="border-color:var(--R);background:var(--Rbg);border-style:dashed"></i>dropped in this step</span><span><i style="border-color:var(--muted);border-style:dashed"></i>forgotten earlier</span></div></div>' +
-      '<div class="side"><div class="smag"><div class="cap">The graph (slide 52)</div><div data-r="g"></div></div><div><div class="panel-h"><span>Memory: 3 slots</span><b data-r="mu"></b></div><div class="ram" data-r="ram"></div></div><div class="say" data-r="say"></div></div></div>';
+      '<div class="smamem" data-r="mem" aria-live="polite"></div>' +
+      '<div class="sim-body"><div class="viz"><div class="tabs"><span class="tlabel">Search tree in memory &middot; f under each node</span></div><div class="canvas smacanvas" data-r="c"></div><div class="smaforg" data-r="fg"></div><div class="legend">' + LEGEND + '<span><i style="border-color:var(--R);background:var(--Rbg);border-style:dashed"></i>dropped in this step</span><span><i style="border-color:var(--muted);border-style:dashed"></i>forgotten earlier</span><span><b class="rtag">(5)</b>value remembered by the parent</span></div></div>' +
+      '<div class="side"><div class="smag"><div class="cap">The graph (slide 52)</div><div data-r="g"></div></div><div class="say" data-r="say"></div></div></div>';
     var X = {}; $$('[data-r]', el).forEach(function (x) { X[x.dataset.r] = x; });
     X.rg.max = S.length - 1; X.g.innerHTML = drawGraph(GRAPHS.tSM, null, null);
     function lab(id) { return id.charAt(0); }
+    function gone(n) { return n[2] === 'forgot' || n[2] === 'cut'; }
+    /* what a parent remembers: the smallest f among its forgotten children */
+    function remembered(s) {
+      var r = {};
+      s.n.forEach(function (n) { var pr = P[n[0]][2]; if (pr && gone(n)) { var c = r[pr]; if (!c || n[1] < c.f) r[pr] = { f: n[1], who: lab(n[0]) }; } });
+      return r;
+    }
     function draw() {
-      var s = S[i], pos = {}, o = '<svg class="gsvg" viewBox="0 0 520 290" width="520" role="img" aria-label="SMA* tree in memory">';
+      var s = S[i], pos = {}, rem = remembered(s), o = '<svg class="gsvg" viewBox="0 0 520 290" width="520" role="img" aria-label="SMA* tree in memory">';
       s.n.forEach(function (n) { pos[n[0]] = n; });
       s.n.forEach(function (n) {
         var pr = P[n[0]][2]; if (!pr || !pos[pr]) return;
-        var a = P[pr], b = P[n[0]], dim = n[2] === 'forgot' || n[2] === 'cut';
-        o += '<line class="tedge ' + (dim ? 'forgot' : n[2] === 'path' ? 'sol' : '') + '" x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '"/>';
+        var a = P[pr], b = P[n[0]];
+        o += '<line class="tedge ' + (gone(n) ? 'forgot' : n[2] === 'path' ? 'sol' : '') + '" x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '"/>';
       });
       s.n.forEach(function (n) {
-        var p = P[n[0]];
+        var p = P[n[0]], r = rem[n[0]];
         o += '<g class="node ' + n[2] + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="18"/><text class="l" x="' + p[0] + '" y="' + (p[1] + 1) + '">' + lab(n[0]) + '</text><text class="tval" x="' + p[0] + '" y="' + (p[1] + 33) + '">f=' + n[1] + '</text>' +
-          (s.rem[n[0]] !== undefined ? '<text class="remv" x="' + (p[0] + 24) + '" y="' + (p[1] - 12) + '">(' + s.rem[n[0]] + ')</text>' : '') + '</g>';
+          (r ? '<text class="remv" x="' + (p[0] + 24) + '" y="' + (p[1] - 10) + '">(' + r.f + ')</text><text class="remn" x="' + (p[0] + 24) + '" y="' + (p[1] + 2) + '">has forgotten ' + r.who + '</text>' : '') + '</g>';
       });
       X.c.innerHTML = o + '</svg>';
-      var mem = s.n.filter(function (n) { return n[2] !== 'forgot' && n[2] !== 'cut'; });
-      X.ram.innerHTML = [0, 1, 2].map(function (k) {
-        var n = mem[k]; if (!n) return '<div><span>SLOT ' + (k + 1) + '</span>empty</div>';
-        return '<div class="' + (s.goal ? 'goalr' : 'full') + '"><span>SLOT ' + (k + 1) + '</span>' + lab(n[0]) + ' (f=' + n[1] + (s.rem[n[0]] !== undefined ? ', remembers ' + s.rem[n[0]] : '') + ')</div>';
-      }).join('');
-      X.mu.textContent = mem.length + ' of 3 used';
+
+      var mem = s.n.filter(function (n) { return !gone(n); }), full = mem.length >= LIMIT, dropped = s.n.filter(function (n) { return n[2] === 'cut'; });
+      var slots = '';
+      for (var k = 0; k < LIMIT; k++) {
+        var n = mem[k];
+        slots += n ? '<div class="slot on' + (s.goal ? ' goal' : '') + '"><span class="sn">SLOT ' + (k + 1) + '</span><b>' + lab(n[0]) + '</b><span class="sf">f = ' + n[1] + '</span>' + (rem[n[0]] ? '<i>remembers ' + rem[n[0]].who + ' (' + rem[n[0]].f + ')</i>' : '') + '</div>' : '<div class="slot"><span class="sn">SLOT ' + (k + 1) + '</span><b>free</b></div>';
+      }
+      X.mem.innerHTML = '<div class="mh"><b>Memory limit: ' + LIMIT + ' nodes</b><span class="mu' + (full ? ' full' : '') + '">' + mem.length + ' of ' + LIMIT + ' used' + (full ? ' &middot; FULL' : '') + '</span>' +
+        (dropped.length ? '<span class="drop">just dropped: ' + dropped.map(function (d) { return lab(d[0]) + ' (f = ' + d[1] + ')'; }).join(', ') + '</span>' : '') + '</div><div class="slots">' + slots + '</div>';
+
+      var fg = s.n.filter(gone);
+      X.fg.innerHTML = '<span class="fh">Forgotten, but remembered by the parent</span>' + (fg.length ? fg.map(function (d) {
+        var pr = P[d[0]][2];
+        return '<span class="fi' + (d[2] === 'cut' ? ' now' : '') + '"><b>' + lab(d[0]) + '</b> f = ' + d[1] + ' &middot; ' + lab(pr) + ' keeps <b>(' + rem[pr].f + ')</b>' + (d[2] === 'cut' ? ' &middot; dropped now' : '') + '</span>';
+      }).join('') : '<span class="fi none">nothing has been dropped yet</span>');
+
       X.say.className = 'say' + (s.goal ? ' goal' : s.bad ? ' bad' : '');
-      X.say.innerHTML = '<span class="kind">' + (i === 0 ? '' : '') + s.k + '</span><p>' + s.x + '</p>';
+      X.say.innerHTML = '<span class="kind">' + s.k + '</span><p>' + s.x + '</p>';
       X.say.classList.remove('flash'); void X.say.offsetWidth; X.say.classList.add('flash');
       X.cnt.textContent = 'step ' + i + ' / ' + (S.length - 1); X.rg.value = i;
       X.p.disabled = X.z.disabled = i === 0; X.n.disabled = i === S.length - 1;
