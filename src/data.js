@@ -1,14 +1,26 @@
+/* SMA* with room for 3 nodes: the example on informed-deck slides 52 to 54, step for step.
+   Each node is [id, f, state]. States: cur (being expanded), open, done, cut (dropped in this step),
+   forgot (dropped earlier), path. "rem" is the forgotten f-value a parent remembers. */
+var SMA_POS = { S: [260, 40, null], A: [120, 135, 'S'], B: [260, 135, 'S'], C: [400, 135, 'S'], GA: [120, 235, 'A'], GB: [260, 235, 'B'] };
 var SMA_STEPS = [
-  { k: 'START', t: [['S', 3, 260, 40, 'cur', null]], ram: ['S (f=3)', '', ''],
-    x: 'Put the start node S in memory with f(S) = 0 + 3 = 3. One of the three memory slots is used.' },
-  { k: 'EXPAND S', t: [['S', 3, 260, 40, 'done', null], ['A', 4, 165, 130, 'open', 'S'], ['B', 5, 355, 130, 'open', 'S']], ram: ['S (f=3)', 'A (f=4)', 'B (f=5)'],
-    x: 'Expand S. Its children A (f = 4 + 0 = 4) and B (f = 3 + 2 = 5) go into memory. <b>Memory is now full: 3 of 3.</b>' },
-  { k: 'MEMORY FULL: DROP THE WORST LEAF', bad: 1, t: [['S', 4, 260, 40, 'done', null], ['A', 4, 130, 130, 'open', 'S'], ['B', 5, 260, 130, 'forgot', 'S'], ['C', 6, 390, 130, 'open', 'S']], ram: ['S (f=4, remembers 5)', 'A (f=4)', 'C (f=6)'],
-    x: 'S still has a third child, C (f = 5 + 1 = 6), but there is no free slot. SMA* <b>drops the worst leaf</b>, B (f = 5), and S <b>remembers</b> that a forgotten child was worth 5. S now shows f = 4, the best of what it still has.' },
-  { k: 'EXPAND A', bad: 1, t: [['S', 5, 260, 32, 'done', null], ['A', 6, 165, 112, 'done', 'S'], ['B', 5, 355, 112, 'forgot', 'S'], ['G', 6, 165, 198, 'cut', 'A']], ram: ['S (f=5)', 'A (f=6)', 'G (f=6)'],
-    x: 'A (f = 4) is the best node in memory. Expanding it gives G with f = 4 + 2 + 0 = 6. To make room, the worst leaf C (6) is dropped. A is updated to f = 6. S becomes min(6, remembered 5) = <b>5</b>: the forgotten B now looks better than anything in memory.' },
-  { k: 'GOAL', t: [['S', 5, 260, 32, 'path', null], ['A', 6, 155, 112, 'forgot', 'S'], ['B', 5, 345, 112, 'path', 'S'], ['G', 5, 345, 198, 'path', 'B']], ram: ['S (f=5)', 'B (f=5)', 'G (f=5)'],
-    x: 'Because the remembered value 5 beats A (6), SMA* drops A and G, <b>regenerates B</b> (f = 5) and expands it: G with f = 3 + 2 + 0 = 5. <b>Goal reached: S &#8594; B &#8594; G, cost 5</b>, the optimal path, using only 3 slots.' }
+  { k: 'START', n: [['S', 3, 'cur']], rem: {},
+    x: 'Start with S in memory. f(S) = g + h = 0 + 3 = 3. Memory holds at most <b>3 nodes</b>, so only two more can fit. The graph above is the one on slide 52.' },
+  { k: 'STEP 1 &middot; GENERATE THE CHILDREN ONE BY ONE', n: [['S', 3, 'cur'], ['A', 4, 'open'], ['B', 5, 'open']], rem: {},
+    x: 'Expand S. A: g = 4, h = 0, f = 4. B: g = 3, h = 2, f = 5. S, A and B now fill all 3 slots. S still has a third child, C, that does not fit.' },
+  { k: 'STEP 2 &middot; MEMORY FULL', bad: 1, n: [['S', 3, 'cur'], ['A', 4, 'open'], ['B', 5, 'cut'], ['C', 6, 'open']], rem: { S: 5 },
+    x: 'Generate C: g = 5, h = 1, f = 6. Memory is full, so SMA* drops the <b>worst leaf</b> already in memory: B (f = 5). S writes the forgotten value beside itself, <b>(5)</b>: &ldquo;a child worth 5 was dropped.&rdquo; C takes the free slot.' },
+  { k: 'STEP 3 &middot; ALL CHILDREN EXPLORED, ADJUST F', n: [['S', 4, 'cur'], ['A', 4, 'open'], ['B', 5, 'forgot'], ['C', 6, 'open']], rem: { S: 5 },
+    x: 'S has generated all its children, so update f(S) to the smallest value among them: A = 4, C = 6 and the remembered 5. <b>f(S) = 4.</b>' },
+  { k: 'STEP 4 &middot; EXPAND A, MEMORY FULL', bad: 1, n: [['S', 4, 'done'], ['A', 4, 'cur'], ['B', 5, 'forgot'], ['C', 6, 'cut'], ['GA', 6, 'open']], rem: { S: 5 },
+    x: 'The best leaf is A (f = 4), so expand it. Its child G has g = 4 + 2 = 6, h = 0, f = 6. Memory is full: drop the worst leaf, C (f = 6). S already remembers 5, which is smaller than 6, so it keeps <b>(5)</b>.' },
+  { k: 'STEP 5 &middot; ALL CHILDREN EXPLORED, ADJUST F', n: [['S', 5, 'cur'], ['A', 6, 'done'], ['B', 5, 'forgot'], ['C', 6, 'forgot'], ['GA', 6, 'open']], rem: { S: 5 },
+    x: 'A&rsquo;s only child G has f = 6, so <b>f(A) = 6</b>. Update S: min(A = 6, remembered 5) = <b>5</b>. The forgotten branch through B now looks better than anything still in memory.' },
+  { k: 'STEP 6 &middot; REGENERATE B', bad: 1, n: [['S', 5, 'cur'], ['A', 6, 'open'], ['B', 5, 'open'], ['C', 6, 'forgot'], ['GA', 6, 'cut']], rem: { S: 6, A: 6 },
+    x: 'S is the best node (f = 5), because of the remembered B. To build B again (g = 3, h = 2, f = 5) a slot is needed: drop the worst leaf, G (f = 6). A has lost its only child, so it now remembers <b>(6)</b>.' },
+  { k: 'STEP 6 &middot; REGENERATE C', bad: 1, n: [['S', 5, 'cur'], ['A', 6, 'cut'], ['B', 5, 'open'], ['C', 6, 'open']], rem: { S: 6 },
+    x: 'Build S&rsquo;s other child C again (f = 6). Memory is full and the worst leaf is A (f = 6), so drop it. S now remembers <b>(6)</b>, the value of the forgotten A.' },
+  { k: 'STEP 7 &middot; EXPAND B, REACH THE GOAL', goal: 1, n: [['S', 5, 'path'], ['A', 6, 'forgot'], ['B', 5, 'path'], ['C', 6, 'cut'], ['GB', 5, 'path']], rem: { S: 6 },
+    x: 'Expand B (f = 5, the best leaf). Its child G has g = 3 + 2 = 5, h = 0, f = 5. Memory is full, so drop the worst leaf, C (f = 6). G is the goal and has the lowest f, so SMA* stops: <b>S &#8594; B &#8594; G, cost 5</b>, the optimal path, found with only 3 slots.' }
 ];
 
 var QUIZ = {

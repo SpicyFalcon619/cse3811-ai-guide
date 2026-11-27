@@ -35,7 +35,10 @@ var GRAPHS = {
     edges: [['S', 'A', 1], ['S', 'B', 1], ['A', 'C', 1], ['B', 'C', 2], ['C', 'G', 3]] },
   s18: { name: 'Slide 18: is A* optimal?', dir: true, start: 'S', goal: 'G', vb: '0 0 420 200', inf: true,
     nodes: { S: [50, 140, 7], A: [210, 45, 6], G: [370, 140, 0] },
-    edges: [['S', 'A', 1], ['A', 'G', 3], ['S', 'G', 5]] }
+    edges: [['S', 'A', 1], ['A', 'G', 3], ['S', 'G', 5]] },
+  tSM: { name: 'Teacher and deck: SMA* example', dir: false, start: 'S', goal: 'G', vb: '0 0 360 250', inf: true,
+    nodes: { S: [50, 125, 3], A: [180, 40, 0], B: [180, 125, 2], C: [180, 210, 1], G: [310, 125, 0] },
+    edges: [['S', 'A', 4], ['S', 'B', 3], ['S', 'C', 5], ['A', 'G', 2], ['B', 'G', 2], ['C', 'G', 1]] }
 };
 
 function build(G) {
@@ -208,10 +211,23 @@ function runSearch(G, alg, opts) {
   if (alg === 'RBFS') {
     round = 0; var stackIds2 = [];
     var r0 = tnode(null, G.start, 0, 0); valOv[r0.id] = r0.f; st[r0.id] = 'cur';
-    regs = { 'Call': 'RBFS(' + G.start + ', ∞)', 'Best': '–', 'Alt': '–', 'f_limit': '∞' };
+    regs = { 'Call': 'RBFS(' + G.start + ', ∞)', 'Successors': '–', 'Best': '–', 'Alt': '–', 'f_limit (in)': '∞', 'Next f_limit': '–' };
     snap('init', 'Start: call RBFS(' + G.start + ', f_limit = ∞). f(' + G.start + ') = ' + r0.g + ' + ' + r0.h + ' = ' + r0.f + '.', { stack: [r0.id], cur: r0.id });
     var calls = 0;
     function fmt(x) { return x === Infinity ? '∞' : x; }
+    /* the registers the panel shows: successors with f, Best, Alt, the limit passed in and the limit passed on */
+    function setR(n, flimit, kids) {
+      var byF = kids.slice().sort(function (a, b) { return a.F - b.F || (a.s < b.s ? -1 : a.s > b.s ? 1 : 0); });
+      var best = byF[0], alt = byF.length > 1 ? byF[1].F : Infinity;
+      regs = {
+        'Call': 'RBFS(' + n.s + ', ' + fmt(flimit) + ')',
+        'Successors': kids.slice().sort(function (a, b) { return a.s < b.s ? -1 : 1; }).map(function (k) { return k.s + ' = ' + fmt(k.F); }).join(', '),
+        'Best': best.s + ' (' + best.F + ')',
+        'Alt': byF.length > 1 ? byF[1].s + ' (' + alt + ')' : 'none (∞)',
+        'f_limit (in)': fmt(flimit),
+        'Next f_limit': best.F > flimit ? 'fail: ' + best.F + ' > ' + fmt(flimit) : 'min(' + fmt(flimit) + ', ' + fmt(alt) + ') = ' + fmt(Math.min(flimit, alt))
+      };
+    }
     function rbfs(n, flimit) {
       if (++calls > 60) return { ok: false, f: Infinity };
       stackIds2.push(n.id);
@@ -220,12 +236,12 @@ function runSearch(G, alg, opts) {
       if (!ks.length) { st[n.id] = 'fail'; snap('backup', pathStr(n.path) + ' has no successors: it fails with f = ∞.', { stack: stackIds2.slice(), cur: n.id }); stackIds2.pop(); return { ok: false, f: Infinity }; }
       var kids = ks.map(function (x) { var k = tnode(n.id, x[0], n.g + x[1], n.depth + 1); k.F = Math.max(k.g + k.h, valOv[n.id]); valOv[k.id] = k.F; st[k.id] = 'open'; return k; });
       st[n.id] = 'done';
-      regs = { 'Call': 'RBFS(' + n.s + ', ' + fmt(flimit) + ')', 'Best': '–', 'Alt': '–', 'f_limit': fmt(flimit) };
+      setR(n, flimit, kids);
       snap('pop', 'Expand <b>' + n.s + '</b>. Each successor gets f = max(g + h, f(' + n.s + ') = ' + valOv[n.id] + '): ' + kids.map(function (k) { var raw = k.g + k.h; return k.s + ' = max(' + k.g + ' + ' + k.h + ', ' + valOv[n.id] + ') = ' + k.F; }).join('; ') + '.', { stack: stackIds2.slice(), cur: n.id });
       while (true) {
         kids.sort(function (a, b) { return a.F - b.F || (a.s < b.s ? -1 : a.s > b.s ? 1 : 0); });
         var best = kids[0], alt = kids.length > 1 ? kids[1].F : Infinity;
-        regs = { 'Call': 'RBFS(' + n.s + ', ' + fmt(flimit) + ')', 'Best': best.s + ' (' + best.F + ')', 'Alt': kids.length > 1 ? kids[1].s + ' (' + alt + ')' : '–', 'f_limit': fmt(flimit) };
+        setR(n, flimit, kids);
         kids.forEach(function (k) { if (st[k.id] !== 'forgot') st[k.id] = 'open'; });
         var succTxt = kids.slice().sort(function (a, b) { return a.s < b.s ? -1 : 1; }).map(function (k) { return k.s + ' = ' + fmt(k.F); }).join(', ');
         if (best.F > flimit) {
@@ -242,7 +258,7 @@ function runSearch(G, alg, opts) {
         var r = rbfs(best, nl);
         if (r.ok) return r;
         best.F = r.f; valOv[best.id] = r.f;
-        st[n.id] = 'cur';
+        st[n.id] = 'cur'; setR(n, flimit, kids);
         snap('back', 'Back in RBFS(' + n.s + '). ' + best.s + ' now carries f = ' + fmt(r.f) + '. Compare the children again: ' + kids.map(function (k) { return k.s + ' = ' + fmt(k.F); }).join(', ') + '.', { stack: stackIds2.slice(), cur: n.id });
         st[n.id] = 'done';
       }

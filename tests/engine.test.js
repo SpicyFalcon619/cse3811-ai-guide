@@ -49,5 +49,17 @@ for (const [name, ok] of [
   if (ok) console.log(`ok    ${name}`); else { failed++; console.log(`FAIL  ${name}`); }
 }
 
+// RBFS: the panel registers (successors, Best, Alt, limit in, next limit) must match the deck (slides 56-57)
+{
+  const steps = runSearch(GRAPHS.tR, 'RBFS', { mode: 'tree' }).steps;
+  const first = steps.find((s) => s.kind === 'call');
+  const fail = steps.find((s) => s.kind === 'backup');
+  for (const [name, ok] of [
+    ['RBFS deck example: A\'s successors are B = 17, C = 14, D = 12', first.regs['Successors'] === 'B = 17, C = 14, D = 12'],
+    ['RBFS deck example: Best D (12), Alt C (14), next f_limit 14', first.regs['Best'] === 'D (12)' && first.regs['Alt'] === 'C (14)' && /= 14$/.test(first.regs['Next f_limit'])],
+    ['RBFS deck example: D fails with F = 15 above the limit 14', fail.regs['Best'] === 'F (15)' && /^fail/.test(fail.regs['Next f_limit'])],
+  ]) { cases.push(0); if (ok) console.log(`ok    ${name}`); else { failed++; console.log(`FAIL  ${name}`); } }
+}
+
 console.log(`\n${cases.length - failed} of ${cases.length} passed`);
 process.exit(failed ? 1 : 0);

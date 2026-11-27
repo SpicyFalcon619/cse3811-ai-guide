@@ -836,21 +836,50 @@
     el.innerHTML = R.rows.map(function (r) { var win = typeof r.next === 'string'; return '<div class="rung' + (win ? ' win' : '') + '"><span>ITERATION ' + r.it + '</span><b>threshold ' + r.thr + '</b><span>' + (win ? 'goal found' : 'cut: ' + r.cut + ' &#8594; next ' + r.next) + '</span></div>'; }).join('');
   };
   WIDGETS.sma = function (el) {
-    var i = 0, S = SMA_STEPS;
-    el.innerHTML = '<div class="sim"><div class="sim-body"><div class="viz"><div class="canvas" data-r="c"></div><div class="legend">' + LEGEND + '<span><i style="border-color:var(--muted);border-style:dashed"></i>dropped from memory</span><span><i style="border-color:var(--R);background:var(--Rbg);border-style:dashed"></i>worst leaf</span></div></div><div class="side"><div><div class="panel-h"><span>Memory: 3 slots</span></div><div class="ram" data-r="ram"></div></div><div class="say" data-r="say"></div></div></div><div class="ctrl"><button class="btn" type="button" data-r="p"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Back</button><button class="btn pri" type="button" data-r="n">Next<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><span class="cnt" data-r="cnt"></span></div></div>';
+    var S = SMA_STEPS, P = SMA_POS, i = 0, timer = null;
+    el.classList.add('sim', 'xsim');
+    el.innerHTML = '<div class="ctrl"><button class="btn" type="button" data-r="z"><svg viewBox="0 0 24 24"><path d="M4 4v6h6"/><path d="M4.5 15a8 8 0 1 0 2-8.5L4 10"/></svg>Restart</button><button class="btn" type="button" data-r="p"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Back</button><button class="btn pri" type="button" data-r="n">Next<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><button class="btn" type="button" data-r="a">Play</button><input type="range" min="0" value="0" data-r="rg" aria-label="Step"><span class="cnt" data-r="cnt"></span></div>' +
+      '<div class="sim-body"><div class="viz"><div class="tabs"><span class="tlabel">Search tree in memory &middot; f under each node, (x) = remembered f</span></div><div class="canvas smacanvas" data-r="c"></div><div class="legend">' + LEGEND + '<span><i style="border-color:var(--R);background:var(--Rbg);border-style:dashed"></i>dropped in this step</span><span><i style="border-color:var(--muted);border-style:dashed"></i>forgotten earlier</span></div></div>' +
+      '<div class="side"><div class="smag"><div class="cap">The graph (slide 52)</div><div data-r="g"></div></div><div><div class="panel-h"><span>Memory: 3 slots</span><b data-r="mu"></b></div><div class="ram" data-r="ram"></div></div><div class="say" data-r="say"></div></div></div>';
+    var X = {}; $$('[data-r]', el).forEach(function (x) { X[x.dataset.r] = x; });
+    X.rg.max = S.length - 1; X.g.innerHTML = drawGraph(GRAPHS.tSM, null, null);
+    function lab(id) { return id.charAt(0); }
     function draw() {
-      var s = S[i], o = '<svg class="gsvg" viewBox="0 0 520 260" width="520" role="img" aria-label="SMA* tree">';
-      var pos = {}; s.t.forEach(function (n) { pos[n[0]] = n; });
-      s.t.forEach(function (n) { if (n[5]) { var p = pos[n[5]]; o += '<line class="tedge ' + (n[4] === 'forgot' ? 'forgot' : n[4] === 'path' ? 'sol' : '') + '" x1="' + p[2] + '" y1="' + p[3] + '" x2="' + n[2] + '" y2="' + n[3] + '"/>'; } });
-      s.t.forEach(function (n) { o += '<g class="node ' + n[4] + '"><circle cx="' + n[2] + '" cy="' + n[3] + '" r="17"/><text class="l" x="' + n[2] + '" y="' + (n[3] + 1) + '">' + n[0].charAt(0) + '</text><text class="tval" x="' + n[2] + '" y="' + (n[3] + 32) + '">f=' + n[1] + '</text></g>'; });
-      $('[data-r=c]', el).innerHTML = o + '</svg>';
-      $('[data-r=ram]', el).innerHTML = s.ram.map(function (r, k) { return '<div class="' + (r ? (i === S.length - 1 ? 'goalr' : 'full') : '') + '"><span>SLOT ' + (k + 1) + '</span>' + (r || 'empty') + '</div>'; }).join('');
-      var sy = $('[data-r=say]', el); sy.className = 'say' + (i === S.length - 1 ? ' goal' : s.bad ? ' bad' : '');
-      sy.innerHTML = '<span class="kind">STEP ' + (i + 1) + ' &middot; ' + s.k + '</span><p>' + s.x + '</p>';
-      $('[data-r=cnt]', el).textContent = 'step ' + (i + 1) + ' / ' + S.length;
-      $('[data-r=p]', el).disabled = i === 0; $('[data-r=n]', el).disabled = i === S.length - 1;
+      var s = S[i], pos = {}, o = '<svg class="gsvg" viewBox="0 0 520 290" width="520" role="img" aria-label="SMA* tree in memory">';
+      s.n.forEach(function (n) { pos[n[0]] = n; });
+      s.n.forEach(function (n) {
+        var pr = P[n[0]][2]; if (!pr || !pos[pr]) return;
+        var a = P[pr], b = P[n[0]], dim = n[2] === 'forgot' || n[2] === 'cut';
+        o += '<line class="tedge ' + (dim ? 'forgot' : n[2] === 'path' ? 'sol' : '') + '" x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '"/>';
+      });
+      s.n.forEach(function (n) {
+        var p = P[n[0]];
+        o += '<g class="node ' + n[2] + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="18"/><text class="l" x="' + p[0] + '" y="' + (p[1] + 1) + '">' + lab(n[0]) + '</text><text class="tval" x="' + p[0] + '" y="' + (p[1] + 33) + '">f=' + n[1] + '</text>' +
+          (s.rem[n[0]] !== undefined ? '<text class="remv" x="' + (p[0] + 24) + '" y="' + (p[1] - 12) + '">(' + s.rem[n[0]] + ')</text>' : '') + '</g>';
+      });
+      X.c.innerHTML = o + '</svg>';
+      var mem = s.n.filter(function (n) { return n[2] !== 'forgot' && n[2] !== 'cut'; });
+      X.ram.innerHTML = [0, 1, 2].map(function (k) {
+        var n = mem[k]; if (!n) return '<div><span>SLOT ' + (k + 1) + '</span>empty</div>';
+        return '<div class="' + (s.goal ? 'goalr' : 'full') + '"><span>SLOT ' + (k + 1) + '</span>' + lab(n[0]) + ' (f=' + n[1] + (s.rem[n[0]] !== undefined ? ', remembers ' + s.rem[n[0]] : '') + ')</div>';
+      }).join('');
+      X.mu.textContent = mem.length + ' of 3 used';
+      X.say.className = 'say' + (s.goal ? ' goal' : s.bad ? ' bad' : '');
+      X.say.innerHTML = '<span class="kind">' + (i === 0 ? '' : '') + s.k + '</span><p>' + s.x + '</p>';
+      X.say.classList.remove('flash'); void X.say.offsetWidth; X.say.classList.add('flash');
+      X.cnt.textContent = 'step ' + i + ' / ' + (S.length - 1); X.rg.value = i;
+      X.p.disabled = X.z.disabled = i === 0; X.n.disabled = i === S.length - 1;
     }
-    el.addEventListener('click', function (e) { if (e.target.closest('[data-r=p]') && i > 0) { i--; draw(); } if (e.target.closest('[data-r=n]') && i < S.length - 1) { i++; draw(); } });
+    function stop() { if (timer) { clearInterval(timer); timer = null; } X.a.textContent = 'Play'; }
+    function go(k) { stop(); i = Math.max(0, Math.min(S.length - 1, k)); draw(); }
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-r]'); if (!b) return;
+      if (b === X.p) go(i - 1); else if (b === X.n) go(i + 1); else if (b === X.z) go(0);
+      else if (b === X.a) { if (timer) stop(); else { X.a.textContent = 'Pause'; timer = setInterval(function () { if (i >= S.length - 1) stop(); else { i++; draw(); } }, 1700); } }
+    });
+    X.rg.addEventListener('input', function () { go(+this.value); });
+    el.tabIndex = -1;
+    el.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') { e.preventDefault(); go(i + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(i - 1); } });
     draw();
   };
   WIDGETS.paper = function (el) {
