@@ -842,7 +842,7 @@
     el.innerHTML = '<div class="sim-top"><label class="f">GRAPH <select data-r="gs" aria-label="Graph"></select></label><div class="seg" data-r="ms" role="group" aria-label="Memory limit"><span class="seglab">MEMORY</span>' + [2, 3, 4, 5, 6].map(function (v) { return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join('') + '</div><span class="smares" data-r="res"></span></div>' +
       '<div class="ctrl"><button class="btn" type="button" data-r="z"><svg viewBox="0 0 24 24"><path d="M4 4v6h6"/><path d="M4.5 15a8 8 0 1 0 2-8.5L4 10"/></svg>Restart</button><button class="btn" type="button" data-r="p"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Back</button><button class="btn pri" type="button" data-r="n">Next<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><button class="btn" type="button" data-r="a">Play</button><input type="range" min="0" value="0" data-r="rg" aria-label="Step"><span class="cnt" data-r="cnt"></span></div>' +
       '<div class="smamem" data-r="mem" aria-live="polite"></div>' +
-      '<div class="sim-body"><div class="viz"><div class="tabs" role="group" aria-label="View"><button type="button" data-v="graph">State graph</button><button type="button" data-v="full">Full search tree</button><button type="button" data-v="mem">In memory</button></div><div class="canvas smacanvas" data-r="c"></div><div class="smaforg" data-r="fg"></div><div class="legend">' + LEGEND + '<span><i style="border-color:var(--R);background:var(--Rbg);border-style:dashed"></i>dropped in this step</span><span><i style="border-color:var(--muted);border-style:dashed"></i>forgotten earlier</span><span><b class="rtag">(5)</b>value remembered by the parent</span></div></div>' +
+      '<div class="sim-body"><div class="viz"><div class="tabs" role="group" aria-label="View"><button type="button" data-v="graph">State graph</button><button type="button" data-v="full">Full search tree</button><button type="button" data-v="mem">In memory</button></div><div class="dock" aria-label="Step controls"><div class="dock-in"><button class="btn pri" type="button" data-d="next" title="Next step">Next<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><button class="btn" type="button" data-d="prev" title="Back one step"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Back</button><button class="btn" type="button" data-d="reset" title="Restart"><svg viewBox="0 0 24 24"><path d="M4 4v6h6"/><path d="M4.5 15a8 8 0 1 0 2-8.5L4 10"/></svg>Start</button><span class="dcnt" data-r="dcnt"></span></div></div><div class="canvas smacanvas" data-r="c"></div><div class="smaforg" data-r="fg"></div><div class="legend">' + LEGEND + '<span><i style="border-color:var(--R);background:var(--Rbg);border-style:dashed"></i>dropped in this step</span><span><i style="border-color:var(--muted);border-style:dashed"></i>forgotten earlier</span><span><b class="rtag">(5)</b>value remembered by the parent</span></div></div>' +
       '<div class="side"><div class="smag"><div class="cap" data-r="gcap"></div><div data-r="g"></div></div><div class="say" data-r="say"></div></div></div>';
     var X = {}; $$('[data-r]', el).forEach(function (x) { X[x.dataset.r] = x; });
     function lab(key) { return key.split('-').pop(); }
@@ -910,12 +910,14 @@
       X.say.classList.remove('flash'); void X.say.offsetWidth; X.say.classList.add('flash');
       X.cnt.textContent = 'step ' + i + ' / ' + (S.length - 1); X.rg.value = i;
       X.p.disabled = X.z.disabled = i === 0; X.n.disabled = i === S.length - 1;
+      $$('[data-d]', el).forEach(function (b) { b.disabled = b.dataset.d === 'next' ? i >= S.length - 1 : i === 0; }); X.dcnt.textContent = i + ' / ' + (S.length - 1);
     }
     function stop() { if (timer) { clearInterval(timer); timer = null; } if (X.a) X.a.textContent = 'Play'; }
     function go(k) { stop(); i = Math.max(0, Math.min(S.length - 1, k)); draw(); }
     function setGraph(k) { if (!GRAPHS[k]) return; gk = k; fillSelect(); run(); }
     el.addEventListener('click', function (e) {
       var m = e.target.closest('[data-r=ms] button[data-v]'); if (m) { M = +m.dataset.v; run(); return; }
+      var dk = e.target.closest('[data-d]'); if (dk) { go(dk.dataset.d === 'next' ? i + 1 : dk.dataset.d === 'prev' ? i - 1 : 0); return; }
       var b = e.target.closest('[data-r]'); if (!b) return;
       if (b === X.p) go(i - 1); else if (b === X.n) go(i + 1); else if (b === X.z) go(0);
       else if (b === X.a) { if (timer) stop(); else { X.a.textContent = 'Pause'; timer = setInterval(function () { if (i >= S.length - 1) stop(); else { i++; draw(); } }, 1700); } }

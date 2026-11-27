@@ -52,13 +52,14 @@
     el.classList.add('sim', 'xsim');
     el.innerHTML = '<div class="sim-top">' + o.top + '</div>' +
       '<div class="ctrl"><button class="btn" type="button" data-c="reset">' + ICON.reset + 'Restart</button><button class="btn" type="button" data-c="prev">' + ICON.prev + 'Back</button><button class="btn pri" type="button" data-c="next">Next' + ICON.next + '</button><button class="btn" type="button" data-c="play">Play</button><input type="range" min="0" value="0" data-c="range" aria-label="Step"><span class="cnt" data-c="cnt"></span></div>' +
-      '<div class="sim-body"><div class="viz"><div class="canvas" data-c="canvas"></div><div class="legend">' + (o.legend || '') + '</div></div><div class="side" data-c="side"></div></div>';
+      '<div class="sim-body"><div class="viz"><div class="dock" aria-label="Step controls"><div class="dock-in"><button class="btn pri" type="button" data-d="next" title="Next step">Next' + ICON.next + '</button><button class="btn" type="button" data-d="prev" title="Back one step">' + ICON.prev + 'Back</button><button class="btn" type="button" data-d="reset" title="Restart">' + ICON.reset + 'Start</button><span class="dcnt" data-c="dcnt"></span></div></div><div class="canvas" data-c="canvas"></div><div class="legend">' + (o.legend || '') + '</div></div><div class="side" data-c="side"></div></div>';
     this.c = {}; $$('[data-c]', el).forEach(function (x) { self.c[x.dataset.c] = x; });
     $$('[data-seg]', el).forEach(function (s) {
       s.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; $$('button', s).forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); o.opt[s.dataset.seg] = b.dataset.v; self.run(); });
     });
     $$('select[data-sel]', el).forEach(function (s) { s.addEventListener('change', function () { o.opt[s.dataset.sel] = s.value; self.run(); }); });
     this.c.next.addEventListener('click', function () { self.stop(); self.go(self.i + 1); });
+    $$('[data-d]', el).forEach(function (d) { d.addEventListener('click', function () { self.c[d.dataset.d].click(); }); });
     this.c.prev.addEventListener('click', function () { self.stop(); self.go(self.i - 1); });
     this.c.reset.addEventListener('click', function () { self.stop(); self.go(0); });
     this.c.play.addEventListener('click', function () { if (self.timer) self.stop(); else self.play(); });
@@ -75,6 +76,8 @@
     this.c.side.innerHTML = this.o.side(this.R, s, this.i);
     this.c.range.value = this.i; this.c.cnt.textContent = 'step ' + this.i + ' / ' + (n - 1);
     this.c.prev.disabled = this.i === 0; this.c.next.disabled = this.i >= n - 1;
+    var me = this; $$('[data-d]', this.el).forEach(function (d) { d.disabled = d.dataset.d === 'next' ? me.c.next.disabled : d.dataset.d === 'prev' ? me.c.prev.disabled : me.i === 0; });
+    this.c.dcnt.textContent = this.i + ' / ' + (n - 1);
     var say = $('.say', this.c.side); if (say) { say.classList.remove('flash'); void say.offsetWidth; say.classList.add('flash'); }
   };
   Stepper.prototype.play = function () {
