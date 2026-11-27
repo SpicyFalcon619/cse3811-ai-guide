@@ -870,3 +870,8 @@
   .legend .rtag { font: 700 .72rem var(--mono); color: var(--W); margin-right: 5px; }
   .gsvg .remn { font: 600 8.5px var(--mono); fill: var(--W); text-anchor: start; }
   @media (max-width: 640px) { .smamem .slots { gap: 6px; } .slot { padding: 6px 8px; } .slot i { font-size: .6rem; } }
+  .smamem .slots { grid-template-columns: repeat(var(--m, 3), minmax(0, 1fr)); }
+  .smares { margin-left: auto; font: 600 .78rem var(--mono); padding: 4px 10px; border-radius: var(--r-sm); }
+  .smares.ok { background: rgba(92, 201, 139, .16); color: var(--G); }
+  .smares.no { background: var(--Rbg); color: var(--R); }
+  .smares b { font-weight: 700; }

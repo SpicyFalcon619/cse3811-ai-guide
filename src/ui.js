@@ -157,6 +157,7 @@
       if (step.cur !== undefined && run.T[step.cur]) { var p = run.T[step.cur].path; for (var j = 1; j <= p.length; j++) onKey[p.slice(0, j).join('-')] = 1; }
       if (step.done && run.result) { var q = run.result.path; for (var m = 1; m <= q.length; m++) solKey[q.slice(0, m).join('-')] = 1; }
     }
+    if (opts.lit) { ghosts = true; Object.keys(opts.lit).forEach(function (k) { stat[k] = opts.lit[k]; if (opts.lit[k] === 'path') solKey[k] = 1; }); }
     var vk = opts.valKey || 'g';
     function X(n) { return 30 + L.pos[n.id][0]; } function Y(n) { return 30 + L.pos[n.id][1] * GY; }
     var o = '<svg class="gsvg' + (W > 640 ? ' wide' : ' gfull') + '" viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" role="img" aria-label="Full search tree">';
@@ -836,69 +837,96 @@
     el.innerHTML = R.rows.map(function (r) { var win = typeof r.next === 'string'; return '<div class="rung' + (win ? ' win' : '') + '"><span>ITERATION ' + r.it + '</span><b>threshold ' + r.thr + '</b><span>' + (win ? 'goal found' : 'cut: ' + r.cut + ' &#8594; next ' + r.next) + '</span></div>'; }).join('');
   };
   WIDGETS.sma = function (el) {
-    var S = SMA_STEPS, P = SMA_POS, LIMIT = 3, i = 0, timer = null;
+    var keys = (el.dataset.graphs || 'tSM').split(','), gk = keys[0], M = +(el.dataset.memory || 3), R = null, S = [], POS = {}, DIM = [520, 260], i = 0, timer = null, view = 'mem';
     el.classList.add('sim', 'xsim');
-    el.innerHTML = '<div class="ctrl"><button class="btn" type="button" data-r="z"><svg viewBox="0 0 24 24"><path d="M4 4v6h6"/><path d="M4.5 15a8 8 0 1 0 2-8.5L4 10"/></svg>Restart</button><button class="btn" type="button" data-r="p"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Back</button><button class="btn pri" type="button" data-r="n">Next<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><button class="btn" type="button" data-r="a">Play</button><input type="range" min="0" value="0" data-r="rg" aria-label="Step"><span class="cnt" data-r="cnt"></span></div>' +
+    el.innerHTML = '<div class="sim-top"><label class="f">GRAPH <select data-r="gs" aria-label="Graph"></select></label><div class="seg" data-r="ms" role="group" aria-label="Memory limit"><span class="seglab">MEMORY</span>' + [2, 3, 4, 5, 6].map(function (v) { return '<button type="button" data-v="' + v + '">' + v + '</button>'; }).join('') + '</div><span class="smares" data-r="res"></span></div>' +
+      '<div class="ctrl"><button class="btn" type="button" data-r="z"><svg viewBox="0 0 24 24"><path d="M4 4v6h6"/><path d="M4.5 15a8 8 0 1 0 2-8.5L4 10"/></svg>Restart</button><button class="btn" type="button" data-r="p"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Back</button><button class="btn pri" type="button" data-r="n">Next<svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button><button class="btn" type="button" data-r="a">Play</button><input type="range" min="0" value="0" data-r="rg" aria-label="Step"><span class="cnt" data-r="cnt"></span></div>' +
       '<div class="smamem" data-r="mem" aria-live="polite"></div>' +
-      '<div class="sim-body"><div class="viz"><div class="tabs"><span class="tlabel">Search tree in memory &middot; f under each node</span></div><div class="canvas smacanvas" data-r="c"></div><div class="smaforg" data-r="fg"></div><div class="legend">' + LEGEND + '<span><i style="border-color:var(--R);background:var(--Rbg);border-style:dashed"></i>dropped in this step</span><span><i style="border-color:var(--muted);border-style:dashed"></i>forgotten earlier</span><span><b class="rtag">(5)</b>value remembered by the parent</span></div></div>' +
-      '<div class="side"><div class="smag"><div class="cap">The graph (slide 52)</div><div data-r="g"></div></div><div class="say" data-r="say"></div></div></div>';
+      '<div class="sim-body"><div class="viz"><div class="tabs" role="group" aria-label="View"><button type="button" data-v="graph">State graph</button><button type="button" data-v="full">Full search tree</button><button type="button" data-v="mem">In memory</button></div><div class="canvas smacanvas" data-r="c"></div><div class="smaforg" data-r="fg"></div><div class="legend">' + LEGEND + '<span><i style="border-color:var(--R);background:var(--Rbg);border-style:dashed"></i>dropped in this step</span><span><i style="border-color:var(--muted);border-style:dashed"></i>forgotten earlier</span><span><b class="rtag">(5)</b>value remembered by the parent</span></div></div>' +
+      '<div class="side"><div class="smag"><div class="cap" data-r="gcap"></div><div data-r="g"></div></div><div class="say" data-r="say"></div></div></div>';
     var X = {}; $$('[data-r]', el).forEach(function (x) { X[x.dataset.r] = x; });
-    X.rg.max = S.length - 1; X.g.innerHTML = drawGraph(GRAPHS.tSM, null, null);
-    function lab(id) { return id.charAt(0); }
-    function gone(n) { return n[2] === 'forgot' || n[2] === 'cut'; }
-    /* what a parent remembers: the smallest f among its forgotten children */
-    function remembered(s) {
-      var r = {};
-      s.n.forEach(function (n) { var pr = P[n[0]][2]; if (pr && gone(n)) { var c = r[pr]; if (!c || n[1] < c.f) r[pr] = { f: n[1], who: lab(n[0]) }; } });
-      return r;
+    function lab(key) { return key.split('-').pop(); }
+    function gname(k) { return GRAPHS[k] ? GRAPHS[k].name : k; }
+    function fillSelect() {
+      var ks = keys.slice(); if (GRAPHS.custom && ks.indexOf('custom') < 0) ks.push('custom');
+      X.gs.innerHTML = ks.map(function (k) { return '<option value="' + k + '">' + esc(gname(k)) + '</option>'; }).join(''); X.gs.value = gk; X.gs.dispatchEvent(new Event('sync'));
     }
-    function draw() {
-      var s = S[i], pos = {}, rem = remembered(s), o = '<svg class="gsvg" viewBox="0 0 520 290" width="520" role="img" aria-label="SMA* tree in memory">';
+    function layout() {
+      var G = GRAPHS[gk], ns = fullTree(G), L = layoutTree(ns, 84), maxD = L.maxD; POS = {};
+      ns.forEach(function (n) { POS[n.key] = [44 + L.pos[n.id][0], 40 + L.pos[n.id][1] * 96]; });
+      DIM = [Math.max(520, L.leaves * 84 + 70), (maxD + 1) * 96 + 40];
+    }
+    function run() {
+      stop(); var G = GRAPHS[gk]; R = smaRun(G, M); S = R.steps; layout(); i = 0;
+      X.rg.max = S.length - 1; X.gcap.textContent = 'The graph: ' + G.name;
+      $$('[data-r=ms] button', el).forEach(function (b) { b.setAttribute('aria-pressed', String(+b.dataset.v === M)); });
+      X.res.innerHTML = R.result ? 'Answer: <b>' + R.result.path.join('-') + '</b>, cost ' + R.result.cost : 'No answer with ' + M + ' nodes';
+      X.res.className = 'smares' + (R.result ? ' ok' : ' no');
+      draw();
+    }
+    var RANK = { path: 6, cur: 5, open: 4, done: 3, cut: 2, forgot: 1 };
+    function graphView(s) {
+      var st = {}; s.n.forEach(function (n) { var g = lab(n[0]); if (!st[g] || RANK[n[2]] > RANK[st[g]]) st[g] = n[2]; });
+      return drawGraph(GRAPHS[gk], null, null, { lit: { st: st, e: {} } });
+    }
+    function fullView(s) {
+      var lit = {}; s.n.forEach(function (n) { lit[n[0]] = n[2]; });
+      return drawFull(GRAPHS[gk], { lit: lit, valKey: 'f', cost: true });
+    }
+    function memView(s) {
+      var pos = {}, o = '<svg class="gsvg" viewBox="0 0 ' + DIM[0] + ' ' + DIM[1] + '" width="' + DIM[0] + '" role="img" aria-label="SMA* tree in memory">';
       s.n.forEach(function (n) { pos[n[0]] = n; });
       s.n.forEach(function (n) {
-        var pr = P[n[0]][2]; if (!pr || !pos[pr]) return;
-        var a = P[pr], b = P[n[0]];
-        o += '<line class="tedge ' + (gone(n) ? 'forgot' : n[2] === 'path' ? 'sol' : '') + '" x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '"/>';
+        var pk = n[0].indexOf('-') < 0 ? null : n[0].slice(0, n[0].lastIndexOf('-')); if (!pk || !pos[pk]) return;
+        var a = POS[pk], b = POS[n[0]], gone = n[2] === 'forgot' || n[2] === 'cut';
+        o += '<line class="tedge ' + (gone ? 'forgot' : n[2] === 'path' ? 'sol' : '') + '" x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '"/>';
       });
       s.n.forEach(function (n) {
-        var p = P[n[0]], r = rem[n[0]];
-        o += '<g class="node ' + n[2] + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="18"/><text class="l" x="' + p[0] + '" y="' + (p[1] + 1) + '">' + lab(n[0]) + '</text><text class="tval" x="' + p[0] + '" y="' + (p[1] + 33) + '">f=' + n[1] + '</text>' +
-          (r ? '<text class="remv" x="' + (p[0] + 24) + '" y="' + (p[1] - 10) + '">(' + r.f + ')</text><text class="remn" x="' + (p[0] + 24) + '" y="' + (p[1] + 2) + '">has forgotten ' + r.who + '</text>' : '') + '</g>';
+        var p = POS[n[0]], r = s.rem[n[0]];
+        o += '<g class="node ' + n[2] + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="18"/><text class="l" x="' + p[0] + '" y="' + (p[1] + 1) + '" style="font-size:' + Math.min(13, nodeLabelSize(lab(n[0]))) + 'px">' + esc(lab(n[0])) + '</text><text class="tval" x="' + p[0] + '" y="' + (p[1] + 33) + '">f=' + (n[1] === Infinity ? '&infin;' : n[1]) + '</text>' +
+          (r ? '<text class="remv" x="' + (p[0] + 24) + '" y="' + (p[1] - 10) + '">(' + (r.f === Infinity ? '&infin;' : r.f) + ')</text><text class="remn" x="' + (p[0] + 24) + '" y="' + (p[1] + 2) + '">has forgotten ' + esc(r.who) + '</text>' : '') + '</g>';
       });
-      X.c.innerHTML = o + '</svg>';
-
-      var mem = s.n.filter(function (n) { return !gone(n); }), full = mem.length >= LIMIT, dropped = s.n.filter(function (n) { return n[2] === 'cut'; });
-      var slots = '';
-      for (var k = 0; k < LIMIT; k++) {
-        var n = mem[k];
-        slots += n ? '<div class="slot on' + (s.goal ? ' goal' : '') + '"><span class="sn">SLOT ' + (k + 1) + '</span><b>' + lab(n[0]) + '</b><span class="sf">f = ' + n[1] + '</span>' + (rem[n[0]] ? '<i>remembers ' + rem[n[0]].who + ' (' + rem[n[0]].f + ')</i>' : '') + '</div>' : '<div class="slot"><span class="sn">SLOT ' + (k + 1) + '</span><b>free</b></div>';
+      return o + '</svg>';
+    }
+    function draw() {
+      var s = S[i]; if (!s) return;
+      X.c.innerHTML = view === 'graph' ? graphView(s) : view === 'full' ? fullView(s) : memView(s);
+      X.g.innerHTML = graphView(s);
+      $$('.tabs button', el).forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.v === view)); });
+      var mem = s.n.filter(function (n) { return n[2] !== 'forgot' && n[2] !== 'cut'; }), full = mem.length >= M, dropped = s.n.filter(function (n) { return n[2] === 'cut'; }), slots = '';
+      for (var k = 0; k < M; k++) {
+        var n = mem[k], r = n && s.rem[n[0]];
+        slots += n ? '<div class="slot on' + (s.goal ? ' goal' : '') + '"><span class="sn">SLOT ' + (k + 1) + '</span><b>' + esc(lab(n[0])) + '</b><span class="sf">f = ' + (n[1] === Infinity ? '&infin;' : n[1]) + '</span>' + (r ? '<i>remembers ' + esc(r.who) + ' (' + (r.f === Infinity ? '&infin;' : r.f) + ')</i>' : '') + '</div>' : '<div class="slot"><span class="sn">SLOT ' + (k + 1) + '</span><b>free</b></div>';
       }
-      X.mem.innerHTML = '<div class="mh"><b>Memory limit: ' + LIMIT + ' nodes</b><span class="mu' + (full ? ' full' : '') + '">' + mem.length + ' of ' + LIMIT + ' used' + (full ? ' &middot; FULL' : '') + '</span>' +
-        (dropped.length ? '<span class="drop">just dropped: ' + dropped.map(function (d) { return lab(d[0]) + ' (f = ' + d[1] + ')'; }).join(', ') + '</span>' : '') + '</div><div class="slots">' + slots + '</div>';
-
-      var fg = s.n.filter(gone);
+      X.mem.innerHTML = '<div class="mh"><b>Memory limit: ' + M + ' nodes</b><span class="mu' + (full ? ' full' : '') + '">' + mem.length + ' of ' + M + ' used' + (full ? ' &middot; FULL' : '') + '</span>' +
+        (dropped.length ? '<span class="drop">just dropped: ' + dropped.map(function (d) { return esc(lab(d[0])) + ' (f = ' + (d[1] === Infinity ? '&infin;' : d[1]) + ')'; }).join(', ') + '</span>' : '') + '</div><div class="slots" style="--m:' + M + '">' + slots + '</div>';
+      var fg = s.n.filter(function (n) { return n[2] === 'forgot' || n[2] === 'cut'; });
       X.fg.innerHTML = '<span class="fh">Forgotten, but remembered by the parent</span>' + (fg.length ? fg.map(function (d) {
-        var pr = P[d[0]][2];
-        return '<span class="fi' + (d[2] === 'cut' ? ' now' : '') + '"><b>' + lab(d[0]) + '</b> f = ' + d[1] + ' &middot; ' + lab(pr) + ' keeps <b>(' + rem[pr].f + ')</b>' + (d[2] === 'cut' ? ' &middot; dropped now' : '') + '</span>';
+        var pk = d[0].slice(0, d[0].lastIndexOf('-')), r = s.rem[pk];
+        return '<span class="fi' + (d[2] === 'cut' ? ' now' : '') + '"><b>' + esc(lab(d[0])) + '</b> f = ' + (d[1] === Infinity ? '&infin;' : d[1]) + ' &middot; ' + esc(lab(pk)) + ' keeps <b>(' + (r ? (r.f === Infinity ? '&infin;' : r.f) : '?') + ')</b>' + (d[2] === 'cut' ? ' &middot; dropped now' : '') + '</span>';
       }).join('') : '<span class="fi none">nothing has been dropped yet</span>');
-
       X.say.className = 'say' + (s.goal ? ' goal' : s.bad ? ' bad' : '');
       X.say.innerHTML = '<span class="kind">' + s.k + '</span><p>' + s.x + '</p>';
       X.say.classList.remove('flash'); void X.say.offsetWidth; X.say.classList.add('flash');
       X.cnt.textContent = 'step ' + i + ' / ' + (S.length - 1); X.rg.value = i;
       X.p.disabled = X.z.disabled = i === 0; X.n.disabled = i === S.length - 1;
     }
-    function stop() { if (timer) { clearInterval(timer); timer = null; } X.a.textContent = 'Play'; }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } if (X.a) X.a.textContent = 'Play'; }
     function go(k) { stop(); i = Math.max(0, Math.min(S.length - 1, k)); draw(); }
+    function setGraph(k) { if (!GRAPHS[k]) return; gk = k; fillSelect(); run(); }
     el.addEventListener('click', function (e) {
+      var m = e.target.closest('[data-r=ms] button[data-v]'); if (m) { M = +m.dataset.v; run(); return; }
       var b = e.target.closest('[data-r]'); if (!b) return;
       if (b === X.p) go(i - 1); else if (b === X.n) go(i + 1); else if (b === X.z) go(0);
       else if (b === X.a) { if (timer) stop(); else { X.a.textContent = 'Pause'; timer = setInterval(function () { if (i >= S.length - 1) stop(); else { i++; draw(); } }, 1700); } }
     });
+    X.gs.addEventListener('change', function () { gk = this.value; run(); });
     X.rg.addEventListener('input', function () { go(+this.value); });
+    $('.tabs', el).addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { view = b.dataset.v; draw(); } });
     el.tabIndex = -1;
     el.addEventListener('keydown', function (e) { if (e.key === 'ArrowRight') { e.preventDefault(); go(i + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(i - 1); } });
-    draw();
+    (window.__smaw = window.__smaw || []).push({ setGraph: setGraph });
+    fillSelect(); run();
   };
   WIDGETS.paper = function (el) {
     var G = GRAPHS[el.dataset.graph];

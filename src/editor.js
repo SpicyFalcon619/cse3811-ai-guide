@@ -108,14 +108,14 @@
       var N = {}; Object.keys(S.nodes).forEach(function (k) { N[k] = [S.nodes[k].x, S.nodes[k].y, S.useH ? S.nodes[k].h : 0]; });
       GRAPHS.custom = { name: 'Your graph', dir: S.dir, start: S.start, goal: S.goal, vb: '0 0 ' + VW + ' ' + VH, inf: S.useH && Object.keys(S.nodes).some(function (k) { return S.nodes[k].h > 0; }), nodes: N, edges: S.edges.map(function (e) { return [e.a, e.b, e.c]; }) };
     }
-    function push() { var sim = window.__sims && window.__sims.labsim; if (sim) sim.set({ graph: 'custom' }); }
+    function push() { var sim = window.__sims && window.__sims.labsim; if (sim) sim.set({ graph: 'custom' }); (window.__smaw || []).forEach(function (w) { w.setGraph('custom'); }); }
     var timer = null;
-    function changed(skipText) {
+    function changed(skipText, silent) {
       draw(); var p = problem();
       G.msg.textContent = p || 'Ready. ' + Object.keys(S.nodes).length + ' nodes, ' + S.edges.length + ' edges.'; G.msg.classList.toggle('bad', !!p);
       G.run.disabled = !!p;
       if (!skipText && document.activeElement !== G.ta) G.ta.value = toText();
-      if (!p) { build(); if (S.live) { clearTimeout(timer); timer = setTimeout(push, 250); } }
+      if (!p) { build(); if (S.live && !silent) { clearTimeout(timer); timer = setTimeout(push, 250); } }
     }
     /* ---------- drawing ---------- */
     function pt(e) { var r = G.stage.firstChild.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * VW, (e.clientY - r.top) / r.height * VH]; }
@@ -233,7 +233,7 @@
       else if (ev.key === 'v' || ev.key === 'V') setTool('select'); else if (ev.key === 'n' || ev.key === 'N') setTool('node'); else if (ev.key === 'e' || ev.key === 'E') setTool('edge');
     });
     el.tabIndex = -1;
-    loadExample('q253u'); panel(); $$tool(); changed();
+    loadExample('q253u'); panel(); $$tool(); changed(false, true);
   }
   (window.EXTRA_WIDGETS = window.EXTRA_WIDGETS || {}).editor = Editor;
 })();

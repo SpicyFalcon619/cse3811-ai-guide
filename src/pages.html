@@ -694,7 +694,14 @@
 <div class="ls-card"><b>In one line</b><p>A* that drops its worst leaf when memory is full, remembering its f on the parent.</p></div>
 </aside></div></section>
 
-  <div data-widget="sma"></div>
+  <div data-widget="sma" data-graphs="tSM,tA,tR,q253i,q261i,q262i,tI,s36,q253u,q262u" data-memory="3"></div>
+  <div class="cols">
+    <div class="card"><span class="k">Try this</span><p>On <b>Teacher and deck: SMA* example</b> with memory <b>3</b>, step through and you get the slide 53 and 54 example: S-B-G, cost 5. Change the memory to <b>2</b>: the solution S-B-G needs three nodes at once, so SMA* reports that no answer fits. With a big memory it behaves like A*.</p></div>
+    <div class="card"><span class="k">Rules the simulator follows</span><p>Expand the lowest f among nodes that can still be expanded (ties: deeper first). Generate the missing successors one by one; when memory is full, first drop the <b>worst leaf</b> (highest f, then shallowest) and let its parent remember that f. Then update each parent to the smallest f among its children and the values it remembers.</p></div>
+  </div>
+  <h2>Run SMA* on your own graph</h2>
+  <p>Draw a graph or a tree, give the nodes h values and press <b>Run in the simulator</b>. The visualiser above switches to <b>Your graph</b> and follows every edit; pick the memory limit with the MEMORY buttons.</p>
+  <div class="card" data-widget="editor"></div>
   <div class="cols">
     <div class="rule"><span class="k">Rules</span><ol><li>Expand the lowest-f leaf, as in A*.</li><li>Memory full? Drop the leaf with the <b>highest f</b>.</li><li>Back its f up to the parent, which remembers the best forgotten value.</li><li>If a remembered value becomes the best option, regenerate that branch.</li></ol></div>
     <div class="card"><span class="k">Properties</span><p>Optimal if the cheapest solution path fits in memory; complete if the shallowest solution fits. It balances optimality against a fixed memory budget (slide 47).</p></div>

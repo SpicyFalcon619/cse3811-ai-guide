@@ -273,4 +273,101 @@ function runSearch(G, alg, opts) {
   return { steps: steps, T: T, result: result, alg: alg, G: G, opts: opts, rows: rows };
 }
 
-if (typeof module !== 'undefined') module.exports = { GRAPHS: GRAPHS, runSearch: runSearch };
+/* ---------------- SMA*: simplified memory-bounded A* ----------------
+   Follows the lecture example (informed deck slides 51-54) and the textbook's SMA*:
+   - at most M nodes live in memory;
+   - the node to expand is the one with the lowest f among the nodes that still have a successor to generate
+     (a leaf, or a node with a forgotten successor); ties go to the deeper node, then alphabetically;
+   - expanding a node generates its missing successors one by one; if memory is full, the worst leaf already
+     in memory (highest f, then shallowest) is dropped first, and its parent remembers that leaf's f;
+   - a child's f is max(g + h, f(parent), any value remembered for it); a non-goal node so deep that it could
+     never be expanded inside M nodes gets f = infinity;
+   - after a node's successors are done, f(parent) = the smallest f among its children and the values it remembers,
+     and this is repeated up to the root;
+   - the goal is recognised when it is chosen for expansion.
+   Returns { steps, result, M }. Each step: { k, x, n: [[pathKey, f, state]], rem, bad, goal, M, used }. */
+function smaRun(G, M, opts) {
+  opts = opts || {};
+  var B = build(G), cap = opts.cap || 160, steps = [], nodes = {}, order = [], mem = {}, nowDrop = {};
+  function sh(x) { return x === Infinity ? '&infin;' : x; }
+  function mk(par, s, g) {
+    var k = par ? par.key + '-' + s : s, n = nodes[k];
+    if (!n) { n = nodes[k] = { key: k, s: s, par: par ? par.key : null, depth: par ? par.depth + 1 : 0, g: g, h: B.h(s), f: g + B.h(s), kids: [], fg: {}, path: par ? par.path.concat([s]) : [s] }; order.push(k); }
+    return n;
+  }
+  function succ(n) { return B.adj[n.s].filter(function (x) { return n.path.indexOf(x[0]) < 0; }); }
+  function memNodes() { return Object.keys(mem).map(function (k) { return nodes[k]; }); }
+  function ungen(n) { return succ(n).filter(function (x) { return !n.kids.some(function (k) { return nodes[k].s === x[0]; }); }); }
+  function cmpF(a, b) { return a < b ? -1 : a > b ? 1 : 0; }
+  function snap(title, text, o) {
+    o = o || {};
+    var list = [], rem = {};
+    order.forEach(function (k) {
+      var n = nodes[k], inm = !!mem[k];
+      if (!inm && !(n.par && mem[n.par])) return;
+      list.push([k, n.f, inm ? (o.path && o.path[k] ? 'path' : o.cur === k ? 'cur' : n.kids.length ? 'done' : 'open') : nowDrop[k] ? 'cut' : 'forgot']);
+    });
+    memNodes().forEach(function (n) {
+      var best = null; Object.keys(n.fg).forEach(function (s) { if (!best || n.fg[s] < best.f) best = { f: n.fg[s], who: s }; });
+      if (best) rem[n.key] = best;
+    });
+    steps.push({ k: title, x: text, n: list, rem: rem, bad: o.bad ? 1 : 0, goal: o.goal ? 1 : 0, M: M, used: Object.keys(mem).length });
+    nowDrop = {};
+  }
+  function dropNode(v) { var p = nodes[v.par]; delete mem[v.key]; p.kids = p.kids.filter(function (k) { return k !== v.key; }); p.fg[v.s] = v.f; nowDrop[v.key] = 1; }
+  function recompute(p) {
+    var vals = p.kids.map(function (k) { return nodes[k].f; }); Object.keys(p.fg).forEach(function (s) { vals.push(p.fg[s]); });
+    if (vals.length) p.f = Math.min.apply(null, vals);
+  }
+  function adjust(from, title) {
+    var changes = [];
+    for (var p = from; p; p = p.par ? nodes[p.par] : null) { var old = p.f; recompute(p); if (p.f !== old) changes.push('f(' + p.s + ') ' + sh(old) + ' &rarr; ' + sh(p.f)); }
+    snap(title, 'All successors of <b>' + from.s + '</b> have been generated or dropped. A parent&rsquo;s f is the smallest f among its children and the values it remembers, so update upwards: ' + (changes.length ? changes.join(', ') : 'no f-value changes') + '.', { cur: from.key });
+  }
+  var root = mk(null, G.start, 0); mem[root.key] = 1;
+  snap('START', 'Start with <b>' + root.s + '</b> in memory: f = g + h = 0 + ' + root.h + ' = ' + root.f + '. Memory holds at most <b>' + M + ' node' + (M === 1 ? '' : 's') + '</b>.');
+  while (steps.length < cap) {
+    var cands = memNodes().filter(function (n) { return n.kids.length === 0 || ungen(n).length > 0; });
+    if (!cands.length) { snap('FAIL', 'Nothing in memory can be expanded.', { bad: 1 }); return { steps: steps, result: null, M: M }; }
+    cands.sort(function (a, b) { return cmpF(a.f, b.f) || b.depth - a.depth || cmpF(a.key, b.key); });
+    var best = cands[0];
+    if (best.f === Infinity) { snap('FAIL', 'Every node that could still be expanded has f = &infin;: no solution fits in <b>' + M + '</b> nodes (or there is no path). Try a larger memory.', { bad: 1 }); return { steps: steps, result: null, M: M }; }
+    if (best.s === G.goal) {
+      var path = {}; for (var q = best; q; q = q.par ? nodes[q.par] : null) path[q.key] = 1;
+      snap('GOAL', '<b>' + best.s + '</b> is the goal and has the lowest f (' + best.f + '), so SMA* stops. Path <b>' + best.path.join(' &#8594; ') + '</b>, cost ' + best.g + ', found with at most ' + M + ' nodes in memory.', { goal: 1, path: path });
+      return { steps: steps, result: { path: best.path, cost: best.g }, M: M };
+    }
+    var todo = ungen(best), first = true;
+    if (!succ(best).length) {
+      if (!best.par) { snap('FAIL', 'The start state has no successors.', { bad: 1 }); return { steps: steps, result: null, M: M }; }
+      var par = nodes[best.par]; dropNode(best); par.fg[best.s] = Infinity;
+      snap('DEAD END ' + best.s, '<b>' + best.s + '</b> is not the goal and has no successors, so its f becomes &infin; and it is removed from memory. ' + par.s + ' remembers (&infin;) for it.', { bad: 1 });
+      adjust(par, 'ADJUST F-VALUES after ' + best.s); continue;
+    }
+    todo.forEach(function (x) {
+      if (steps.length >= cap) return;
+      var dropped = null, pre = first ? 'Expand <b>' + best.s + '</b> (f = ' + sh(best.f) + ', the lowest f among the nodes that can still be expanded; ties go to the deeper node). ' : '';
+      first = false;
+      if (Object.keys(mem).length >= M) {
+        var vic = memNodes().filter(function (n) { return n.kids.length === 0 && n.key !== best.key; });
+        if (!vic.length) { best.fg[x[0]] = Infinity; snap('EXPAND ' + best.s + ' &middot; NO ROOM FOR ' + x[0], pre + 'Memory is full and there is nothing else to drop, so <b>' + x[0] + '</b> cannot be built. ' + best.s + ' remembers (&infin;) for it.', { cur: best.key, bad: 1 }); return; }
+        vic.sort(function (a, b) { return cmpF(b.f, a.f) || a.depth - b.depth || cmpF(a.key, b.key); });
+        dropped = vic[0]; dropNode(dropped);
+      }
+      var g = best.g + x[1], c = mk(best, x[0], g), old = best.fg[x[0]]; delete best.fg[x[0]];
+      var raw = g + c.h, f = Math.max(raw, best.f, old === undefined ? 0 : old);
+      if (c.s !== G.goal && c.depth + 2 > M) f = Infinity;
+      c.g = g; c.f = f; mem[c.key] = 1; best.kids.push(c.key);
+      var t = pre + (old !== undefined ? 'Build <b>' + c.s + '</b> again' : 'Generate <b>' + c.s + '</b>') + ': g = ' + g + ', h = ' + c.h + ', f = ' + raw +
+        (f === Infinity ? '; it is too deep to be expanded inside ' + M + ' nodes, so f = &infin;' : f !== raw ? '; raised to <b>' + f + '</b>, because a child is never cheaper than its parent&rsquo;s f or a value that was remembered for it' : '') + '.';
+      if (dropped) t += ' Memory was full (' + M + ' of ' + M + '), so SMA* first dropped the <b>worst leaf</b> already in memory: <b>' + dropped.s + '</b> (f = ' + sh(dropped.f) + '). ' + nodes[dropped.par].s + ' remembers <b>(' + sh(dropped.f) + ')</b>.';
+      else t += ' Memory used: ' + Object.keys(mem).length + ' of ' + M + '.';
+      snap('EXPAND ' + best.s + ' &middot; GENERATE ' + c.s, t, { cur: best.key, bad: dropped ? 1 : 0 });
+    });
+    adjust(best, 'ADJUST F-VALUES after ' + best.s);
+  }
+  snap('STOPPED', 'Stopped after ' + cap + ' steps. With this little memory SMA* keeps dropping and rebuilding nodes without getting anywhere. Try a larger memory.', { bad: 1 });
+  return { steps: steps, result: null, M: M };
+}
+
+if (typeof module !== 'undefined') module.exports = { GRAPHS: GRAPHS, runSearch: runSearch, smaRun: smaRun };

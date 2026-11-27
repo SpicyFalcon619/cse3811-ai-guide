@@ -49,6 +49,26 @@ for (const [name, ok] of [
   if (ok) console.log(`ok    ${name}`); else { failed++; console.log(`FAIL  ${name}`); }
 }
 
+// SMA*: the deck's example (informed deck slides 52-54), then the general behaviour
+{
+  const { smaRun } = require('../src/engine.js');
+  const plain = (t) => t.replace(/<[^>]+>/g, '').replace(/&rarr;/g, '→').replace(/&[a-z]+;/g, '');
+  const deck = smaRun(GRAPHS.tSM, 3);
+  const dropOrder = deck.steps.map((s) => (s.x.match(/worst leaf<\/b> already in memory: <b>(\w)<\/b>/) || [])[1]).filter(Boolean);
+  const adjust1 = deck.steps.find((s) => /^ADJUST/.test(s.k));
+  const big = smaRun(GRAPHS.q253i, 20), astar = runSearch(GRAPHS.q253i, 'ASTAR', { mode: 'tree' }).result;
+  let over = 0;
+  [['tSM', 2], ['tSM', 3], ['tSM', 4], ['q253i', 3], ['q253i', 4], ['q261i', 4], ['tA', 3], ['tR', 4]].forEach(([g, m]) => smaRun(GRAPHS[g], m).steps.forEach((s) => { if (s.used > m) over++; }));
+  for (const [name, ok] of [
+    ['SMA* deck example, memory 3: S-B-G with cost 5', deck.result && deck.result.path.join('-') === 'S-B-G' && deck.result.cost === 5],
+    ['SMA* deck example drops B, C, G, A and C in that order (slides 53-54)', dropOrder.join('') === 'BCGAC'],
+    ['SMA* deck example: after generating the children, f(S) goes from 3 to 4', /f\(S\) 3 → 4/.test(plain(adjust1.x))],
+    ['SMA* deck example, memory 2: no answer fits', smaRun(GRAPHS.tSM, 2).result === null],
+    ['SMA* with plenty of memory finds what A* finds (Fall 2025 Q3: S-A-B-G, cost 6)', big.result.path.join('-') === astar.path.join('-') && big.result.cost === astar.cost],
+    ['SMA* never holds more nodes than its limit', over === 0],
+  ]) { cases.push(0); if (ok) console.log(`ok    ${name}`); else { failed++; console.log(`FAIL  ${name}`); } }
+}
+
 // RBFS: the panel registers (successors, Best, Alt, limit in, next limit) must match the deck (slides 56-57)
 {
   const steps = runSearch(GRAPHS.tR, 'RBFS', { mode: 'tree' }).steps;
